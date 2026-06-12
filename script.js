@@ -266,3 +266,33 @@ themeToggleBtn.addEventListener('click', () => {
     
     localStorage.setItem('theme', theme);
 });
+
+// Back to Top Button Logic
+const backToTopBtn = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+        backToTopBtn.classList.add('show');
+    } else {
+        backToTopBtn.classList.remove('show');
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// Magnetic effect for back to top button
+backToTopBtn.addEventListener('mousemove', (e) => {
+    const rect = backToTopBtn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    backToTopBtn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.1)`;
+});
+
+backToTopBtn.addEventListener('mouseleave', () => {
+    backToTopBtn.style.transform = 'translate(0px, 0px) scale(1)';
+});

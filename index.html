@@ -50,7 +50,7 @@
     <!-- Boxicons for SVGs -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
     <!-- Custom Cursor -->
@@ -85,6 +85,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Mode"><i class='bx bx-sun'></i></button></li>
@@ -97,36 +98,49 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-content fade-in">
-            <h3 class="subtitle">user@azure:~$ ./hello_world.sh</h3>
-            <h1 class="title">Anand Vaidya</h1>
-            <h2 class="typing-text">I build <span class="highlight typed-role"></span><span class="cursor">|</span></h2>
-            <p class="description">
-                Cloud Engineer specializing in designing, deploying, and optimizing scalable cloud-based solutions using Microsoft Azure, Docker, CI/CD pipelines, and modern DevOps practices.
-            </p>
-            <div class="hero-actions">
-                <a href="#experience" class="btn btn-primary">View Experience <i class='bx bx-briefcase'></i></a>
-                <a href="#contact" class="btn btn-secondary">ping --me</a>
+        <div class="container hero-layout">
+            <div class="hero-content fade-in">
+                <h3 class="subtitle">user@azure:~$ ./hello_world.sh</h3>
+                <h1 class="title">Anand Vaidya</h1>
+                <h2 class="typing-text">I build <span class="highlight typed-role"></span><span class="cursor">|</span></h2>
+                <p class="description">
+                    Cloud Engineer specializing in designing, deploying, and optimizing scalable cloud-based solutions using Microsoft Azure, Docker, CI/CD pipelines, and modern DevOps practices.
+                </p>
+                <div class="hero-actions">
+                    <a href="#experience" class="btn btn-primary">View Experience <i class='bx bx-briefcase'></i></a>
+                    <a href="#contact" class="btn btn-secondary">ping --me</a>
+                </div>
+
+                <div class="terminal-mockup">
+                    <div class="terminal-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="terminal-title">bash - anand@cloud-node</span>
+                    </div>
+                    <div class="terminal-body" id="terminal-body" style="height: 320px;">
+                        <!-- Terminal typing animation injected via JS -->
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://github.com/anandvaidyaa" target="_blank" aria-label="GitHub"><i class='bx bxl-github'></i></a>
+                    <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" aria-label="LinkedIn"><i class='bx bxl-linkedin'></i></a>
+                    <a href="mailto:anand.svaidya24@gmail.com" aria-label="Email"><i class='bx bx-envelope'></i></a>
+                </div>
             </div>
 
-            <div class="terminal-mockup">
-                <div class="terminal-header">
-                    <span class="dot red"></span>
-                    <span class="dot yellow"></span>
-                    <span class="dot green"></span>
-                    <span class="terminal-title">bash - anand@cloud-node</span>
+            <!-- Profile Picture Section -->
+            <div class="hero-image-wrapper fade-in" style="animation-delay: 0.3s;">
+                <div class="glow-ring"></div>
+                <div class="profile-pic-container tilt-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+                    <img src="profile.jpg" alt="Anand Vaidya" class="profile-pic">
+                    <div class="floating-badge badge-top"><i class='bx bxl-microsoft'></i> Azure</div>
+                    <div class="floating-badge badge-bottom"><i class='bx bxs-server'></i> DevOps</div>
                 </div>
-                <div class="terminal-body" id="terminal-body" style="min-height: 200px;">
-                    <!-- Terminal typing animation injected via JS -->
-                </div>
-            </div>
-
-            <div class="social-links">
-                <a href="https://github.com/anandvaidyaa" target="_blank" aria-label="GitHub"><i class='bx bxl-github'></i></a>
-                <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" aria-label="LinkedIn"><i class='bx bxl-linkedin'></i></a>
-                <a href="mailto:anand.svaidya24@gmail.com" aria-label="Email"><i class='bx bx-envelope'></i></a>
             </div>
         </div>
+
         <div class="hero-scroll">
             <a href="#about" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
         </div>
@@ -326,6 +340,75 @@
     </section>
 
 
+    <!-- Projects Section -->
+    <section class="projects section" id="projects">
+        <div class="container reveal">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <div class="project-card glass-card tilt-card" data-tilt data-tilt-max="5" data-tilt-speed="400">
+                    <div class="project-header">
+                        <div class="folder-icon"><i class='bx bx-sitemap'></i></div>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub"><i class='bx bxl-github'></i></a>
+                            <a href="#" aria-label="Live Demo"><i class='bx bx-link-external'></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Scalable E-Commerce Backend</h3>
+                    <p class="project-desc">
+                        A high-performance e-commerce backend built with ASP.NET Core and Serverless Azure Functions, utilizing Cosmos DB for low-latency product data retrieval and caching.
+                    </p>
+                    <div class="project-tech">
+                        <span>Azure Functions</span>
+                        <span>Cosmos DB</span>
+                        <span>ASP.NET Core</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card glass-card tilt-card" data-tilt data-tilt-max="5" data-tilt-speed="400">
+                    <div class="project-header">
+                        <div class="folder-icon"><i class='bx bx-git-branch'></i></div>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub"><i class='bx bxl-github'></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Automated Bicep IaC Pipeline</h3>
+                    <p class="project-desc">
+                        A robust Azure DevOps CI/CD pipeline using Bicep templates for provisioning entire multi-region environments with zero-downtime deployments.
+                    </p>
+                    <div class="project-tech">
+                        <span>Azure Bicep</span>
+                        <span>Azure DevOps</span>
+                        <span>ARM</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card glass-card tilt-card" data-tilt data-tilt-max="5" data-tilt-speed="400">
+                    <div class="project-header">
+                        <div class="folder-icon"><i class='bx bx-shield-quarter'></i></div>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub"><i class='bx bxl-github'></i></a>
+                            <a href="#" aria-label="Live Demo"><i class='bx bx-link-external'></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Zero-Trust Identity API</h3>
+                    <p class="project-desc">
+                        A scalable API Management layer secured by Azure AD B2C with custom policies, rate limiting, and automated threat detection mechanisms.
+                    </p>
+                    <div class="project-tech">
+                        <span>Azure APIM</span>
+                        <span>Azure AD B2C</span>
+                        <span>OAuth 2.0</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Education Section -->
     <section class="education section" id="education">
         <div class="container reveal">
@@ -384,7 +467,7 @@
         <div class="container reveal">
             <h2 class="section-title">Get In Touch</h2>
             <div class="contact-card glass-card">
-                <p>I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!</p>
+                <p>I run on coffee and cloud compute. Whether you need a server rescued, have a cool project, or just want to argue about Tabs vs. Spaces, my inbox is always open!</p>
                 <div class="contact-info">
                     <a href="mailto:anand.svaidya24@gmail.com" class="contact-item">
                         <i class='bx bx-envelope'></i> anand.svaidya24@gmail.com
@@ -401,17 +484,28 @@
         </div>
     </section>
 
+    <!-- Infinite Marquee Section -->
+    <div class="marquee-wrapper">
+        <div class="marquee">
+            <span>LET'S WORK TOGETHER &nbsp; • &nbsp; BUILD SCALABLE CLOUD APPS &nbsp; • &nbsp; ARCHITECT THE FUTURE &nbsp; • &nbsp; </span>
+            <span>LET'S WORK TOGETHER &nbsp; • &nbsp; BUILD SCALABLE CLOUD APPS &nbsp; • &nbsp; ARCHITECT THE FUTURE &nbsp; • &nbsp; </span>
+        </div>
+    </div>
+
     <!-- Footer -->
-    <footer>
         <div class="footer-content">
             <div class="social-links">
                 <a href="https://github.com/anandvaidyaa" target="_blank"><i class='bx bxl-github'></i></a>
                 <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank"><i class='bx bxl-linkedin'></i></a>
             </div>
             <p>Built with <i class='bx bxs-heart' style="color:var(--accent);"></i> by Anand Vaidya</p>
-            <p class="footer-small">Designed inspired by modern UI/UX trends.</p>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top glass-card" aria-label="Back to Top">
+        <i class='bx bx-up-arrow-alt'></i>
+    </button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
