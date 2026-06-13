@@ -7,7 +7,7 @@
 
     <!-- ======================== CORE SEO ======================== -->
     <meta name="description" content="Anand Vaidya — Cloud Engineer from Vadodara. Expert in Microsoft Azure, DevOps, CI/CD, ASP.NET Core &amp; serverless architectures.">
-    <meta name="keywords" content="Anand Vaidya, Anand S Vaidya, Cloud Engineer, Azure Developer, DevOps Engineer, ASP.NET Core, Vadodara, India, Microsoft Azure, Docker, Cosmos DB, Bicep, Infrastructure as Code, Portfolio, anandvaidya">
+    <meta name="keywords" content="Anand Vaidya, Anand S Vaidya, Cloud Engineer, Azure Developer, DevOps Engineer, ASP.NET Core, Vadodara, India, Microsoft Azure, Docker, Cosmos DB, Bicep, Infrastructure as Code, Portfolio, anandvaidya, FSP">
     <meta name="author" content="Anand Vaidya">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
@@ -87,7 +87,7 @@
           ],
           "worksFor": {
             "@type": "Organization",
-            "name": "Atharva IT Services"
+            "name": "FSP"
           }
         },
         {
@@ -112,7 +112,7 @@
     <!-- Boxicons for SVGs -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
     <!-- Custom Cursor -->
@@ -154,8 +154,8 @@
         <div class="nav-content">
             <a href="#" class="logo">AV<span>.</span></a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
+                <li><a href="#about">About Me</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -222,7 +222,7 @@
         </div>
 
         <div class="hero-scroll">
-            <a href="#about" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
+            <a href="#experience" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
         </div>
     </section>
 
@@ -245,93 +245,6 @@
                 <div class="metric-card glass-card tilt-card">
                     <h3 class="shield-icon"><i class='bx bx-check-shield bx-tada-hover'></i></h3>
                     <p>Zero-Trust<br>Security Models</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About / Tech Stack Section -->
-    <section class="about section" id="about">
-        <div class="container reveal">
-            <h2 class="section-title">About Me & Tech Stack</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>
-                        I build cloud systems that solve real business problems — not just infrastructure for its own sake. At FSP, I work on integrating enterprise platforms and automating workflows so teams spend less time firefighting and more time shipping.
-                    </p>
-                    <p>
-                        My background is in <strong>e-commerce & logistics</strong> — I've built systems that synchronise orders across Shopify, Amazon and Walmart, route shipments through FedEx, DHL and UPS, and handle failures gracefully so nothing falls through the cracks. I also care deeply about making systems observable, secure, and cheap to run.
-                    </p>
-                </div>
-                
-                <div class="bento-grid">
-                    <div class="bento-box glass-card">
-                        <h4><i class='bx bx-building'></i> Infrastructure</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag">Azure Bicep</span>
-                            <span class="skill-tag">ARM Templates</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card">
-                        <h4><i class='bx bx-server'></i> Compute & Logic</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag">Azure Functions</span>
-                            <span class="skill-tag">Logic Apps</span>
-                            <span class="skill-tag">App Services</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card">
-                        <h4><i class='bx bx-git-branch'></i> DevOps</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag">Azure DevOps</span>
-                            <span class="skill-tag">Docker</span>
-                            <span class="skill-tag">CI/CD</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card">
-                        <h4><i class='bx bxs-data'></i> Data & APIs</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag">Cosmos DB</span>
-                            <span class="skill-tag">Azure APIM</span>
-                            <span class="skill-tag">SQL Server</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Architecture Diagram -->
-            <div class="architecture-diagram glass-card tilt-card" data-tilt data-tilt-max="5">
-                <h3>Cloud Serverless Architecture Flow</h3>
-                <p class="arch-desc">A typical event-driven integration pattern I deploy and manage.</p>
-                <div class="arch-flow">
-                    <div class="arch-node floating" style="animation-delay: 0s;">
-                        <div class="node-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class='bx bx-mobile-alt'></i></div>
-                        <span>Client App</span>
-                    </div>
-                    <div class="arch-line">
-                        <div class="packet" style="animation-delay: 0s;"></div>
-                        <div class="packet" style="animation-delay: 1s;"></div>
-                    </div>
-                    <div class="arch-node floating accent pulse-border" style="animation-delay: 0.2s;">
-                        <div class="node-icon" style="background: linear-gradient(135deg, #00d2ff, #3a7bd5);"><i class='bx bx-sitemap'></i></div>
-                        <span>Azure APIM</span>
-                    </div>
-                    <div class="arch-line">
-                        <div class="packet" style="animation-delay: 0.5s;"></div>
-                        <div class="packet" style="animation-delay: 1.5s;"></div>
-                    </div>
-                    <div class="arch-node floating pulse-border" style="animation-delay: 0.4s; border-color: #f59e0b;">
-                        <div class="node-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);"><i class='bx bx-bolt-circle'></i></div>
-                        <span>Azure Function</span>
-                    </div>
-                    <div class="arch-line">
-                        <div class="packet" style="animation-delay: 0s;"></div>
-                        <div class="packet" style="animation-delay: 1s;"></div>
-                    </div>
-                    <div class="arch-node floating" style="animation-delay: 0.6s;">
-                        <div class="node-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);"><i class='bx bxs-data'></i></div>
-                        <span>Cosmos DB</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -413,6 +326,98 @@
 
                 <!-- Add more experience items here by copying the block above -->
 
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Tech Stack Section -->
+    <section class="about section" id="about">
+        <div class="container reveal">
+            <h2 class="section-title">About Me & Tech Stack</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        Cloud Engineer focused on building resilient cloud infrastructure, integrating enterprise platforms, and automating manual processes to solve real-world business problems.
+                    </p>
+                    <ul class="about-bullets">
+                        <li><strong>Cloud Integration & Automation:</strong> Architected event-driven integration pipelines at FSP to connect enterprise systems, reducing workflow processing times from hours to seconds and eliminating manual firefighting.</li>
+                        <li><strong>E-Commerce & Logistics:</strong> Designed robust integrations synchronizing inventory and orders across Shopify, Amazon, and Walmart, and automating carrier dispatch workflows via FedEx, DHL, and UPS.</li>
+                        <li><strong>Resiliency & Security:</strong> Built zero-trust cloud setups using Managed Identities, Azure RBAC, and Infrastructure as Code (Bicep/ARM) to ensure low-latency, secure, and cost-effective operations.</li>
+                    </ul>
+                </div>
+                
+                <div class="bento-grid">
+                    <div class="bento-box glass-card">
+                        <h4><i class='bx bx-building'></i> Infrastructure</h4>
+                        <div class="bento-items">
+                            <span class="skill-tag">Azure Bicep</span>
+                            <span class="skill-tag">ARM Templates</span>
+                        </div>
+                    </div>
+                    <div class="bento-box glass-card">
+                        <h4><i class='bx bx-server'></i> Compute & Logic</h4>
+                        <div class="bento-items">
+                            <span class="skill-tag">Azure Functions</span>
+                            <span class="skill-tag">Logic Apps</span>
+                            <span class="skill-tag">App Services</span>
+                        </div>
+                    </div>
+                    <div class="bento-box glass-card">
+                        <h4><i class='bx bx-git-branch'></i> DevOps</h4>
+                        <div class="bento-items">
+                            <span class="skill-tag">Azure DevOps</span>
+                            <span class="skill-tag">Docker</span>
+                            <span class="skill-tag">CI/CD</span>
+                        </div>
+                    </div>
+                    <div class="bento-box glass-card">
+                        <h4><i class='bx bxs-data'></i> Data & APIs</h4>
+                        <div class="bento-items">
+                            <span class="skill-tag">Cosmos DB</span>
+                            <span class="skill-tag">Azure APIM</span>
+                            <span class="skill-tag">SQL Server</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram glass-card tilt-card" data-tilt data-tilt-max="5">
+                <h3>Cloud Serverless Architecture Flow</h3>
+                <div class="arch-details">
+                    <p><strong>What it does:</strong> Incoming orders from client apps hit the Azure APIM gateway for authentication and rate-limiting. Once validated, they trigger an Azure Function running serverless business logic (syncing inventory and calculating shipping rates) before persisting state to Cosmos DB.</p>
+                    <p><strong>Why this design:</strong> This decoupled, event-driven pattern ensures low execution costs by scaling compute dynamically to zero, protects database limits, and ensures zero order loss even during sudden traffic surges.</p>
+                </div>
+                <div class="arch-flow">
+                    <div class="arch-node floating" style="animation-delay: 0s;">
+                        <div class="node-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class='bx bx-mobile-alt'></i></div>
+                        <span>Client App</span>
+                    </div>
+                    <div class="arch-line">
+                        <div class="packet" style="animation-delay: 0s;"></div>
+                        <div class="packet" style="animation-delay: 1s;"></div>
+                    </div>
+                    <div class="arch-node floating accent pulse-border" style="animation-delay: 0.2s;">
+                        <div class="node-icon" style="background: linear-gradient(135deg, #00d2ff, #3a7bd5);"><i class='bx bx-sitemap'></i></div>
+                        <span>Azure APIM</span>
+                    </div>
+                    <div class="arch-line">
+                        <div class="packet" style="animation-delay: 0.5s;"></div>
+                        <div class="packet" style="animation-delay: 1.5s;"></div>
+                    </div>
+                    <div class="arch-node floating pulse-border" style="animation-delay: 0.4s; border-color: #f59e0b;">
+                        <div class="node-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);"><i class='bx bx-bolt-circle'></i></div>
+                        <span>Azure Function</span>
+                    </div>
+                    <div class="arch-line">
+                        <div class="packet" style="animation-delay: 0s;"></div>
+                        <div class="packet" style="animation-delay: 1s;"></div>
+                    </div>
+                    <div class="arch-node floating" style="animation-delay: 0.6s;">
+                        <div class="node-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);"><i class='bx bxs-data'></i></div>
+                        <span>Cosmos DB</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
