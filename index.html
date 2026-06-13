@@ -112,7 +112,7 @@
     <!-- Boxicons for SVGs -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
     <!-- Custom Cursor -->
@@ -154,8 +154,8 @@
         <div class="nav-content">
             <a href="#" class="logo">AV<span>.</span></a>
             <ul class="nav-links" id="nav-links">
+                <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
-                <li><a href="#about">About Me</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -222,7 +222,7 @@
         </div>
 
         <div class="hero-scroll">
-            <a href="#experience" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
+            <a href="#about" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
         </div>
     </section>
 
@@ -246,86 +246,6 @@
                     <h3 class="shield-icon"><i class='bx bx-check-shield bx-tada-hover'></i></h3>
                     <p>Zero-Trust<br>Security Models</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="experience section" id="experience">
-        <div class="container reveal">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline">
-                
-                <!-- Experience Item 1 -->
-                <div class="timeline-item glass-card">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">Apr 2025 – Present</div>
-                    <div class="timeline-header">
-                        <img src="https://fsp.co/wp-content/uploads/2022/06/logo.svg" alt="FSP Logo" class="company-logo">
-                        <div>
-                            <h3 class="timeline-role">Cloud Engineer</h3>
-                            <h4 class="timeline-company">FSP, Vadodara</h4>
-                        </div>
-                    </div>
-                    <ul class="timeline-desc">
-                        <li><strong>Workflow Automation:</strong> Eliminated manual intervention in enterprise approval and data-sync workflows by building serverless event-driven pipelines with Azure Functions and Logic Apps — reducing processing time from hours to seconds.</li>
-                        <li><strong>Secure API Layer:</strong> Designed a centralised API gateway using Azure APIM so internal teams and external partners could integrate safely — with rate limiting, OAuth 2.0 auth, and full audit trails, preventing unauthorised access and abuse.</li>
-                        <li><strong>Infrastructure Reliability:</strong> Replaced fragile manual deployments with fully automated Bicep-based IaC, making environment provisioning repeatable and cutting deployment errors to near-zero.</li>
-                        <li><strong>Zero-Trust Security:</strong> Removed hardcoded credentials and service passwords across systems by migrating to Managed Identities and RBAC — closing a critical attack surface in production environments.</li>
-                    </ul>
-                    <div class="tech-stack-badges">
-                        <span class="badge"><i class='bx bxl-microsoft'></i> Azure Functions</span>
-                        <span class="badge"><i class='bx bx-sitemap'></i> Azure APIM</span>
-                        <span class="badge"><i class='bx bx-code-alt'></i> Azure Bicep</span>
-                        <span class="badge"><i class='bx bx-cog'></i> Logic Apps</span>
-                    </div>
-                </div>
-
-                <!-- Experience Item 2 -->
-                <div class="timeline-item glass-card">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">02/2023 – 03/2025</div>
-                    <div class="timeline-header">
-                        <img src="https://atharvaits.com/media/4i3bjide/brand-logo.png" alt="Atharva IT Services Logo" class="company-logo">
-                        <div>
-                            <h3 class="timeline-role">Junior Developer</h3>
-                            <h4 class="timeline-company">Atharva IT Services, Ahmedabad</h4>
-                        </div>
-                    </div>
-                    <ul class="timeline-desc">
-                        <li><strong>Multi-Channel Order Management:</strong> Built a unified order processing backend connecting Shopify, Amazon, and Walmart — so sellers could manage all channels from one system without manually reconciling orders across platforms.</li>
-                        <li><strong>Shipping & Carrier Integration:</strong> Integrated FedEx, DHL, and UPS APIs to automate shipment creation, label generation, and real-time tracking updates — eliminating the manual dispatch process that caused daily delays.</li>
-                        <li><strong>Scalable Data Layer:</strong> Moved high-frequency order and inventory reads to Cosmos DB, bringing query response times down from seconds to milliseconds during peak traffic spikes.</li>
-                        <li><strong>Faster Releases:</strong> Set up Docker-based CI/CD pipelines on Azure DevOps so the team could ship new features and hotfixes multiple times a day without downtime or manual deployments.</li>
-                    </ul>
-                    <div class="tech-stack-badges">
-                        <span class="badge"><i class='bx bxl-docker'></i> Docker</span>
-                        <span class="badge"><i class='bx bxl-microsoft'></i> ASP.NET Core</span>
-                        <span class="badge"><i class='bx bx-data'></i> Cosmos DB</span>
-                        <span class="badge"><i class='bx bx-git-branch'></i> Azure DevOps</span>
-                    </div>
-                </div>
-
-                <!-- Experience Item 2 -->
-                <div class="timeline-item glass-card">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">09/2021 – 08/2022</div>
-                    <div class="timeline-header">
-                        <img src="https://www.paruluniversity.ac.in/wp-content/uploads/2025/09/Variant9.svg" alt="Parul University Logo" class="company-logo" style="background-color: #0a4d94;">
-                        <div>
-                            <h3 class="timeline-role">LMS Administrator Intern</h3>
-                            <h4 class="timeline-company">Parul University, Vadodara</h4>
-                        </div>
-                    </div>
-                    <ul class="timeline-desc">
-                        <li><strong>Data Management:</strong> Organized and maintained LMS data, encompassing student information, and course materials.</li>
-                        <li><strong>Troubleshooting:</strong> Effectively resolved technical issues and user problems related to the LMS.</li>
-                        <li><strong>Administration:</strong> Oversaw comprehensive administration, user accounts, and monitored system usage.</li>
-                    </ul>
-                </div>
-
-                <!-- Add more experience items here by copying the block above -->
-
             </div>
         </div>
     </section>
@@ -418,6 +338,86 @@
                         <span>Cosmos DB</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience section" id="experience">
+        <div class="container reveal">
+            <h2 class="section-title">Experience</h2>
+            <div class="timeline">
+                
+                <!-- Experience Item 1 -->
+                <div class="timeline-item glass-card">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Apr 2025 – Present</div>
+                    <div class="timeline-header">
+                        <img src="https://fsp.co/wp-content/uploads/2022/06/logo.svg" alt="FSP Logo" class="company-logo">
+                        <div>
+                            <h3 class="timeline-role">Cloud Engineer</h3>
+                            <h4 class="timeline-company">FSP, Vadodara</h4>
+                        </div>
+                    </div>
+                    <ul class="timeline-desc">
+                        <li><strong>Workflow Automation:</strong> Eliminated manual intervention in enterprise approval and data-sync workflows by building serverless event-driven pipelines with Azure Functions and Logic Apps — reducing processing time from hours to seconds.</li>
+                        <li><strong>Secure API Layer:</strong> Designed a centralised API gateway using Azure APIM so internal teams and external partners could integrate safely — with rate limiting, OAuth 2.0 auth, and full audit trails, preventing unauthorised access and abuse.</li>
+                        <li><strong>Infrastructure Reliability:</strong> Replaced fragile manual deployments with fully automated Bicep-based IaC, making environment provisioning repeatable and cutting deployment errors to near-zero.</li>
+                        <li><strong>Zero-Trust Security:</strong> Removed hardcoded credentials and service passwords across systems by migrating to Managed Identities and RBAC — closing a critical attack surface in production environments.</li>
+                    </ul>
+                    <div class="tech-stack-badges">
+                        <span class="badge"><i class='bx bxl-microsoft'></i> Azure Functions</span>
+                        <span class="badge"><i class='bx bx-sitemap'></i> Azure APIM</span>
+                        <span class="badge"><i class='bx bx-code-alt'></i> Azure Bicep</span>
+                        <span class="badge"><i class='bx bx-cog'></i> Logic Apps</span>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="timeline-item glass-card">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">02/2023 – 03/2025</div>
+                    <div class="timeline-header">
+                        <img src="https://atharvaits.com/media/4i3bjide/brand-logo.png" alt="Atharva IT Services Logo" class="company-logo">
+                        <div>
+                            <h3 class="timeline-role">Junior Developer</h3>
+                            <h4 class="timeline-company">Atharva IT Services, Ahmedabad</h4>
+                        </div>
+                    </div>
+                    <ul class="timeline-desc">
+                        <li><strong>Multi-Channel Order Management:</strong> Built a unified order processing backend connecting Shopify, Amazon, and Walmart — so sellers could manage all channels from one system without manually reconciling orders across platforms.</li>
+                        <li><strong>Shipping & Carrier Integration:</strong> Integrated FedEx, DHL, and UPS APIs to automate shipment creation, label generation, and real-time tracking updates — eliminating the manual dispatch process that caused daily delays.</li>
+                        <li><strong>Scalable Data Layer:</strong> Moved high-frequency order and inventory reads to Cosmos DB, bringing query response times down from seconds to milliseconds during peak traffic spikes.</li>
+                        <li><strong>Faster Releases:</strong> Set up Docker-based CI/CD pipelines on Azure DevOps so the team could ship new features and hotfixes multiple times a day without downtime or manual deployments.</li>
+                    </ul>
+                    <div class="tech-stack-badges">
+                        <span class="badge"><i class='bx bxl-docker'></i> Docker</span>
+                        <span class="badge"><i class='bx bxl-microsoft'></i> ASP.NET Core</span>
+                        <span class="badge"><i class='bx bx-data'></i> Cosmos DB</span>
+                        <span class="badge"><i class='bx bx-git-branch'></i> Azure DevOps</span>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="timeline-item glass-card">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">09/2021 – 08/2022</div>
+                    <div class="timeline-header">
+                        <img src="https://www.paruluniversity.ac.in/wp-content/uploads/2025/09/Variant9.svg" alt="Parul University Logo" class="company-logo" style="background-color: #0a4d94;">
+                        <div>
+                            <h3 class="timeline-role">LMS Administrator Intern</h3>
+                            <h4 class="timeline-company">Parul University, Vadodara</h4>
+                        </div>
+                    </div>
+                    <ul class="timeline-desc">
+                        <li><strong>Data Management:</strong> Organized and maintained LMS data, encompassing student information, and course materials.</li>
+                        <li><strong>Troubleshooting:</strong> Effectively resolved technical issues and user problems related to the LMS.</li>
+                        <li><strong>Administration:</strong> Oversaw comprehensive administration, user accounts, and monitored system usage.</li>
+                    </ul>
+                </div>
+
+                <!-- Add more experience items here by copying the block above -->
+
             </div>
         </div>
     </section>
