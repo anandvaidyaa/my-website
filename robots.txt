@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://anandvaidya.in/sitemap.xml
+
+# Crawl-delay (optional — polite crawling)
+Crawl-delay: 5

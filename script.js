@@ -114,11 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Terminal Preloader Logic ---
 const bootLines = [
-    "> Initializing Azure Cloud Environment...",
-    "> Authenticating Managed Identities... [OK]",
-    "> Loading Serverless Functions... [OK]",
-    "> Establishing VNET connections... [OK]",
-    "> Starting Anand_Vaidya_Portfolio.exe..."
+    "PS C:\\Windows\\System32> Invoke-AzureInit",
+    "    Initializing Azure Cloud Environment... [OK]",
+    "PS C:\\Windows\\System32> Connect-AzAccount -Identity",
+    "    Authenticating Managed Identities... [OK]",
+    "PS C:\\Windows\\System32> Start-AzFunctionApp -Name portfolio",
+    "    Loading Azure Functions... [OK]",
+    "PS C:\\Windows\\System32> .\\Start-Portfolio.ps1",
+    "    Starting Anand_Vaidya_Portfolio.exe... [OK]"
 ];
 
 const preloaderBody = document.getElementById('preloader-body');
@@ -128,11 +131,18 @@ let bootLineIndex = 0;
 function typeBootLine() {
     if (bootLineIndex < bootLines.length) {
         const p = document.createElement('p');
-        p.textContent = bootLines[bootLineIndex];
-        
-        // Add a slight success color to the [OK] strings
-        if (p.textContent.includes('[OK]')) {
-            p.innerHTML = p.textContent.replace('[OK]', '<span style="color:#27c93f;">[OK]</span>');
+        const line = bootLines[bootLineIndex];
+
+        // Style PS prompt lines differently
+        if (line.startsWith('PS ')) {
+            const parts = line.split('>');
+            p.innerHTML = `<span style="color:#ffbd44;font-weight:600;">${parts[0]}&gt;</span><span style="color:#fff;">${parts.slice(1).join('>')}</span>`;
+        } else if (line.includes('[OK]')) {
+            p.innerHTML = line.replace('[OK]', '<span style="color:#27c93f;font-weight:600;">[OK]</span>');
+            p.style.color = '#a0aec0';
+        } else {
+            p.textContent = line;
+            p.style.color = '#a0aec0';
         }
 
         preloaderBody.appendChild(p);

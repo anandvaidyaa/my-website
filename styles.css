@@ -569,11 +569,12 @@ a {
     -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
 }
 
+/* ===== Windows Terminal Style ===== */
 .terminal-mockup {
-    background: #0b0f19;
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 210, 255, 0.1);
+    background: #0c0c0c;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 20px rgba(0,210,255,0.08);
     margin: 3rem auto 2rem;
     max-width: 650px;
     text-align: left;
@@ -581,63 +582,146 @@ a {
     font-family: var(--font-mono);
 }
 
-.terminal-header {
-    background: #141a28;
-    padding: 10px 15px;
+/* Windows Terminal tab bar */
+.wt-header {
+    background: #1c1c1c;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    height: 36px;
+    padding: 0;
+    user-select: none;
+}
+
+.wt-tabs {
+    display: flex;
+    align-items: stretch;
+    flex: 1;
+    overflow: hidden;
+}
+
+.wt-tab {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--card-border);
+    gap: 6px;
+    padding: 0 14px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    background: transparent;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    cursor: default;
+    white-space: nowrap;
+    transition: background 0.2s;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-.dot.red { background: #ff5f56; }
-.dot.yellow { background: #ffbd2e; }
-.dot.green { background: #27c93f; }
-
-.terminal-title {
-    margin: 0 auto;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    transform: translateX(-24px); /* offset for the dots */
-}
-
-.terminal-body {
-    padding: 20px;
-    color: #a0aec0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.terminal-body p {
-    margin-bottom: 0.5rem;
-}
-
-.terminal-body .prompt {
-    color: #27c93f;
-    margin-right: 10px;
+.wt-tab.active {
+    background: #0c0c0c;
+    color: rgba(255,255,255,0.9);
+    border-bottom: 2px solid #7c6bff;
     font-weight: 600;
 }
 
-.terminal-body .term-output {
-    color: #a0aec0;
-    margin-left: 1.5rem;
+.wt-tab-icon {
+    color: #7c6bff;
+    font-size: 1rem;
+    line-height: 1;
 }
+
+.wt-tab-close {
+    font-size: 0.65rem;
+    margin-left: 4px;
+    color: rgba(255,255,255,0.3);
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: all 0.2s;
+}
+
+.wt-tab-close:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.wt-new-tab {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.3);
+    cursor: default;
+    transition: all 0.2s;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.wt-new-tab:hover {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.7);
+}
+
+.wt-controls {
+    display: flex;
+    align-items: stretch;
+}
+
+.wt-controls span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    cursor: default;
+    transition: background 0.15s;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.wt-controls span:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.wt-controls span:last-child:hover {
+    background: #c42b1c;
+    color: #fff;
+}
+
+/* Terminal body */
+.terminal-body {
+    padding: 16px 20px;
+    color: #cccccc;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    background: #0c0c0c;
+}
+
+.terminal-body p {
+    margin-bottom: 0.3rem;
+}
+
+/* PS prompt color — yellow like real Windows Terminal */
+.terminal-body .prompt {
+    color: #ffbd44;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.terminal-body .term-output {
+    color: #ccc;
+    margin-left: 1rem;
+}
+
 .terminal-body .term-output.success {
-    color: var(--accent);
+    color: #16c60c;
 }
 
 .cursor-blink {
     display: inline-block;
     width: 8px;
-    height: 15px;
-    background: #fff;
+    height: 16px;
+    background: #aeafad;
     vertical-align: middle;
-    animation: blink 1s step-end infinite;
+    animation: blink 1.2s step-end infinite;
 }
 
 .social-links {
@@ -1143,6 +1227,17 @@ a {
     color: var(--accent);
     transform: translateY(-3px);
     display: inline-block;
+}
+
+.project-badge {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    background: rgba(0, 210, 255, 0.08);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
 }
 
 .project-title {
