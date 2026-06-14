@@ -1578,7 +1578,7 @@ const contactText = `
 `;
 
 const neofetchText = `
-<div style="display: flex; align-items: center; gap: 24px; font-family: var(--font-mono); margin: 8px 0;">
+<div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 24px; font-family: var(--font-mono); margin: 8px 0;">
   <pre style="color: #00d2ff; font-weight: bold; margin: 0; line-height: 1.25;">
    /\\___/\\
   /   _   \\
@@ -2339,7 +2339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Docker':         '🐳',
         'CI/CD':          '⚙',
         'Cosmos DB':      'DB',
-        'Azure APIM':     'GW',
+        'Azure APIM':     'API',
         'SQL Server':     'SQL'
     };
 
