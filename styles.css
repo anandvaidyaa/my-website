@@ -4199,9 +4199,9 @@ body.light-mode .form-success-overlay {
         display: flex !important;
         flex-direction: column;
         width: 100%;
-        max-width: 340px;
-        height: 200px;
-        font-size: 0.7rem;
+        max-width: 350px;
+        height: 260px; /* Make it taller so all lines fit nicely */
+        font-size: 0.8rem; /* Make the font clearer/larger on mobile */
     }
 }
 
@@ -6147,14 +6147,16 @@ body.light-mode .arch-node {
 /* Animated Connections */
 .arch-connection {
     position: absolute;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.5); /* Much more visible */
     z-index: 5;
     opacity: 0;
     transition: opacity 0.5s ease 1s; /* fade in after nodes */
+    box-shadow: 0 0 5px rgba(0, 210, 255, 0.3); /* Subtle glow */
 }
 
 body.light-mode .arch-connection {
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: none;
 }
 
 .timeline-item.active-progress .arch-connection {
