@@ -436,14 +436,20 @@ const timelineItems = document.querySelectorAll('.timeline-item');
 
 function animateTimeline() {
     if (!timeline || !progressLine) return;
-    const timelineRect = timeline.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
     
+    const windowHeight = window.innerHeight;
     const startPoint = windowHeight * 0.8;
     const endPoint = windowHeight * 0.2;
     
-    let progress = 0;
+    // PHASE 1: ALL DOM READS
+    const timelineRect = timeline.getBoundingClientRect();
+    const itemUpdates = Array.from(timelineItems).map(item => {
+        const itemRect = item.getBoundingClientRect();
+        const triggerY = itemRect.top + itemRect.height * 0.3;
+        return { item, isActive: triggerY < startPoint };
+    });
     
+    let progress = 0;
     if (timelineRect.top < startPoint) {
         const totalHeight = timelineRect.height;
         const scrolled = startPoint - timelineRect.top;
@@ -451,12 +457,11 @@ function animateTimeline() {
         progress = Math.min(Math.max(progress, 0), 1);
     }
     
+    // PHASE 2: ALL DOM WRITES
     progressLine.style.height = `${progress * 100}%`;
     
-    timelineItems.forEach(item => {
-        const itemRect = item.getBoundingClientRect();
-        const triggerY = itemRect.top + itemRect.height * 0.3;
-        if (triggerY < startPoint) {
+    itemUpdates.forEach(({ item, isActive }) => {
+        if (isActive) {
             item.classList.add('active-progress');
         } else {
             item.classList.remove('active-progress');
@@ -464,8 +469,17 @@ function animateTimeline() {
     });
 }
 
-window.addEventListener('scroll', animateTimeline);
-window.addEventListener('resize', animateTimeline);
+let timelineTicking = false;
+window.addEventListener('scroll', () => {
+    if (!timelineTicking) {
+        window.requestAnimationFrame(() => {
+            animateTimeline();
+            timelineTicking = false;
+        });
+        timelineTicking = true;
+    }
+}, { passive: true });
+window.addEventListener('resize', animateTimeline, { passive: true });
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(animateTimeline, 1200);
 });
@@ -578,8 +592,17 @@ function updateScrollProgress() {
     }
 }
 
-window.addEventListener('scroll', updateScrollProgress);
-window.addEventListener('resize', updateScrollProgress);
+let scrollTicking = false;
+window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+            updateScrollProgress();
+            scrollTicking = false;
+        });
+        scrollTicking = true;
+    }
+}, { passive: true });
+window.addEventListener('resize', updateScrollProgress, { passive: true });
 
 // Sidebar Navigation DOT Highlight Observer
 const sectionObserverOptions = {
