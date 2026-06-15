@@ -116,12 +116,21 @@
     </script>
 
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <!-- Google Fonts -->
+    
+    <!-- LCP Optimization: Preload Hero Image -->
+    <link rel="preload" as="image" href="profile.webp">
+
+    <!-- Google Fonts (Deferred) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Boxicons for SVGs -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap"></noscript>
+
+    <!-- Boxicons for SVGs (Deferred) -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"></noscript>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css?v=27">
     
@@ -382,7 +391,7 @@
             <div class="hero-image-wrapper fade-in" style="animation-delay: 0.3s;">
                 <div class="glow-ring"></div>
                 <div class="profile-pic-container">
-                    <img src="profile.webp" alt="Anand Vaidya - Cloud Engineer from Vadodara, India" class="profile-pic" width="450" loading="eager">
+                    <img src="profile.webp" alt="Anand Vaidya - Cloud Engineer from Vadodara, India" class="profile-pic" width="450" height="450" loading="eager">
                     <div class="floating-badge-wrapper badge-top-wrapper">
                         <div class="floating-badge badge-top"><i class='bx bxl-microsoft'></i> Azure</div>
                     </div>
@@ -1576,6 +1585,6 @@
     </button>
 
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

@@ -31,7 +31,7 @@ window.addEventListener('scroll', () => {
     } else {
         navbar.classList.remove('scrolled');
     }
-});
+}, { passive: true });
 
 // Advanced Scroll Reveal & Stagger Animation Logic
 const revealElements = document.querySelectorAll('.reveal');
@@ -238,28 +238,34 @@ function resetCursorToDefault() {
 resetCursorToDefault();
 
 // Smooth cursor interpolation via requestAnimationFrame
-let mouseX = 0, mouseY = 0;
-let outlineX = 0, outlineY = 0;
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-window.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    if (cursorDot) {
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
+if (isTouchDevice) {
+    if (cursorDot) cursorDot.style.display = 'none';
+    if (cursorOutline) cursorOutline.style.display = 'none';
+} else {
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+    
+    window.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    function animateCursor() {
+        if (cursorOutline && cursorDot) {
+            outlineX += (mouseX - outlineX) * 0.12;
+            outlineY += (mouseY - outlineY) * 0.12;
+            cursorOutline.style.left = `${outlineX}px`;
+            cursorOutline.style.top = `${outlineY}px`;
+            // Moved dot update to rAF for performance
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+        }
+        requestAnimationFrame(animateCursor);
     }
-});
-
-function animateCursor() {
-    if (cursorOutline) {
-        outlineX += (mouseX - outlineX) * 0.12;
-        outlineY += (mouseY - outlineY) * 0.12;
-        cursorOutline.style.left = `${outlineX}px`;
-        cursorOutline.style.top = `${outlineY}px`;
-    }
-    requestAnimationFrame(animateCursor);
+    animateCursor();
 }
-animateCursor();
 
 // Clickables cursor focus lock
 let activeClickable = null;
@@ -379,20 +385,8 @@ if (themeToggleBtn) {
         if (document.body.classList.contains('light-mode')) {
             if (themeIcon) themeIcon.classList.replace('bx-sun', 'bx-moon');
             theme = 'light';
-            if (window.vantaEffect) {
-                window.vantaEffect.setOptions({
-                    backgroundColor: 0xf1f5f9,
-                    color: 0x0f172a
-                });
-            }
         } else {
             if (themeIcon) themeIcon.classList.replace('bx-moon', 'bx-sun');
-            if (window.vantaEffect) {
-                window.vantaEffect.setOptions({
-                    backgroundColor: 0x0b0f19,
-                    color: 0x00d2ff
-                });
-            }
         }
         localStorage.setItem('theme', theme);
     });
@@ -407,7 +401,7 @@ window.addEventListener('scroll', () => {
     } else {
         backToTopBtn.classList.remove('show');
     }
-});
+}, { passive: true });
 
 if (backToTopBtn) {
     backToTopBtn.addEventListener('click', () => {
@@ -492,16 +486,23 @@ const badgeBottom = document.querySelector('.badge-bottom');
 if (heroSection && badgeTop && badgeBottom) {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (!isTouchDevice) {
+        let parallaxTicking = false;
         heroSection.addEventListener('mousemove', (e) => {
-            const rect = heroSection.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const deviationX = (x / rect.width) - 0.5;
-            const deviationY = (y / rect.height) - 0.5;
-            
-            badgeTop.style.transform = `translate(${deviationX * -40}px, ${deviationY * -40}px)`;
-            badgeBottom.style.transform = `translate(${deviationX * 40}px, ${deviationY * 40}px)`;
+            if (!parallaxTicking) {
+                window.requestAnimationFrame(() => {
+                    const rect = heroSection.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const deviationX = (x / rect.width) - 0.5;
+                    const deviationY = (y / rect.height) - 0.5;
+                    
+                    badgeTop.style.transform = `translate(${deviationX * -40}px, ${deviationY * -40}px)`;
+                    badgeBottom.style.transform = `translate(${deviationX * 40}px, ${deviationY * 40}px)`;
+                    parallaxTicking = false;
+                });
+                parallaxTicking = true;
+            }
         });
         
         heroSection.addEventListener('mouseleave', () => {
@@ -680,7 +681,15 @@ function initTelemetryChart() {
         }
         
         offset += 0.04 * Math.min(3, scale);
-        requestAnimationFrame(draw);
+        
+        if (window.isAboutVisible) {
+            requestAnimationFrame(draw);
+        } else {
+            setTimeout(function check() {
+                if (window.isAboutVisible) requestAnimationFrame(draw);
+                else setTimeout(check, 1000);
+            }, 1000);
+        }
     }
     draw();
 }
@@ -823,7 +832,16 @@ function runTelemetryEventStream() {
         rateEl.textContent = `${currentRate} req/s`;
     }
     
-    setTimeout(runTelemetryEventStream, delay);
+    setTimeout(() => {
+        if (window.isAboutVisible) {
+            runTelemetryEventStream();
+        } else {
+            setTimeout(function check() {
+                if (window.isAboutVisible) runTelemetryEventStream();
+                else setTimeout(check, 1000);
+            }, 1000);
+        }
+    }, delay);
 }
 
 // Global Diagnostics Panel Initialization
@@ -1049,6 +1067,8 @@ function startTelemetryTabFluc(nodeName) {
     if (telemetryTabInterval) clearInterval(telemetryTabInterval);
     
     telemetryTabInterval = setInterval(() => {
+        if (!window.isExperienceVisible) return;
+        
         const cpuValEl = document.getElementById('diag-cpu-val');
         const cpuFillEl = document.getElementById('diag-cpu-fill');
         
@@ -1455,7 +1475,16 @@ function runMetricFluctuations() {
         ramGauge.style.strokeDashoffset = offset;
     }
     
-    setTimeout(runMetricFluctuations, 2000);
+    setTimeout(() => {
+        if (window.isHeroVisible) {
+            runMetricFluctuations();
+        } else {
+            setTimeout(function check() {
+                if (window.isHeroVisible) runMetricFluctuations();
+                else setTimeout(check, 1000);
+            }, 1000);
+        }
+    }, 2000);
 }
 
 let latencyData = Array(20).fill(15);
@@ -1515,7 +1544,16 @@ function initHeroLatencyChart() {
         ctx.lineWidth = 2;
         ctx.stroke();
         
-        setTimeout(drawLatency, 300);
+        setTimeout(() => {
+            if (window.isHeroVisible) {
+                requestAnimationFrame(drawLatency);
+            } else {
+                setTimeout(function check() {
+                    if (window.isHeroVisible) requestAnimationFrame(drawLatency);
+                    else setTimeout(check, 1000);
+                }, 1000);
+            }
+        }, 300);
     }
     drawLatency();
 }
@@ -2482,16 +2520,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-/* Magnetic Buttons */
-const magneticButtons = document.querySelectorAll('.btn, .social-links a');
-magneticButtons.forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(px, px)`;
+
+
+// =======================================================
+// PERFORMANCE OBSERVER (Pauses heavy loops when offscreen)
+// =======================================================
+window.isAboutVisible = false;
+window.isHeroVisible = true;
+window.isExperienceVisible = false;
+
+const perfObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const id = entry.target.id;
+        if (id === 'about') window.isAboutVisible = entry.isIntersecting;
+        if (id === 'home') window.isHeroVisible = entry.isIntersecting;
+        if (id === 'experience') window.isExperienceVisible = entry.isIntersecting;
     });
-    btn.addEventListener('mouseleave', () => {
-        btn.style.transform = 'translate(0, 0)';
-    });
+}, { threshold: 0.05 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const aboutSection = document.getElementById('about');
+    const heroSection = document.getElementById('home');
+    const expSection = document.getElementById('experience');
+    
+    if (aboutSection) perfObserver.observe(aboutSection);
+    if (heroSection) perfObserver.observe(heroSection);
+    if (expSection) perfObserver.observe(expSection);
 });
+
