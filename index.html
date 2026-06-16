@@ -151,6 +151,12 @@
     <!-- Preload Critical JS -->
     <link rel="preload" href="script.min.js" as="script">
     
+    <script>
+        // Force dark mode and scroll to top on every fresh load
+        localStorage.setItem('theme', 'dark');
+        if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
+        window.scrollTo(0, 0);
+    </script>
 </head>
 <body>
     <!-- Premium Cursor -->
