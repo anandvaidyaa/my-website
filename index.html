@@ -150,58 +150,14 @@
     
     <!-- Preload Critical JS -->
     <link rel="preload" href="script.min.js" as="script">
-    <!-- Bulletproof Custom Cursor Cache-Busting Styles -->
-    <style>
-        .cursor-outline.cursor-hover {
-            opacity: 0 !important;
-            width: 0px !important;
-            height: 0px !important;
-            border-color: transparent !important;
-            background-color: transparent !important;
-            box-shadow: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            animation: none !important;
-        }
-        
-        body.light-mode .cursor-outline.cursor-hover {
-            opacity: 0 !important;
-            width: 0px !important;
-            height: 0px !important;
-            border-color: transparent !important;
-            background-color: transparent !important;
-            box-shadow: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-        
-        .cursor-dot.cursor-dot-hover {
-            width: 8px !important;
-            height: 8px !important;
-            background-color: transparent !important;
-            border: 1.5px solid var(--accent) !important;
-            box-shadow: 0 0 8px var(--accent-glow) !important;
-            opacity: 1 !important;
-            display: block !important;
-            visibility: visible !important;
-        }
-        
-        body.light-mode .cursor-dot.cursor-dot-hover {
-            width: 8px !important;
-            height: 8px !important;
-            background-color: transparent !important;
-            border: 1.5px solid var(--accent) !important;
-            box-shadow: 0 0 8px var(--accent-glow) !important;
-            opacity: 1 !important;
-            display: block !important;
-            visibility: visible !important;
-        }
-    </style>
+    
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="cursor-outline" data-cursor-outline></div>
-    <div class="cursor-dot" data-cursor-dot></div>
+    <!-- Premium Cursor -->
+    <div id="premium-cursor">
+        <div class="cursor-glow"></div>
+        <div class="cursor-ring"></div>
+    </div>
     
     <!-- Cyber-Telemetry Sidebar Navigation -->
     <div class="sidebar-telemetry">
@@ -1529,13 +1485,13 @@
                         <span class="contact-val">+91-9913013470</span>
                     </div>
                 </a>
-                <div class="contact-detail-card glass-card">
+                <a href="https://www.google.com/maps/place/Vadodara,+Gujarat,+India" target="_blank" class="contact-detail-card glass-card" style="text-decoration: none; color: inherit;">
                     <div class="contact-icon-box"><i class='bx bx-map'></i></div>
                     <div class="contact-meta">
                         <span class="contact-label">Location</span>
                         <span class="contact-val">Vadodara, Gujarat, India</span>
                     </div>
-                </div>
+                </a>
             </div>
             
             <!-- Stripe-Style Glassmorphism Contact Form -->

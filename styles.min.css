@@ -265,7 +265,7 @@ textarea:focus-visible {
     left: 0;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    z-index: 99999;
+    z-index: 2147483647 !important;
     pointer-events: none;
     width: 6px;
     height: 6px;
@@ -6962,4 +6962,221 @@ body.light-mode .org-logo-container {
     z-index: 10000 !important;
     transform: translateY(0) scale(1) !important;
     pointer-events: auto !important;
+}
+\n
+/* Light Mode Fixes for Hero Image Profile and Badges */
+body.light-mode .profile-pic-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(240, 244, 248, 0.85));
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .floating-badge {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    color: #0f172a !important;
+    font-weight: 600;
+}
+
+body.light-mode .floating-badge i {
+    color: var(--accent) !important;
+}
+
+body.light-mode .glow-ring {
+    opacity: 0.4;
+}
+\n
+/* ==========================================================================
+   PREMIUM GLASS CURSOR SYSTEM
+   ========================================================================== */
+
+    * {
+        cursor: none !important;
+    }
+    
+    #premium-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+        z-index: 2147483647 !important;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Base Default State - Small Glowing Dot */
+    #premium-cursor .cursor-glow {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: rgba(0, 210, 255, 0.4);
+        filter: blur(4px);
+        transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border-radius 0.2s ease;
+    }
+
+    #premium-cursor .cursor-ring {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+        transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease, border-radius 0.2s ease;
+    }
+
+    /* Light Mode Adjustments */
+    body.light-mode #premium-cursor .cursor-glow {
+        background: rgba(0, 120, 212, 0.2);
+    }
+    body.light-mode #premium-cursor .cursor-ring {
+        background: #0f172a;
+        box-shadow: 0 0 10px rgba(0, 120, 212, 0.4);
+    }
+
+    /* Hover State (Cards, etc) */
+    #premium-cursor[data-state="hover"] .cursor-glow {
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 210, 255, 0.2);
+    }
+    #premium-cursor[data-state="hover"] .cursor-ring {
+        width: 12px;
+        height: 12px;
+    }
+
+    /* Magnet State (Buttons, Links) - Glass Ring Focus */
+    #premium-cursor[data-state="magnet"] .cursor-glow {
+        width: 40px;
+        height: 40px;
+        background: transparent;
+    }
+    #premium-cursor[data-state="magnet"] .cursor-ring {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    body.light-mode #premium-cursor[data-state="magnet"] .cursor-ring {
+        border-color: rgba(0, 0, 0, 0.1);
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Text State */
+    #premium-cursor[data-state="text"] .cursor-glow {
+        width: 4px;
+        height: 24px;
+        border-radius: 2px;
+        background: var(--accent);
+        filter: blur(0);
+    }
+    #premium-cursor[data-state="text"] .cursor-ring {
+        width: 2px;
+        height: 20px;
+        border-radius: 2px;
+        background: #fff;
+        box-shadow: none;
+    }
+    body.light-mode #premium-cursor[data-state="text"] .cursor-ring {
+        background: #0f172a;
+    }
+
+    /* Click State (Pulse) */
+    #premium-cursor.clicking .cursor-ring {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    #premium-cursor.clicking .cursor-glow {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.8;
+    }
+\n
+/* Architecture Diagram Alignment Fixes */
+.timeline-case-study .arch-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.timeline-case-study .arch-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.timeline-case-study .conn-line-h {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    flex-grow: 1;
+    max-width: 4rem;
+}
+
+.timeline-case-study .conn-line-v {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto !important;
+}
+
+@media screen and (max-width: 768px) {
+    .timeline-case-study .conn-line-h {
+        width: 100% !important;
+        flex-grow: 1;
+        min-width: 1.5rem;
+    }
+    .timeline-case-study .conn-line-v {
+        margin: 0 auto !important;
+    }
+    .timeline-case-study .arch-row {
+        gap: 0.5rem;
+        padding-left: 0 !important;
+    }
+    .timeline-case-study .arch-node {
+        padding: 0.8rem !important;
+    }
+}
+\n
+/* Absolute Alignment Overrides for Architecture Diagram */
+.timeline-case-study .arch-row {
+    justify-content: center !important;
+    padding-left: 0 !important;
+}
+
+.timeline-case-study .conn-line-v {
+    margin: 0 auto !important;
+}
+
+.timeline-case-study .conn-line-h {
+    width: 3rem !important;
+    min-width: 2rem !important;
+    flex-shrink: 0;
+}
+
+.timeline-case-study .arch-node {
+    flex: 1;
+    max-width: 140px;
+}
+
+@media screen and (max-width: 768px) {
+    .timeline-case-study .conn-line-h {
+        width: 1.5rem !important;
+        min-width: 1.5rem !important;
+    }
+    
+    .timeline-case-study .arch-node {
+        padding: 0.6rem !important;
+        font-size: 0.7rem !important;
+    }
 }
