@@ -200,6 +200,7 @@
 
     <div class="scroll-progress" aria-hidden="true"><span></span></div>
     <div class="grain" aria-hidden="true"></div>
+    <div class="atmo" id="atmo" aria-hidden="true"></div>
 
     <!-- ========================= NAVIGATION ========================= -->
     <header class="site-header" id="site-header">
@@ -253,10 +254,11 @@
     <main id="main">
 
         <!-- ========================= HERO ========================= -->
-        <section class="hero" id="home" aria-labelledby="hero-title">
+        <section class="hero" id="home" aria-labelledby="hero-title" data-chapter="hero">
             <div class="hero__bg" aria-hidden="true">
                 <div class="mesh"><span></span><span></span><span></span></div>
                 <div class="grid-floor"></div>
+                <div class="halftone"></div>
                 <svg class="net" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
                     <g class="net__lines">
                         <path d="M-20 640 C 260 560, 420 700, 720 610 S 1180 470, 1460 560"/>
@@ -272,17 +274,90 @@
             </div>
 
             <div class="container hero__inner">
-                <div class="hero__copy">
+                <div class="hero__head">
                     <p class="hero__status anim" style="--d:0">
                         <span class="pulse" aria-hidden="true"></span>
                         <span>Currently Cloud Engineer at <strong>FSP Consulting</strong></span>
                     </p>
 
-                    <h1 class="hero__title" id="hero-title">
-                        <span class="mask"><span class="anim" style="--d:1">Anand</span></span>
-                        <span class="mask"><span class="anim outline" style="--d:2">Vaidya</span></span>
-                    </h1>
+                    <div class="hero__type">
+                        <span class="hero__echo" aria-hidden="true"><span>ANAND</span><span>VAIDYA</span></span>
+                        <h1 class="hero__title" id="hero-title">
+                            <span class="mask"><span class="anim hero__word" style="--d:1">Anand</span></span>
+                            <span class="mask"><span class="anim hero__word hero__word--last" style="--d:2">Vaidya</span></span>
+                        </h1>
+                        <!-- A tiny resident of the hero. Purely decorative. -->
+                        <svg class="cloudlet" id="cloudlet" viewBox="0 0 120 80" aria-hidden="true">
+                            <path class="cloudlet__body" d="M28 70h62a22 22 0 0 0 2-44 30 30 0 0 0-57-6A24 24 0 0 0 28 70z"/>
+                            <g class="cloudlet__eyes">
+                                <ellipse cx="50" cy="44" rx="5" ry="6.5"/>
+                                <ellipse cx="72" cy="44" rx="5" ry="6.5"/>
+                            </g>
+                            <path class="cloudlet__mouth" d="M56 56q5 4 10 0"/>
+                        </svg>
+                        <p class="annot annot--name" aria-hidden="true">
+                            <svg viewBox="0 0 90 50"><path d="M84 44C62 44 36 34 14 10m0 0 2 14M14 10l14 2"/></svg>
+                            <span>yes, that&rsquo;s the whole name</span>
+                        </p>
+                    </div>
+                </div>
 
+                <div class="hero__stage anim" style="--d:2">
+                    <div class="sculpture" id="sculpture">
+                        <div class="sculpture__tilt" id="sculpture-tilt">
+                            <figure class="blob-portrait">
+                                <img src="profile-320.webp"
+                                     srcset="profile-320.webp 320w, profile.webp 450w"
+                                     sizes="(max-width: 600px) 220px, 330px"
+                                     width="450" height="450"
+                                     alt="Portrait of Anand Vaidya, Azure Cloud Engineer"
+                                     fetchpriority="high" decoding="async">
+                            </figure>
+
+                            <div class="torus" aria-hidden="true"><span></span></div>
+
+                            <button class="orb" id="orb" type="button" data-cursor="POKE" aria-label="Poke the glass orb (it changes material)">
+                                <span class="orb__core" aria-hidden="true"></span>
+                                <span class="orb__shine" aria-hidden="true"></span>
+                            </button>
+
+                            <div class="shard" aria-hidden="true"></div>
+                            <div class="shard shard--sm" aria-hidden="true"></div>
+
+                            <svg class="icosa" viewBox="0 0 100 100" aria-hidden="true">
+                                <g>
+                                    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28"/>
+                                    <path d="M50 6 32 40 68 40Z M12 28 32 40 12 72 M88 28 68 40 88 72 M32 40 50 94 68 40 M12 72 50 94 88 72 M32 40 68 40"/>
+                                </g>
+                            </svg>
+
+                            <div class="sat-orbit" aria-hidden="true"></div>
+                            <div class="sat-path">
+                                <div class="sat-y">
+                                    <button class="satellite" id="satellite" type="button" data-cursor="NUDGE" aria-label="Nudge the satellite into a different orbit">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hud glass glass--holo" aria-hidden="true">
+                            <p><span>sys</span>engineering in progress</p>
+                            <p><span>loc</span>22.31&deg;N &middot; 73.18&deg;E</p>
+                            <p><span>ptr</span><output id="hud-ptr">x 000 &middot; y 000</output></p>
+                            <p><span>since</span>feb 2023</p>
+                        </div>
+
+                        <p class="sticker sticker--holo" aria-hidden="true">clouds, but make them <b>engineered</b></p>
+                        <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+                            <defs><path id="stamp-circle" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+                            <text><textPath href="#stamp-circle">AZURE &middot; SERVERLESS &middot; IAC &middot; CI/CD &middot; </textPath></text>
+                            <path class="stamp__bolt" d="M64 40 50 64h10l-4 16 14-24H60l4-16z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="hero__body">
                     <p class="hero__role anim" style="--d:3">
                         <span>Azure Cloud Engineer</span><span class="dot" aria-hidden="true"></span><span>Serverless &amp; Integration</span><span class="dot" aria-hidden="true"></span><span>DevOps &amp; IaC</span>
                     </p>
@@ -293,8 +368,8 @@
                     </p>
 
                     <div class="hero__actions anim" style="--d:5">
-                        <a href="#projects" class="btn btn--primary magnetic">View projects <svg class="i"><use href="#i-arrow-right"/></svg></a>
-                        <a href="#architecture" class="btn btn--ghost magnetic">Explore the architecture</a>
+                        <a href="#projects" class="btn btn--primary magnetic" data-cursor="VIEW">View projects <svg class="i"><use href="#i-arrow-right"/></svg></a>
+                        <a href="#architecture" class="btn btn--glass magnetic" data-cursor="EXPLORE">Explore the architecture</a>
                         <a href="#contact" class="btn btn--link">Contact me <svg class="i"><use href="#i-arrow-right"/></svg></a>
                     </div>
 
@@ -303,51 +378,6 @@
                         <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me"><svg class="i"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></li>
                         <li><a href="mailto:anand.svaidya24@gmail.com"><svg class="i"><use href="#i-mail"/></svg><span>Email</span></a></li>
                     </ul>
-                </div>
-
-                <div class="hero__visual anim" style="--d:3">
-                    <div class="orbit-system" id="orbit-system">
-                        <svg class="orbit-rings" viewBox="0 0 520 520" aria-hidden="true">
-                            <defs>
-                                <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-                                    <stop offset="0" stop-color="var(--accent-2)"/>
-                                    <stop offset=".55" stop-color="var(--accent)"/>
-                                    <stop offset="1" stop-color="var(--accent-3)" stop-opacity=".2"/>
-                                </linearGradient>
-                            </defs>
-                            <circle class="ring ring--outer" cx="260" cy="260" r="250"/>
-                            <circle class="ring ring--mid" cx="260" cy="260" r="205"/>
-                            <circle class="ring ring--inner" cx="260" cy="260" r="160"/>
-                            <g class="ring-ticks">
-                                <path d="M260 2v14M260 504v14M2 260h14M504 260h14"/>
-                            </g>
-                        </svg>
-
-                        <svg class="orbit-arc" viewBox="0 0 520 520" aria-hidden="true">
-                            <circle cx="260" cy="260" r="205"/>
-                        </svg>
-
-                        <figure class="portrait">
-                            <img src="profile-320.webp"
-                                 srcset="profile-320.webp 320w, profile.webp 450w"
-                                 sizes="(max-width: 600px) 240px, 360px"
-                                 width="450" height="450"
-                                 alt="Portrait of Anand Vaidya, Azure Cloud Engineer"
-                                 fetchpriority="high" decoding="async">
-                        </figure>
-
-                        <div class="orbit orbit--outer" aria-hidden="true">
-                            <span class="chip-pos" style="--a:-20deg"><span class="orbit-chip"><svg class="i"><use href="#i-bolt"/></svg>Azure Functions</span></span>
-                            <span class="chip-pos" style="--a:70deg"><span class="orbit-chip"><svg class="i"><use href="#i-gateway"/></svg>API Management</span></span>
-                            <span class="chip-pos" style="--a:160deg"><span class="orbit-chip"><svg class="i"><use href="#i-flow"/></svg>Logic Apps</span></span>
-                            <span class="chip-pos" style="--a:250deg"><span class="orbit-chip"><svg class="i"><use href="#i-code"/></svg>Bicep</span></span>
-                        </div>
-                        <div class="orbit orbit--inner" aria-hidden="true">
-                            <span class="chip-pos" style="--a:30deg"><span class="orbit-node"><svg class="i"><use href="#i-branch"/></svg></span></span>
-                            <span class="chip-pos" style="--a:150deg"><span class="orbit-node"><svg class="i"><use href="#i-db"/></svg></span></span>
-                            <span class="chip-pos" style="--a:270deg"><span class="orbit-node"><svg class="i"><use href="#i-key"/></svg></span></span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -361,81 +391,113 @@
             </div>
 
             <a class="scroll-cue" href="#about" aria-label="Scroll to About">
-                <span class="scroll-cue__line" aria-hidden="true"></span>
-                <span class="scroll-cue__text">Scroll</span>
+                <span class="scroll-cue__ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="scroll-cue__prog" cx="20" cy="20" r="17"/></svg><svg class="i"><use href="#i-arrow-down"/></svg></span>
+                <span class="scroll-cue__text">scroll to deploy</span>
             </a>
         </section>
 
-        <!-- Tech ticker (decorative duplicate of the skills below) -->
-        <div class="ticker" aria-hidden="true">
-            <div class="ticker__track">
-                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Azure Bicep</span><span>ARM Templates</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>SQL Server</span><span>Managed Identities</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
-                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Azure Bicep</span><span>ARM Templates</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>SQL Server</span><span>Managed Identities</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
+        <!-- Scroll-linked type band (decorative; the same skills are listed below) -->
+        <div class="band" aria-hidden="true" data-band="1">
+            <div class="band__track">
+                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Bicep</span><span>ARM</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>Managed Identity</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
+                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Bicep</span><span>ARM</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>Managed Identity</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
             </div>
         </div>
 
         <!-- ========================= ABOUT ========================= -->
-        <section class="section about" id="about" aria-labelledby="about-title">
-            <div class="container">
-                <header class="section-head reveal">
+        <section class="section about" id="about" aria-labelledby="about-title" data-chapter="about">
+            <p class="mega" aria-hidden="true" data-drift="-0.12">About</p>
+            <div class="container about__layout">
+                <header class="section-head about__head reveal">
                     <p class="kicker"><span>01</span> About</p>
                     <h2 class="section-title" id="about-title">I turn slow, manual processes into <em>event-driven systems</em> that run themselves.</h2>
                 </header>
 
-                <div class="about__grid">
-                    <div class="about__text reveal">
-                        <p class="lead">
-                            I&rsquo;m Anand Vaidya, a Cloud Engineer at FSP Consulting in Vadodara, India. I design and build
-                            serverless integrations on Microsoft Azure &mdash; Azure Functions, Logic Apps and API Management,
-                            secured with OAuth&nbsp;2.0 and Managed Identities, and shipped through Bicep and Azure DevOps pipelines.
-                        </p>
-                        <p>
-                            Before FSP, I spent two years at Atharva IT Services building a .NET Core integration layer that
-                            connected Shopify, Amazon and Walmart and automated shipping logistics. My work is moving toward
-                            platform engineering and cloud architecture: infrastructure defined as code, automated paths to
-                            production, and systems that are secure by default.
-                        </p>
-
-                        <dl class="about__facts">
-                            <div><dt>Current role</dt><dd>Cloud Engineer, FSP Consulting</dd></div>
-                            <div><dt>Engineering since</dt><dd>February 2023</dd></div>
-                            <div><dt>Certified</dt><dd>Azure AI Fundamentals (AI-900)</dd></div>
-                            <div><dt>Education</dt><dd>B.Tech. CSE, Parul University</dd></div>
+                <div class="about__badge reveal">
+                    <div class="idcard glass glass--holo tilt" data-cursor="ID">
+                        <div class="idcard__top">
+                            <span class="idcard__chip" aria-hidden="true"></span>
+                            <span class="idcard__org">anandvaidya.in / personnel</span>
+                        </div>
+                        <div class="idcard__main">
+                            <img src="profile-320.webp" width="88" height="88" alt="" loading="lazy" decoding="async">
+                            <dl>
+                                <div><dt>Name</dt><dd>Anand Vaidya</dd></div>
+                                <div><dt>Role</dt><dd>Cloud Engineer</dd></div>
+                            </dl>
+                        </div>
+                        <dl class="idcard__grid">
+                            <div><dt>Org</dt><dd>FSP Consulting</dd></div>
+                            <div><dt>Base</dt><dd>Vadodara, IN</dd></div>
+                            <div><dt>Shipping since</dt><dd>Feb 2023</dd></div>
+                            <div><dt>Certified</dt><dd>AI-900</dd></div>
+                            <div><dt>Education</dt><dd>B.Tech. CSE</dd></div>
+                            <div><dt>Clearance</dt><dd>Managed Identity</dd></div>
                         </dl>
+                        <div class="idcard__barcode" aria-hidden="true"></div>
                     </div>
+                    <p class="annot annot--badge" aria-hidden="true">
+                        <svg viewBox="0 0 90 50"><path d="M84 40C60 40 40 30 22 8m0 0 1 14M22 8l13 3"/></svg>
+                        <span>no secrets were stored<br>in the making of this badge</span>
+                    </p>
+                </div>
 
-                    <ol class="principles reveal-stagger" aria-label="How I build">
-                        <li class="principle reveal tilt">
-                            <span class="principle__no">01</span>
-                            <svg class="i principle__icon"><use href="#i-bolt"/></svg>
+                <div class="about__text reveal">
+                    <p class="lead">
+                        I&rsquo;m Anand Vaidya, a Cloud Engineer at FSP Consulting in Vadodara, India. I design and build
+                        serverless integrations on Microsoft Azure &mdash; Azure Functions, Logic Apps and API Management,
+                        secured with OAuth&nbsp;2.0 and Managed Identities, and shipped through Bicep and Azure DevOps pipelines.
+                    </p>
+                    <p>
+                        Before FSP, I spent two years at Atharva IT Services building a .NET Core integration layer that
+                        connected Shopify, Amazon and Walmart and automated shipping logistics. My work is moving toward
+                        platform engineering and cloud architecture: infrastructure defined as code, automated paths to
+                        production, and systems that are secure by default.
+                    </p>
+                    <button type="button" class="spark" id="spark" data-cursor="✦" aria-label="Make a little sparkle">
+                        <svg class="i" aria-hidden="true"><use href="#i-spark"/></svg>
+                    </button>
+                </div>
+
+                <ol class="principles" aria-label="How I build">
+                    <li class="principle reveal">
+                        <span class="principle__no" aria-hidden="true">01</span>
+                        <div>
                             <h3>Event-driven by default</h3>
                             <p>Compute that scales with demand and down to zero when idle, so traffic bursts don&rsquo;t mean lost orders or idle cost.</p>
-                        </li>
-                        <li class="principle reveal tilt">
-                            <span class="principle__no">02</span>
-                            <svg class="i principle__icon"><use href="#i-key"/></svg>
+                        </div>
+                        <span class="principle__tag" aria-hidden="true">fig. scale &rarr; 0</span>
+                    </li>
+                    <li class="principle reveal">
+                        <span class="principle__no" aria-hidden="true">02</span>
+                        <div>
                             <h3>Identity over secrets</h3>
                             <p>Managed Identities, OAuth&nbsp;2.0 and RBAC instead of credentials in config files.</p>
-                        </li>
-                        <li class="principle reveal tilt">
-                            <span class="principle__no">03</span>
-                            <svg class="i principle__icon"><use href="#i-code"/></svg>
+                        </div>
+                        <span class="principle__tag" aria-hidden="true">passwords: 0</span>
+                    </li>
+                    <li class="principle reveal">
+                        <span class="principle__no" aria-hidden="true">03</span>
+                        <div>
                             <h3>Everything as code</h3>
                             <p>Environments declared in Bicep and ARM, versioned and reviewed like application code.</p>
-                        </li>
-                        <li class="principle reveal tilt">
-                            <span class="principle__no">04</span>
-                            <svg class="i principle__icon"><use href="#i-branch"/></svg>
+                        </div>
+                        <span class="principle__tag" aria-hidden="true">portal clicks: discouraged</span>
+                    </li>
+                    <li class="principle reveal">
+                        <span class="principle__no" aria-hidden="true">04</span>
+                        <div>
                             <h3>An automated path to production</h3>
                             <p>Multi-stage pipelines that build, test, scan and deploy without manual steps.</p>
-                        </li>
-                    </ol>
-                </div>
+                        </div>
+                        <span class="principle__tag" aria-hidden="true">manual steps: 0</span>
+                    </li>
+                </ol>
             </div>
         </section>
 
         <!-- ========================= SKILLS ========================= -->
-        <section class="section skills" id="skills" aria-labelledby="skills-title">
+        <section class="section skills" id="skills" data-chapter="skills" aria-labelledby="skills-title">
             <div class="container">
                 <header class="section-head section-head--split reveal">
                     <div>
@@ -450,54 +512,54 @@
                         <div class="layer reveal" data-layer="01">
                             <h3 class="layer__title"><span class="layer__no">L1</span><svg class="i"><use href="#i-cloud"/></svg> Microsoft Azure</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Managed PaaS for hosting web apps, REST APIs and backends — handles TLS, auto-scaling and deployment slots." data-use="Hosted .NET Core APIs behind API Management with staging/production slot-swap deployments.">App Services</button>
-                                <button type="button" class="skill" data-desc="Entra ID identities for Azure resources, so services authenticate to each other without stored secrets." data-use="Replaced exposed credentials in legacy, on-premises processing with Managed Identities at FSP Consulting.">Managed Identities</button>
-                                <button type="button" class="skill" data-desc="Customer identity and access management for apps and APIs." data-use="Part of the identity layer in the carrier &amp; shipping integration project, together with OAuth 2.0.">Azure AD B2C</button>
+                                <button type="button" class="skill" data-desc="Managed PaaS for hosting web apps, REST APIs and backends — handles TLS, auto-scaling and deployment slots." data-use="Hosted .NET Core APIs behind API Management with staging/production slot-swap deployments." data-related="Azure DevOps|Azure Bicep" data-work="pipeline">App Services</button>
+                                <button type="button" class="skill" data-desc="Entra ID identities for Azure resources, so services authenticate to each other without stored secrets." data-use="Replaced exposed credentials in legacy, on-premises processing with Managed Identities at FSP Consulting." data-related="OAuth 2.0|Azure Functions|Logic Apps" data-work="fsp">Managed Identities</button>
+                                <button type="button" class="skill" data-desc="Customer identity and access management for apps and APIs." data-use="Part of the identity layer in the carrier &amp; shipping integration project, together with OAuth 2.0." data-related="OAuth 2.0|Azure API Management" data-work="carrier">Azure AD B2C</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="02">
                             <h3 class="layer__title"><span class="layer__no">L2</span><svg class="i"><use href="#i-bolt"/></svg> Serverless &amp; integration</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Serverless compute that runs event-driven code on demand — scales to zero when idle, eliminating infrastructure overhead." data-use="Built order-processing, inventory-sync and webhook-handler functions, and the event-driven architecture at FSP Consulting.">Azure Functions</button>
-                                <button type="button" class="skill" data-desc="Low-code workflow orchestrator that connects enterprise systems using hundreds of pre-built connectors." data-use="Automated approval flows, cross-system data sync and carrier dispatch workflows.">Logic Apps</button>
+                                <button type="button" class="skill" data-desc="Serverless compute that runs event-driven code on demand — scales to zero when idle, eliminating infrastructure overhead." data-use="Built order-processing, inventory-sync and webhook-handler functions, and the event-driven architecture at FSP Consulting." data-related="Logic Apps|Cosmos DB|Azure API Management" data-work="orders|fsp">Azure Functions</button>
+                                <button type="button" class="skill" data-desc="Low-code workflow orchestrator that connects enterprise systems using hundreds of pre-built connectors." data-use="Automated approval flows, cross-system data sync and carrier dispatch workflows." data-related="Azure Functions|Managed Identities" data-work="fsp">Logic Apps</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="03">
                             <h3 class="layer__title"><span class="layer__no">L3</span><svg class="i"><use href="#i-gateway"/></svg> APIs &amp; data</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Enterprise API gateway providing rate-limiting, authentication, caching, versioning and analytics for backend services." data-use="Unified microservice APIs behind a single gateway with JWT validation and throttling; fronted the carrier integration layer.">Azure API Management</button>
-                                <button type="button" class="skill" data-desc="Industry-standard protocol for delegated authorisation of APIs." data-use="Secured APIM-fronted services at FSP Consulting and the carrier &amp; shipping integration layer.">OAuth 2.0</button>
-                                <button type="button" class="skill" data-desc="Globally distributed NoSQL database with low-latency reads and multi-region writes." data-use="Stored order and inventory state for real-time e-commerce workloads that handle traffic spikes.">Cosmos DB</button>
-                                <button type="button" class="skill" data-desc="Relational database engine for structured, transactional workloads with ACID guarantees." data-use="Persisted ledger and order-history data with row-level security and automated backups.">SQL Server</button>
+                                <button type="button" class="skill" data-desc="Enterprise API gateway providing rate-limiting, authentication, caching, versioning and analytics for backend services." data-use="Unified microservice APIs behind a single gateway with JWT validation and throttling; fronted the carrier integration layer." data-related="OAuth 2.0|Azure Functions|Azure AD B2C" data-work="carrier|fsp">Azure API Management</button>
+                                <button type="button" class="skill" data-desc="Industry-standard protocol for delegated authorisation of APIs." data-use="Secured APIM-fronted services at FSP Consulting and the carrier &amp; shipping integration layer." data-related="Azure API Management|Azure AD B2C|Managed Identities" data-work="carrier|fsp">OAuth 2.0</button>
+                                <button type="button" class="skill" data-desc="Globally distributed NoSQL database with low-latency reads and multi-region writes." data-use="Stored order and inventory state for real-time e-commerce workloads that handle traffic spikes." data-related="Azure Functions|ASP.NET Core &amp; C#" data-work="orders|atharva">Cosmos DB</button>
+                                <button type="button" class="skill" data-desc="Relational database engine for structured, transactional workloads with ACID guarantees." data-use="Persisted ledger and order-history data with row-level security and automated backups." data-related="Cosmos DB" data-work="parul">SQL Server</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="04">
                             <h3 class="layer__title"><span class="layer__no">L4</span><svg class="i"><use href="#i-code"/></svg> Infrastructure as code</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Declarative IaC language for Azure — cloud resources written as code, so infrastructure is reproducible, version-controlled and auditable." data-use="Defined and deployed VMs, VNets, Key Vaults and App Services across environments; core of the zero-downtime deployment pipeline.">Azure Bicep</button>
-                                <button type="button" class="skill" data-desc="JSON-based Azure Resource Manager templates for deploying and managing Azure resources at scale, idempotently." data-use="Used alongside Bicep for legacy pipeline compatibility and complex nested deployments.">ARM Templates</button>
+                                <button type="button" class="skill" data-desc="Declarative IaC language for Azure — cloud resources written as code, so infrastructure is reproducible, version-controlled and auditable." data-use="Defined and deployed VMs, VNets, Key Vaults and App Services across environments; core of the zero-downtime deployment pipeline." data-related="ARM Templates|Azure DevOps|App Services" data-work="pipeline|fsp">Azure Bicep</button>
+                                <button type="button" class="skill" data-desc="JSON-based Azure Resource Manager templates for deploying and managing Azure resources at scale, idempotently." data-use="Used alongside Bicep for legacy pipeline compatibility and complex nested deployments." data-related="Azure Bicep|Azure DevOps" data-work="pipeline">ARM Templates</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="05">
                             <h3 class="layer__title"><span class="layer__no">L5</span><svg class="i"><use href="#i-branch"/></svg> DevOps, CI/CD &amp; containers</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="End-to-end DevOps platform covering Repos, Pipelines, Boards and Artifacts for the full CI/CD lifecycle." data-use="Configured multi-stage YAML pipelines for build, test, security scanning and blue-green deployments to Azure.">Azure DevOps</button>
-                                <button type="button" class="skill" data-desc="Continuous integration and deployment — automated pipelines that build, test and deploy code with every commit." data-use="Zero-downtime release pipelines with approval gates, rollback triggers and environment promotion.">CI/CD pipelines</button>
-                                <button type="button" class="skill" data-desc="Container runtime for packaging apps and their dependencies into portable, isolated images." data-use="Containerised .NET services and shipped zero-downtime deployments at Atharva IT Services.">Docker</button>
+                                <button type="button" class="skill" data-desc="End-to-end DevOps platform covering Repos, Pipelines, Boards and Artifacts for the full CI/CD lifecycle." data-use="Configured multi-stage YAML pipelines for build, test, security scanning and blue-green deployments to Azure." data-related="CI/CD pipelines|Azure Bicep|Docker" data-work="pipeline|atharva">Azure DevOps</button>
+                                <button type="button" class="skill" data-desc="Continuous integration and deployment — automated pipelines that build, test and deploy code with every commit." data-use="Zero-downtime release pipelines with approval gates, rollback triggers and environment promotion." data-related="Azure DevOps|Azure Bicep" data-work="pipeline">CI/CD pipelines</button>
+                                <button type="button" class="skill" data-desc="Container runtime for packaging apps and their dependencies into portable, isolated images." data-use="Containerised .NET services and shipped zero-downtime deployments at Atharva IT Services." data-related="Azure DevOps|ASP.NET Core &amp; C#" data-work="atharva">Docker</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="06">
                             <h3 class="layer__title"><span class="layer__no">L6</span><svg class="i"><use href="#i-terminal"/></svg> Programming &amp; automation</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Microsoft&rsquo;s cross-platform framework (C#) for web APIs and backend services." data-use="Built the .NET Core integration layer connecting Shopify, Amazon and Walmart at Atharva IT Services.">ASP.NET Core &amp; C#</button>
-                                <button type="button" class="skill" data-desc="The language of the web, also used for tooling and automation." data-use="Built this site with plain HTML, CSS and JavaScript — no framework.">JavaScript</button>
-                                <button type="button" class="skill" data-desc="General-purpose language widely used for scripting, automation and data work." data-use="Completed a Python data science masterclass (Parul University &amp; Udemy).">Python</button>
+                                <button type="button" class="skill" data-desc="Microsoft&rsquo;s cross-platform framework (C#) for web APIs and backend services." data-use="Built the .NET Core integration layer connecting Shopify, Amazon and Walmart at Atharva IT Services." data-related="Cosmos DB|Azure Functions" data-work="orders|atharva">ASP.NET Core &amp; C#</button>
+                                <button type="button" class="skill" data-desc="The language of the web, also used for tooling and automation." data-use="Built this site with plain HTML, CSS and JavaScript — no framework." data-related="" data-work="">JavaScript</button>
+                                <button type="button" class="skill" data-desc="General-purpose language widely used for scripting, automation and data work." data-use="Completed a Python data science masterclass (Parul University &amp; Udemy)." data-related="" data-work="">Python</button>
                             </div>
                         </div>
                     </div>
 
                     <aside class="inspector" id="skill-inspector" aria-live="polite">
-                        <div class="inspector__card">
+                        <div class="inspector__card glass glass--crystal">
                             <p class="inspector__label"><svg class="i"><use href="#i-target"/></svg> Inspector</p>
                             <h3 class="inspector__name" id="inspector-name">Select a technology</h3>
                             <div class="inspector__body" id="inspector-body">
@@ -510,7 +572,7 @@
         </section>
 
         <!-- ========================= ARCHITECTURE EXPLORER ========================= -->
-        <section class="section arch" id="architecture" aria-labelledby="arch-title">
+        <section class="section arch" id="architecture" data-chapter="architecture" aria-labelledby="arch-title">
             <div class="container">
                 <header class="section-head section-head--split reveal">
                     <div>
@@ -523,7 +585,12 @@
                     </p>
                 </header>
 
-                <div class="arch__shell reveal">
+                <div class="arch__wrap">
+                <svg class="cloudlet cloudlet--peek" viewBox="0 0 120 80" aria-hidden="true">
+                    <path class="cloudlet__body" d="M28 70h62a22 22 0 0 0 2-44 30 30 0 0 0-57-6A24 24 0 0 0 28 70z"/>
+                    <g class="cloudlet__eyes"><ellipse cx="50" cy="44" rx="5" ry="6.5"/><ellipse cx="72" cy="44" rx="5" ry="6.5"/></g>
+                </svg>
+                <div class="arch__shell glass glass--dark reveal">
                     <div class="arch__toolbar" role="group" aria-label="Highlight a flow">
                         <button type="button" class="seg is-active" data-flow="all" aria-pressed="true">All</button>
                         <button type="button" class="seg" data-flow="request" aria-pressed="false">Request path</button>
@@ -607,11 +674,12 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </section>
 
         <!-- ========================= EXPERIENCE ========================= -->
-        <section class="section experience" id="experience" aria-labelledby="exp-title">
+        <section class="section experience" id="experience" data-chapter="experience" aria-labelledby="exp-title">
             <div class="container">
                 <header class="section-head reveal">
                     <p class="kicker"><span>04</span> Experience</p>
@@ -619,13 +687,14 @@
                 </header>
 
                 <ol class="timeline">
-                    <li class="job reveal" id="job-fsp">
+                    <li class="job reveal" id="job-fsp" data-year="2025">
                         <div class="job__rail" aria-hidden="true"><span class="job__dot job__dot--live"></span></div>
                         <div class="job__when">
                             <span class="job__dates"><time datetime="2025-04">Apr 2025</time> &ndash; Present</span>
                             <span class="job__type">Full-time · Vadodara</span>
                         </div>
-                        <article class="job__card tilt">
+                        <article class="job__card glass glass--dark tilt">
+                            <span class="job__stamp" aria-hidden="true">now<br>shipping</span>
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">FSP</span>
                                 <div>
@@ -645,13 +714,13 @@
                         </article>
                     </li>
 
-                    <li class="job reveal" id="job-atharva">
+                    <li class="job reveal" id="job-atharva" data-year="2023">
                         <div class="job__rail" aria-hidden="true"><span class="job__dot"></span></div>
                         <div class="job__when">
                             <span class="job__dates"><time datetime="2023-02">Feb 2023</time> &ndash; <time datetime="2025-03">Mar 2025</time></span>
                             <span class="job__type">Full-time · Ahmedabad</span>
                         </div>
-                        <article class="job__card tilt">
+                        <article class="job__card glass glass--dark tilt">
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">AIT</span>
                                 <div>
@@ -671,13 +740,13 @@
                         </article>
                     </li>
 
-                    <li class="job reveal" id="job-parul">
+                    <li class="job reveal" id="job-parul" data-year="2021">
                         <div class="job__rail" aria-hidden="true"><span class="job__dot"></span></div>
                         <div class="job__when">
                             <span class="job__dates"><time datetime="2021-09">Sep 2021</time> &ndash; <time datetime="2022-08">Aug 2022</time></span>
                             <span class="job__type">Internship · Vadodara</span>
                         </div>
-                        <article class="job__card tilt">
+                        <article class="job__card glass glass--dark tilt">
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">PU</span>
                                 <div>
@@ -701,7 +770,7 @@
         </section>
 
         <!-- ========================= PROJECTS ========================= -->
-        <section class="section projects" id="projects" aria-labelledby="projects-title">
+        <section class="section projects" id="projects" data-chapter="projects" aria-labelledby="projects-title">
             <div class="container">
                 <header class="section-head section-head--split reveal">
                     <div>
@@ -713,7 +782,7 @@
 
                 <div class="cases">
                     <!-- Case 1 -->
-                    <article class="case reveal" id="project-order-platform" aria-labelledby="case1-title">
+                    <article class="case case--cyan reveal" id="project-order-platform" aria-labelledby="case1-title">
                         <div class="case__meta">
                             <span class="case__no">01</span>
                             <span class="case__type">Client project · Event-driven integration</span>
@@ -730,7 +799,7 @@
                                 <a class="case__link" href="/projects/multi-channel-order-processing/">Read the order-processing case study <svg class="i"><use href="#i-arrow-right"/></svg></a>
                             </div>
                             <div class="case__side">
-                                <figure class="diagram" aria-label="Simplified architecture: three sales channels feed Azure Functions, which store state in Cosmos DB and sync inventory back to every channel">
+                                <div class="case__frame"><figure class="diagram" aria-label="Simplified architecture: three sales channels feed Azure Functions, which store state in Cosmos DB and sync inventory back to every channel">
                                     <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
                                         <g class="d-edges">
                                             <path class="flow" d="M96 46 C150 46,150 110,182 110"/>
@@ -744,7 +813,7 @@
                                         <g class="d-node d-node--accent"><rect x="182" y="88" width="136" height="40" rx="10"/><text x="250" y="112">Azure Functions</text></g>
                                         <g class="d-node"><rect x="196" y="170" width="108" height="32" rx="8"/><text x="250" y="190">Cosmos DB</text></g>
                                     </svg>
-                                </figure>
+                                </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span></div>
                                 <ul class="outcomes" aria-label="Outcomes">
                                     <li><span class="outcome__val">5&nbsp;min &rarr; &lt;2&nbsp;s</span><span class="outcome__lbl">inventory sync latency</span></li>
                                     <li><span class="outcome__val">$150k+</span><span class="outcome__lbl">previously lost quarterly revenue recovered</span></li>
@@ -755,7 +824,7 @@
                     </article>
 
                     <!-- Case 2 -->
-                    <article class="case case--flip reveal" id="project-deployment-pipeline" aria-labelledby="case2-title">
+                    <article class="case case--lime case--flip reveal" id="project-deployment-pipeline" aria-labelledby="case2-title">
                         <div class="case__meta">
                             <span class="case__no">02</span>
                             <span class="case__type">Client project · Infrastructure as code &amp; CI/CD</span>
@@ -772,7 +841,7 @@
                                 <a class="case__link" href="/projects/zero-downtime-deployment-pipeline/">Read the deployment-pipeline case study <svg class="i"><use href="#i-arrow-right"/></svg></a>
                             </div>
                             <div class="case__side">
-                                <figure class="diagram" aria-label="Simplified pipeline: commit, build and test, Bicep provisioning, then deployment to staging and production">
+                                <div class="case__frame"><figure class="diagram" aria-label="Simplified pipeline: commit, build and test, Bicep provisioning, then deployment to staging and production">
                                     <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
                                         <g class="d-edges">
                                             <path class="flow" d="M80 60 H124"/>
@@ -786,7 +855,7 @@
                                         <g class="d-node"><rect x="200" y="150" width="100" height="32" rx="8"/><text x="250" y="170">Staging</text></g>
                                         <g class="d-node d-node--ok"><rect x="52" y="150" width="110" height="32" rx="8"/><text x="107" y="170">Production</text></g>
                                     </svg>
-                                </figure>
+                                </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span></div>
                                 <ul class="outcomes" aria-label="Outcomes">
                                     <li><span class="outcome__val">2&nbsp;days &rarr; 15&nbsp;min</span><span class="outcome__lbl">deployment time</span></li>
                                     <li><span class="outcome__val">Zero</span><span class="outcome__lbl">downtime releases</span></li>
@@ -797,7 +866,7 @@
                     </article>
 
                     <!-- Case 3 -->
-                    <article class="case reveal" id="project-carrier-gateway" aria-labelledby="case3-title">
+                    <article class="case case--magenta case--stack reveal" id="project-carrier-gateway" aria-labelledby="case3-title">
                         <div class="case__meta">
                             <span class="case__no">03</span>
                             <span class="case__type">Client project · API gateway &amp; security</span>
@@ -814,7 +883,7 @@
                                 <a class="case__link" href="/projects/carrier-shipping-integration/">Read the carrier API gateway case study <svg class="i"><use href="#i-arrow-right"/></svg></a>
                             </div>
                             <div class="case__side">
-                                <figure class="diagram" aria-label="Simplified architecture: dispatch apps call Azure API Management secured with OAuth 2.0, which routes to FedEx, DHL and UPS">
+                                <div class="case__frame"><figure class="diagram" aria-label="Simplified architecture: dispatch apps call Azure API Management secured with OAuth 2.0, which routes to FedEx, DHL and UPS">
                                     <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
                                         <g class="d-edges">
                                             <path class="flow" d="M92 110 H140"/>
@@ -828,7 +897,7 @@
                                         <g class="d-node"><rect x="300" y="94" width="52" height="32" rx="8"/><text x="326" y="114">DHL</text></g>
                                         <g class="d-node"><rect x="300" y="158" width="52" height="32" rx="8"/><text x="326" y="178">UPS</text></g>
                                     </svg>
-                                </figure>
+                                </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span></div>
                                 <ul class="outcomes" aria-label="Outcomes">
                                     <li><span class="outcome__val">Zero clicks</span><span class="outcome__lbl">replacing a 20-minute manual process</span></li>
                                     <li><span class="outcome__val">40+&nbsp;hrs</span><span class="outcome__lbl">dispatch overhead saved per week</span></li>
@@ -842,7 +911,7 @@
         </section>
 
         <!-- ========================= CREDENTIALS ========================= -->
-        <section class="section credentials" id="credentials" aria-labelledby="cred-title">
+        <section class="section credentials" id="credentials" data-chapter="credentials" aria-labelledby="cred-title">
             <div class="container">
                 <header class="section-head reveal">
                     <p class="kicker"><span>06</span> Education &amp; certifications</p>
@@ -850,27 +919,27 @@
                 </header>
 
                 <div class="cred__grid">
-                    <article class="cred cred--edu reveal tilt">
+                    <article class="cred cred--edu glass glass--iris reveal tilt">
                         <svg class="i cred__icon"><use href="#i-grad"/></svg>
                         <p class="cred__kind">Education</p>
                         <h3>B.Tech. Computer Science &amp; Engineering</h3>
                         <p class="cred__org">Parul University, Vadodara</p>
                         <p class="cred__foot"><span>2019 &ndash; 2023</span><span class="cred__ok"><svg class="i"><use href="#i-award"/></svg> First Class with Distinction</span></p>
                     </article>
-                    <article class="cred cred--ms reveal tilt">
+                    <article class="cred cred--ms glass glass--holo reveal tilt">
                         <svg class="i cred__icon"><use href="#i-award"/></svg>
                         <p class="cred__kind">Certification</p>
                         <h3>Microsoft Certified: Azure AI Fundamentals</h3>
                         <p class="cred__org">Microsoft · AI-900</p>
                         <p class="cred__foot"><span>May 2025</span><span class="cred__ok"><svg class="i"><use href="#i-check"/></svg> Verified</span></p>
                     </article>
-                    <article class="cred reveal tilt">
+                    <article class="cred glass glass--frost reveal tilt">
                         <svg class="i cred__icon"><use href="#i-code"/></svg>
                         <p class="cred__kind">Course</p>
                         <h3>Python Data Science &amp; Masterclass</h3>
                         <p class="cred__org">Parul University &amp; Udemy</p>
                     </article>
-                    <article class="cred reveal tilt">
+                    <article class="cred glass glass--frost reveal tilt">
                         <svg class="i cred__icon"><use href="#i-shield"/></svg>
                         <p class="cred__kind">Course</p>
                         <h3>Deep Web &mdash; The Complete Introduction</h3>
@@ -881,7 +950,7 @@
         </section>
 
         <!-- ========================= FAQ ========================= -->
-        <section class="section faq" id="faq" aria-labelledby="faq-title">
+        <section class="section faq" id="faq" data-chapter="faq" aria-labelledby="faq-title">
             <div class="container faq__grid">
                 <header class="section-head reveal">
                     <p class="kicker"><span>07</span> FAQ</p>
@@ -910,7 +979,7 @@
         </section>
 
         <!-- ========================= TERMINAL ========================= -->
-        <section class="section console" id="console" aria-labelledby="console-title">
+        <section class="section console" id="console" data-chapter="console" aria-labelledby="console-title">
             <div class="container console__grid">
                 <header class="section-head reveal">
                     <p class="kicker"><span>08</span> Prefer a shell?</p>
@@ -941,8 +1010,14 @@
             </div>
         </section>
 
+        <div class="band band--big" aria-hidden="true" data-band="2">
+            <div class="band__track">
+                <span>Let&rsquo;s build</span><span>something that scales</span><span>Let&rsquo;s build</span><span>something that scales</span><span>Let&rsquo;s build</span><span>something that scales</span>
+            </div>
+        </div>
+
         <!-- ========================= CONTACT ========================= -->
-        <section class="section contact" id="contact" aria-labelledby="contact-title">
+        <section class="section contact" id="contact" data-chapter="contact" aria-labelledby="contact-title">
             <div class="contact__glow" aria-hidden="true"></div>
             <div class="container">
                 <header class="contact__head reveal">
@@ -985,7 +1060,7 @@
                         </a>
                     </div>
 
-                    <form class="cform reveal" id="contact-form" novalidate>
+                    <form class="cform glass glass--frost reveal" id="contact-form" novalidate>
                         <h3 class="cform__title">Send a message</h3>
                         <p class="cform__note">This opens your email app with the message ready to send.</p>
                         <div class="field">
@@ -1007,11 +1082,19 @@
     </main>
 
     <!-- ========================= FOOTER ========================= -->
-    <footer class="site-footer">
+    <footer class="site-footer" id="site-footer">
         <div class="container footer__grid">
             <div class="footer__brand">
                 <p class="footer__name">Anand Vaidya</p>
                 <p>Azure Cloud Engineer &middot; Vadodara, Gujarat, India</p>
+                <button type="button" class="footer__egg" id="footer-egg" data-cursor="WAKE">
+                    <svg class="cloudlet cloudlet--sleepy" viewBox="0 0 120 80" aria-hidden="true">
+                        <path class="cloudlet__body" d="M28 70h62a22 22 0 0 0 2-44 30 30 0 0 0-57-6A24 24 0 0 0 28 70z"/>
+                        <g class="cloudlet__eyes"><ellipse cx="50" cy="44" rx="5" ry="6.5"/><ellipse cx="72" cy="44" rx="5" ry="6.5"/></g>
+                        <path class="cloudlet__mouth" d="M56 56q5 4 10 0"/>
+                    </svg>
+                    <span>Open the control plane</span>
+                </button>
             </div>
             <nav class="footer__nav" aria-label="Footer">
                 <p class="footer__head">Sections</p>
@@ -1025,7 +1108,13 @@
                 </ul>
             </nav>
             <div class="footer__nav">
-                <p class="footer__head">Elsewhere</p>
+                <p class="footer__head">Case studies</p>
+                <ul>
+                    <li><a href="/projects/multi-channel-order-processing/">Order processing on Azure Functions</a></li>
+                    <li><a href="/projects/zero-downtime-deployment-pipeline/">Zero-downtime pipeline with Bicep</a></li>
+                    <li><a href="/projects/carrier-shipping-integration/">Carrier gateway on API Management</a></li>
+                </ul>
+                <p class="footer__head footer__head--gap">Elsewhere</p>
                 <ul>
                     <li><a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me">GitHub</a></li>
                     <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me">LinkedIn</a></li>
@@ -1033,10 +1122,29 @@
                 </ul>
             </div>
         </div>
+        <p class="footer__wordmark" aria-hidden="true">Anand Vaidya</p>
         <div class="container footer__bottom">
-            <p>&copy; <span id="year">2026</span> Anand Vaidya. Hand-built with HTML, CSS and JavaScript.</p>
+            <p>&copy; <span id="year">2026</span> Anand Vaidya. Hand-built with HTML, CSS and JavaScript. Objects may float.</p>
             <a href="#home" class="to-top">Back to top <svg class="i"><use href="#i-arrow-up"/></svg></a>
         </div>
     </footer>
+
+    <!-- Easter egg: opened by the footer cloud, the Konami code, typing "cloud", or the terminal -->
+    <dialog class="egg glass glass--holo" id="egg" aria-labelledby="egg-title">
+        <p class="egg__tag">control plane &middot; access granted</p>
+        <h2 class="egg__title" id="egg-title">You found the control plane.</h2>
+        <p>Everything is healthy. Nothing is on fire. Here is the whole stack in one breath:</p>
+        <svg class="egg__map" viewBox="0 0 320 120" role="img" aria-label="Clients call API Management, which triggers Functions and Logic Apps, which store data; Bicep and Azure DevOps deploy all of it">
+            <g class="d-edges"><path class="flow" d="M58 40H96M164 40h30M164 40c14 0 18 40 30 40M254 40h12M254 80h12"/></g>
+            <g class="d-node"><rect x="6" y="26" width="52" height="28" rx="7"/><text x="32" y="40">Client</text></g>
+            <g class="d-node d-node--accent"><rect x="96" y="26" width="68" height="28" rx="7"/><text x="130" y="40">APIM</text></g>
+            <g class="d-node"><rect x="194" y="26" width="60" height="28" rx="7"/><text x="224" y="40">Functions</text></g>
+            <g class="d-node"><rect x="194" y="66" width="60" height="28" rx="7"/><text x="224" y="80">Logic Apps</text></g>
+            <g class="d-node d-node--ok"><rect x="266" y="44" width="48" height="32" rx="7"/><text x="290" y="60">Data</text></g>
+            <text class="egg__iac" x="6" y="112">deployed by Bicep + Azure DevOps · secured by Managed Identity</text>
+        </svg>
+        <p class="egg__small">Secret commands also work in the terminal. Try <code>sudo</code>.</p>
+        <form method="dialog"><button class="btn btn--primary btn--sm" type="submit">Close the control plane</button></form>
+    </dialog>
 </body>
 </html>

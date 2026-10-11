@@ -1,5 +1,26 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-11 (3) — Futuristic redesign: materials, sculpture, personality
+
+**Visual identity**
+- Palette extended with acid lime and restrained magenta; warm off-white light theme.
+- Glass material system: dark, iridescent (animated conic edge), crystal (cut corners), frosted and holographic (scan lines + sweeping sheen), with a solid fallback where `backdrop-filter` is unsupported and lighter blur on phones.
+- Hero rebuilt as an asymmetric composition: oversized stacked name with an offset outline extrusion, pointer parallax, and a CSS-3D/SVG sculpture (no WebGL): portrait in a morphing blob, a refracting glass orb, chrome torus, iridescent shards, wireframe polyhedron, an orbiting satellite, a rotating stamp, a live HUD (location, pointer coordinates), a holographic sticker and hand-drawn annotations.
+- About as an editorial spread with a holographic ID badge; principles as numbered spec rows. Scroll-linked type bands, oversized outline words, floating year labels and a "now shipping" stamp in the timeline, projects as tilted glass exhibition frames with per-project accent colour and animated luminous borders, credentials as stickers, a footer wordmark that fills in when reached.
+
+**Motion & interaction**
+- Custom cursor on fine pointers (ring + dot, contextual labels such as VIEW / EXPLORE / INSPECT; the native cursor is kept).
+- Chapter lighting that shifts colour per section; architecture diagram assembles itself (edges draw, nodes pop in); headings reveal word by word; project frames reveal through clip masks.
+- Skills inspector shows a live mini ecosystem graph, related technologies (clickable) and links to where each one was used.
+- Easter eggs: poke the orb (changes material), nudge the satellite (changes orbit), a sparkle button, a cloud mascot whose eyes follow the pointer, a sleepy footer cloud that wakes up, and a hidden "control plane" dialog (footer cloud, Konami code, typing "cloud", or `cloud` in the terminal).
+
+**Performance work in this pass**
+- Ambient motion starts ~2 s after load in idle time and pauses off-screen; the architecture explorer initialises only near the viewport; scroll effects only measure elements near the viewport (avoids forcing layout of `content-visibility` sections); state classes scoped to the smallest element (no whole-document style invalidation on hover).
+
+**Measured (Lighthouse 12, local gzip server, same machine, interleaved A/B)**
+- Mobile performance: new 89–93 vs. previous build 91–95 (runs vary up to 99 on a cold machine). LCP 1.8–1.9 s, CLS 0. Desktop 99–100. Accessibility, best practices and SEO 100. Case-study pages 100.
+- axe-core: 0 WCAG 2.2 AA violations (homepage and case study, both themes, 375 and 1366 px). 46/46 functional checks, 53/53 SEO checks, no horizontal overflow at 320–1920 px.
+
 ## 2026-10-11 (2) — SEO foundation
 
 **Audit findings (production, before)**

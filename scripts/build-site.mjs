@@ -61,7 +61,8 @@ const themeScript = grab(/<script>\s*\/\/ Set the theme[\s\S]*?<\/script>/, "the
 const sprite = grab(/<svg width="0" height="0" class="sprite"[\s\S]*?<\/svg>/, "icon sprite");
 const header = toRoot(grab(/<header class="site-header"[\s\S]*?<\/header>/, "site header"))
     .replace('<a href="/#projects">Projects</a>', '<a href="/#projects" class="is-active">Projects</a>');
-const footer = toRoot(grab(/<footer class="site-footer">[\s\S]*?<\/footer>/, "site footer"));
+const footer = toRoot(grab(/<footer class="site-footer"[\s\S]*?<\/footer>/, "site footer"));
+const egg = grab(/<dialog class="egg[\s\S]*?<\/dialog>/, "easter-egg dialog");
 
 // ---------- 3. Case studies ----------
 const template = await readFile("src/templates/article.html", "utf8");
@@ -146,6 +147,7 @@ for (const p of projects) {
         SPRITE: sprite,
         HEADER: header,
         FOOTER: footer,
+        EGG: egg,
         KICKER: esc(p.kicker),
         LEDE: esc(p.lede),
         CONTEXT: esc(p.context),

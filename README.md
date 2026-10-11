@@ -69,6 +69,9 @@ Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/dep
   container width; keyboard arrows move between nodes. It is labelled illustrative on the page.
 - **Performance:** below-the-fold sections use `content-visibility: auto`; in-page links are handled by
   `scrollToId()` in `src/script.js`, which re-measures after lazy sections render so anchors land correctly.
+- **Glass materials:** `.glass` plus a modifier (`--dark`, `--iris`, `--crystal`, `--frost`, `--holo`) in `src/styles.css` (Phase 3 section).
+- **Hero sculpture:** pure CSS 3D + SVG (`.sculpture`), tilted by `--px/--py` set from the pointer in `initHero()`.
+- **Cursor & easter eggs:** `initCursor()` and `initEggs()` in `src/script.js`. The cursor only runs for a mouse with motion allowed; the native cursor stays. Hidden dialog: footer cloud, Konami code, typing "cloud", or `cloud` in the terminal.
 - **Without JavaScript:** everything is visible; the architecture diagram falls back to a list with all details.
 - **Contact form:** there is no backend. It validates, then opens the visitor's mail client with the message
   pre-filled and says so. For delivery without a mail client, point the form at a service like Formspree.
