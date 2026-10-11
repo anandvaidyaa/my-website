@@ -16,6 +16,7 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 | `content/projects/*.html` | Case studies (JSON metadata + body), rendered to `/projects/<slug>/` with `src/templates/article.html`. |
 | `docs/SEO.md` | Search Console setup, monitoring, authority building, how to add content. |
 | `src/styles.css` | **Edit this.** Design system — tokens (dark + light), layout, components, motion. Mobile-first. |
+| `src/eggs.js`, `src/eggs.css` | Optional easter-egg module (lazy-loaded, isolated). |
 | `src/script.js` | **Edit this.** Interactions, as small independent modules (theme, nav, reveals, skills inspector, architecture explorer, terminal, contact form). |
 | `styles.min.css`, `script.min.js` | Build output — don't edit by hand. |
 | `fonts/` | Self-hosted variable fonts (Outfit, Space Grotesk — SIL OFL 1.1, licences included). |
@@ -71,7 +72,8 @@ Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/dep
   `scrollToId()` in `src/script.js`, which re-measures after lazy sections render so anchors land correctly.
 - **Glass materials:** `.glass` plus a modifier (`--dark`, `--iris`, `--crystal`, `--frost`, `--holo`) in `src/styles.css` (Phase 3 section).
 - **Hero sculpture:** pure CSS 3D + SVG (`.sculpture`), tilted by `--px/--py` set from the pointer in `initHero()`.
-- **Cursor & easter eggs:** `initCursor()` and `initEggs()` in `src/script.js`. The cursor only runs for a mouse with motion allowed; the native cursor stays. Hidden dialog: footer cloud, Konami code, typing "cloud", or `cloud` in the terminal.
+- **Cursor:** `initCursor()` in `src/script.js`; only for a mouse with motion allowed (the native cursor stays).
+- **Easter eggs ("hidden rooms"):** `src/eggs.js` + `src/eggs.css`, loaded lazily by `loadEggs()` in `src/script.js` and safe to delete. Ten secrets plus a finale — the full list and how to trigger each one is in `CHANGELOG.md`. Spoilers live there, not on the site.
 - **Without JavaScript:** everything is visible; the architecture diagram falls back to a list with all details.
 - **Contact form:** there is no backend. It validates, then opens the visitor's mail client with the message
   pre-filled and says so. For delivery without a mail client, point the form at a service like Formspree.

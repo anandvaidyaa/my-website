@@ -19,7 +19,7 @@ const WEBSITE_ID = `${SITE}/#website`;
 const FILES = [
     "index.html", "404.html", "CNAME", "robots.txt", "site.webmanifest",
     "favicon.svg", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
-    "styles.min.css", "script.min.js"
+    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css"
 ];
 const DIRS = ["fonts", "og"];
 const HASHED = ["styles.min.css", "script.min.js"];
@@ -182,8 +182,18 @@ ${p.images.map((i) => `    <image:image><image:loc>${i}</image:loc></image:image
 await writeFile(`${OUT}/sitemap.xml`, sitemap);
 
 // ---------- 5. Cache busting + optional Search Console tag ----------
+const hashOf = (buf) => createHash("sha256").update(buf).digest("hex").slice(0, 10);
 const versions = {};
-for (const f of HASHED) versions[f] = createHash("sha256").update(await readFile(f)).digest("hex").slice(0, 10);
+// The easter-egg module is loaded by script.min.js, so stamp its hashes into that file first
+const eggV = { "eggs.min.js": hashOf(await readFile("eggs.min.js")), "eggs.min.css": hashOf(await readFile("eggs.min.css")) };
+let mainJs = await readFile(`${OUT}/script.min.js`, "utf8");
+for (const [file, v] of Object.entries(eggV)) {
+    const re = new RegExp(file.replace(/\./g, "\\.") + "\\?v=[\\w.-]+", "g");
+    if (!re.test(mainJs)) throw new Error(`script.min.js does not reference ${file}?v=`);
+    mainJs = mainJs.replace(re, `${file}?v=${v}`);
+}
+await writeFile(`${OUT}/script.min.js`, mainJs);
+for (const f of HASHED) versions[f] = hashOf(await readFile(`${OUT}/${f}`));
 
 const htmlFiles = ["index.html", "404.html", ...projects.map((p) => `projects/${p.slug}/index.html`)];
 const gsc = (process.env.GSC_VERIFICATION || "").trim();

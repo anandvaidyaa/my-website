@@ -27,10 +27,16 @@
             <div class="mesh"><span></span><span></span><span></span></div>
             <div class="grid-floor"></div>
         </div>
-        <div>
+        <div class="lost-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="notfound__inner">
+            <button class="portal" id="portal" type="button" aria-label="Step through the portal back to the homepage">
+                <span class="portal__ring" aria-hidden="true"></span>
+                <span class="portal__core" aria-hidden="true"></span>
+                <span class="portal__cube" aria-hidden="true"><b></b><b></b><b></b></span>
+            </button>
             <p class="notfound__code" aria-hidden="true">404</p>
-            <h1>This route doesn&rsquo;t resolve.</h1>
-            <p>The page you asked for isn&rsquo;t deployed here. It may have moved, or the link may be mistyped.</p>
+            <h1>This page has escaped into another cloud region.</h1>
+            <p>Whatever lived at this address isn&rsquo;t deployed here. The little cube is lost too &mdash; click the portal and you&rsquo;ll both go home.</p>
             <div class="hero__actions">
                 <a class="btn btn--primary" href="/">Back to the portfolio</a>
                 <a class="btn btn--ghost" href="/#projects">See projects</a>
@@ -38,5 +44,18 @@
             </div>
         </div>
     </main>
+    <script>
+        // Portal: short warp, then home. Reduced motion goes straight home.
+        (function () {
+            var p = document.getElementById('portal');
+            if (!p) return;
+            p.addEventListener('click', function () {
+                var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (still) { location.href = '/'; return; }
+                document.body.classList.add('is-warping');
+                setTimeout(function () { location.href = '/'; }, 900);
+            });
+        })();
+    </script>
 </body>
 </html>

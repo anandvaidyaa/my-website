@@ -1,5 +1,29 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-11 (4) — Hidden rooms (easter eggs)
+
+New isolated module `src/eggs.js` + `src/eggs.css`, lazy-loaded on the first interaction (or ~7 s after load); keys pressed before it arrives are replayed from memory. No network requests, no analytics; only the list of found secrets is kept in `localStorage` (in-memory fallback).
+
+| Secret | How to find it |
+|---|---|
+| Developer mode | Type `anand` anywhere (not in a form field) |
+| Chaos mode (12 s) | Konami code: ↑ ↑ ↓ ↓ ← → ← → B A |
+| The cloud's guardian | Pet the cat peeking over the contact form (5 pets: a constellation) |
+| Hidden terminal | Ctrl + Shift + K (⌘ + Shift + K on macOS), or click the secrets counter |
+| The constellation | In the FAQ column: connect API Management, Azure Functions and Bicep |
+| Holographic business card | Double-click (double-tap) the hero portrait or the About ID badge, or `card` in the hidden terminal |
+| Name glitch | Click the big name three times quickly |
+| Reverse gravity | Click (or Enter) the large crystal in the hero sculpture |
+| Coordinates | Click the `loc` line in the hero HUD |
+| Control plane | Type `cloud`, click the footer cloud, or `cloud` in the page terminal |
+
+- Discovery toasts and a "Secrets discovered: X / 10" counter (appears after the first find); `reset` in the hidden terminal starts over.
+- Finding all ten plays the architect's signature (replay: `signature` in the hidden terminal).
+- Also: a note for people who scroll to the very bottom, and a 404 "lost dimension" with a portal that warps home (real 404 status kept).
+- Shortcuts ignore form fields and modifier combos; every overlay is a native `<dialog>` (focus trap, Esc to close, focus returned); reduced motion gets static versions.
+
+**Tested:** 56/56 easter-egg checks (every activation, Esc/close, persistence, reset, form-field isolation, reduced motion, 320/375/390/768/1024 px, 404 status + portal), 46/46 functional, 53/53 SEO, axe-core 0 violations (page and open dialogs, both themes). Lighthouse with the module deferred: accessibility, best practices, SEO 100; performance unchanged within run-to-run noise.
+
 ## 2026-10-11 (3) — Futuristic redesign: materials, sculpture, personality
 
 **Visual identity**

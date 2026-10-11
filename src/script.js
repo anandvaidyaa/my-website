@@ -889,6 +889,10 @@
             },
             sudo: function () { line([m("Permission denied. This incident will be reported to the Managed Identity. (psst: try "), a("cloud"), m(")")]); },
             cloud: function () { line(ok("opening the control plane…")); openEgg(); },
+            secrets: function () {
+                line(m("Some things on this page only appear if you look closer. Try a keyboard shortcut with K in it."));
+                document.dispatchEvent(new CustomEvent("av:hint"));
+            },
             ping: function () { line([ok("pong"), m(" · static site, zero servers harmed")]); },
             clear: function () { out.textContent = ""; }
         };
@@ -1043,6 +1047,7 @@
         var dlg = $("#egg");
         if (!dlg || dlg.open) return;
         if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+        document.dispatchEvent(new CustomEvent("av:secret", { detail: "controlplane" }));
         var c = centerOf(dlg);
         burst(c[0], c[1] - 120, 22);
     }
@@ -1082,18 +1087,15 @@
         var spark = $("#spark");
         if (spark) spark.addEventListener("click", function () { var c = centerOf(spark); burst(c[0], c[1], 18); });
 
-        // Control plane: footer cloud, Konami code, or typing "cloud"
+        // Control plane: footer cloud, typing "cloud", or the terminal
         var footerEgg = $("#footer-egg");
         if (footerEgg) footerEgg.addEventListener("click", openEgg);
-        var KONAMI = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
-        var ki = 0, typed = "";
+        var typed = "";
         document.addEventListener("keydown", function (e) {
             var t = e.target;
             if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
             if (e.metaKey || e.ctrlKey || e.altKey) return;
             var k = (e.key || "").toLowerCase();
-            ki = k === KONAMI[ki] ? ki + 1 : (k === KONAMI[0] ? 1 : 0);
-            if (ki === KONAMI.length) { ki = 0; openEgg(); }
             if (k.length === 1) {
                 typed = (typed + k).slice(-5);
                 if (typed === "cloud") { typed = ""; openEgg(); }
@@ -1191,6 +1193,21 @@
         io.observe(el);
     }
 
+    /* ---------------- Easter-egg module (lazy, optional, isolated) ---------------- */
+    var eggsLoaded = false;
+    function loadEggs() {
+        if (eggsLoaded) return;
+        eggsLoaded = true;
+        var css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "/eggs.min.css?v=dev";
+        document.head.appendChild(css);
+        var js = document.createElement("script");
+        js.src = "/eggs.min.js?v=dev";
+        js.defer = true;
+        document.head.appendChild(js);
+    }
+
     /* ---------------- Boot ---------------- */
     function safe(fn) {
         try { fn(); } catch (err) { if (window.console) console.error(err); }
@@ -1221,6 +1238,22 @@
         function ready() { window.setTimeout(function () { idle(function () { var h = $(".hero"); if (h) h.classList.add("is-ready"); }); }, 1800); }
         if (document.readyState === "complete") ready();
         else window.addEventListener("load", ready);
+
+        // Easter eggs load on the first interaction (or ~7 s after load). Keys pressed before the
+        // module arrives are kept in memory only, so a secret typed right away still counts.
+        var early = window.__avEarlyKeys = [];
+        function remember(e) {
+            if (window.__avEggs) { document.removeEventListener("keydown", remember, true); return; }
+            early.push({ key: e.key, ctrl: e.ctrlKey, meta: e.metaKey, shift: e.shiftKey, alt: e.altKey, typing: !!(e.target && (e.target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))) });
+            if (early.length > 12) early.shift();
+        }
+        document.addEventListener("keydown", remember, true);
+        ["keydown", "pointerdown", "touchstart", "scroll"].forEach(function (type) {
+            window.addEventListener(type, loadEggs, { once: true, passive: true });
+        });
+        function eggsLater() { window.setTimeout(function () { idle(loadEggs); }, 7000); }
+        if (document.readyState === "complete") eggsLater();
+        else window.addEventListener("load", eggsLater);
     }
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
