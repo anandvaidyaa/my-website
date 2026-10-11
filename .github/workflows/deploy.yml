@@ -35,6 +35,10 @@ jobs:
 
       - name: Build CSS/JS and assemble _site
         run: npm run build:site
+        env:
+          # Optional: Settings → Secrets and variables → Actions → Variables → GSC_VERIFICATION
+          # (only the token from Search Console's "HTML tag" method, not the whole <meta> tag)
+          GSC_VERIFICATION: ${{ vars.GSC_VERIFICATION }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

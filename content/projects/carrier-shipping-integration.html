@@ -1,0 +1,94 @@
+<script type="application/json" data-meta>
+{
+  "order": 3,
+  "title": "Carrier & Shipping Integration Layer",
+  "seoTitle": "Carrier API Gateway on Azure API Management | Anand Vaidya",
+  "description": "Case study: a secure Azure API Management gateway with OAuth 2.0 automating FedEx, DHL and UPS labels and tracking — 40+ hours of dispatch work saved weekly.",
+  "kicker": "API gateway & security",
+  "lede": "A centralised, secure API gateway on Azure API Management with OAuth 2.0 that automates carrier integrations, label generation and live tracking — turning a 20-minute manual task into zero clicks.",
+  "context": "Client project",
+  "stack": ["Azure API Management", "Azure AD B2C", "OAuth 2.0"],
+  "outcomes": [
+    ["Zero clicks", "replacing a 20-minute manual process"],
+    ["40+ hrs", "dispatch overhead saved per week"],
+    ["Improved", "shipping SLA compliance"]
+  ],
+  "ogImage": "og/carrier-shipping-integration.png",
+  "datePublished": "2026-10-11",
+  "dateModified": "2026-10-11"
+}
+</script>
+
+<h2 id="problem">The problem</h2>
+<p>
+    Dispatch teams were spending hours <strong>creating shipping labels and tracking packages by hand</strong> across
+    separate <strong>FedEx, DHL and UPS</strong> portals. It was a twenty-minute manual process, and it held back
+    shipping SLA compliance.
+</p>
+
+<h2 id="architecture">Architecture</h2>
+<p>
+    I built a <strong>centralised, secure API gateway on Azure API Management</strong>, protected with
+    <strong>OAuth&nbsp;2.0</strong>, that automates the carrier integrations: label generation goes through the gateway,
+    and tracking updates arrive as <strong>live webhooks</strong> instead of someone checking each portal.
+</p>
+
+<figure>
+    <div class="diagram">
+        <svg viewBox="0 0 360 220" role="img" aria-labelledby="d3-title">
+            <title id="d3-title">Dispatch applications call Azure API Management, secured with OAuth 2.0, which routes requests to FedEx, DHL and UPS</title>
+            <g class="d-edges">
+                <path class="flow" d="M92 110 H140"/>
+                <path class="flow" d="M250 110 C280 110,276 46,300 46"/>
+                <path class="flow" d="M250 110 H300"/>
+                <path class="flow" d="M250 110 C280 110,276 174,300 174"/>
+            </g>
+            <g class="d-node"><rect x="10" y="94" width="82" height="32" rx="8"/><text x="51" y="114">Dispatch</text></g>
+            <g class="d-node d-node--accent"><rect x="140" y="86" width="110" height="48" rx="10"/><text x="195" y="106">API Mgmt</text><text class="sub" x="195" y="123">OAuth 2.0</text></g>
+            <g class="d-node"><rect x="300" y="30" width="52" height="32" rx="8"/><text x="326" y="50">FedEx</text></g>
+            <g class="d-node"><rect x="300" y="94" width="52" height="32" rx="8"/><text x="326" y="114">DHL</text></g>
+            <g class="d-node"><rect x="300" y="158" width="52" height="32" rx="8"/><text x="326" y="178">UPS</text></g>
+        </svg>
+    </div>
+    <figcaption>Simplified architecture. Carrier names are the real integrations; internal routing is omitted.</figcaption>
+</figure>
+
+<h3>What the gateway takes care of</h3>
+<ul>
+    <li><strong>One entry point</strong> for every carrier, so dispatch systems integrate once instead of three times.</li>
+    <li><strong>Authentication</strong> with OAuth&nbsp;2.0 and Azure AD B2C, validated at the gateway before requests reach a carrier.</li>
+    <li><strong>Automated label generation</strong> and <strong>live tracking via webhooks</strong>, replacing manual portal work.</li>
+</ul>
+
+<h2 id="decisions">Engineering decisions</h2>
+<div class="decisions">
+    <div class="decision">
+        <h3>A gateway in front of every carrier</h3>
+        <p>API Management centralises cross-cutting concerns &mdash; token validation, throttling, versioning and logging &mdash; so each carrier integration only contains carrier-specific logic.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> the gateway becomes a critical dependency, so its tier, scaling and availability have to be planned like any production service.</p>
+    </div>
+    <div class="decision">
+        <h3>OAuth 2.0 tokens instead of shared credentials</h3>
+        <p>Callers authenticate with short-lived tokens validated at the gateway, which keeps carrier API keys out of client applications.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> token issuance and app registrations add setup, and expiring tokens must be handled gracefully by every client.</p>
+    </div>
+    <div class="decision">
+        <h3>Webhooks for tracking instead of polling</h3>
+        <p>Carriers push status changes as they happen, so tracking stays current without repeatedly querying each carrier.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> webhook endpoints must verify senders and cope with retries and duplicate events.</p>
+    </div>
+</div>
+
+<h2 id="outcomes">Outcomes</h2>
+<ul>
+    <li>A <strong>20-minute manual process reduced to zero clicks</strong>.</li>
+    <li><strong>40+ hours per week</strong> of dispatch overhead saved.</li>
+    <li>Significantly <strong>improved shipping SLA compliance</strong>.</li>
+</ul>
+
+<h2 id="skills">Skills demonstrated</h2>
+<p>
+    API design and governance with <a href="/#skills">Azure API Management</a>, identity with
+    <a href="/#skills">OAuth 2.0 and Azure AD B2C</a>, and integration of third-party carrier APIs. The same
+    gateway-first pattern appears in my current <a href="/#experience">role at FSP Consulting</a>.
+</p>

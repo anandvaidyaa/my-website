@@ -5,6 +5,7 @@ Allow: /
 # Build tooling and sources are not pages
 Disallow: /src/
 Disallow: /scripts/
+Disallow: /content/
 Disallow: /node_modules/
 
 Sitemap: https://anandvaidya.in/sitemap.xml

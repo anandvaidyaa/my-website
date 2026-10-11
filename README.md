@@ -12,7 +12,9 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 
 | Path | What it is |
 |------|------------|
-| `index.html` | The page: semantic markup, metadata, JSON-LD, inline SVG icon sprite. All content lives here and is crawlable without JavaScript. |
+| `index.html` | The homepage: semantic markup, metadata, JSON-LD, inline SVG icon sprite. Crawlable without JavaScript. Its header/footer are reused by every generated page. |
+| `content/projects/*.html` | Case studies (JSON metadata + body), rendered to `/projects/<slug>/` with `src/templates/article.html`. |
+| `docs/SEO.md` | Search Console setup, monitoring, authority building, how to add content. |
 | `src/styles.css` | **Edit this.** Design system — tokens (dark + light), layout, components, motion. Mobile-first. |
 | `src/script.js` | **Edit this.** Interactions, as small independent modules (theme, nav, reveals, skills inspector, architecture explorer, terminal, contact form). |
 | `styles.min.css`, `script.min.js` | Build output — don't edit by hand. |
@@ -21,7 +23,8 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 | `og-cover.png`, `apple-touch-icon.png` | Generated social card (1200×630) and touch icon. |
 | `favicon.svg` | Brand mark. |
 | `404.html` | Custom not-found page (GitHub Pages and Apache both serve it). |
-| `scripts/build-assets.mjs` | Generates the derived images above with `sharp`. |
+| `scripts/build-assets.mjs` | Generates the derived images (portrait, touch icon, social cards incl. one per case study in `og/`) with `sharp`. |
+| `scripts/build-site.mjs` | Assembles `_site/`: copies public files, renders case studies, generates `sitemap.xml`, hashes asset URLs, optional Search Console tag. |
 | `robots.txt`, `sitemap.xml`, `site.webmanifest`, `.htaccess`, `CNAME` | Crawling, PWA metadata, Apache config, custom domain. |
 
 ## Working on it
@@ -31,7 +34,7 @@ npm install          # build tools only (terser, csso, sharp, fonts)
 npm run build        # src/*.{css,js} → *.min.*
 npm run build:site   # build + assemble the deployable site in _site/
 npm run assets       # regenerate profile-320.webp, og-cover.png, apple-touch-icon.png
-npx serve _site      # preview exactly what will be deployed
+npx serve _site      # preview exactly what will be deployed (case-study pages only exist in _site/)
 ```
 
 ## Deployment (GitHub Pages)

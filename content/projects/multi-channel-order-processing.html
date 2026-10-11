@@ -1,0 +1,100 @@
+<script type="application/json" data-meta>
+{
+  "order": 1,
+  "title": "Multi-Channel Order Processing Platform",
+  "seoTitle": "Multi-Channel Order Sync with Azure Functions | Anand Vaidya",
+  "description": "Case study: an event-driven Azure Functions and Cosmos DB backend syncing Shopify, Amazon and Walmart inventory — latency cut from 5 minutes to under 2 seconds.",
+  "kicker": "Event-driven integration",
+  "lede": "An event-driven backend on Azure Functions and Cosmos DB that keeps inventory consistent across Shopify, Amazon and Walmart — so a sale on one channel is reflected on the others in seconds, not minutes.",
+  "context": "Client project",
+  "stack": ["Azure Functions", "Cosmos DB", "ASP.NET Core"],
+  "outcomes": [
+    ["5 min → <2 s", "inventory sync latency"],
+    ["$150k+", "previously lost quarterly revenue recovered"],
+    ["Eliminated", "overselling across channels"]
+  ],
+  "ogImage": "og/multi-channel-order-processing.png",
+  "datePublished": "2026-10-11",
+  "dateModified": "2026-10-11"
+}
+</script>
+
+<h2 id="problem">The problem</h2>
+<p>
+    Sellers listed the same stock on <strong>Shopify, Amazon and Walmart</strong>. Inventory was synchronised between
+    the channels with a delay of around five minutes. That gap was long enough for the same item to sell on two
+    channels at once: orders were lost, stock was oversold, and the business absorbed the cost of cancellations.
+</p>
+<p>
+    The goal was simple to state: <strong>every channel should see the same inventory, as close to real time as
+    possible</strong>, without adding manual reconciliation work.
+</p>
+
+<h2 id="architecture">Architecture</h2>
+<p>
+    I architected an <strong>event-driven integration backend</strong> on <strong>Azure Functions</strong> and
+    <strong>Cosmos DB</strong>. Changes from each marketplace arrive as events; functions ingest them, normalise each
+    channel&rsquo;s format into a single inventory model, persist the result in Cosmos DB, and distribute the update to
+    the other channels.
+</p>
+
+<figure>
+    <div class="diagram">
+        <svg viewBox="0 0 360 220" role="img" aria-labelledby="d1-title">
+            <title id="d1-title">Shopify, Amazon and Walmart send updates to Azure Functions, which store state in Cosmos DB and sync inventory back to every channel</title>
+            <g class="d-edges">
+                <path class="flow" d="M96 46 C150 46,150 110,182 110"/>
+                <path class="flow" d="M96 110 H182"/>
+                <path class="flow" d="M96 174 C150 174,150 110,182 110"/>
+                <path class="flow flow--alt" d="M250 128 V170"/>
+            </g>
+            <g class="d-node"><rect x="14" y="30" width="82" height="32" rx="8"/><text x="55" y="50">Shopify</text></g>
+            <g class="d-node"><rect x="14" y="94" width="82" height="32" rx="8"/><text x="55" y="114">Amazon</text></g>
+            <g class="d-node"><rect x="14" y="158" width="82" height="32" rx="8"/><text x="55" y="178">Walmart</text></g>
+            <g class="d-node d-node--accent"><rect x="182" y="88" width="136" height="40" rx="10"/><text x="250" y="112">Azure Functions</text></g>
+            <g class="d-node"><rect x="196" y="170" width="108" height="32" rx="8"/><text x="250" y="190">Cosmos DB</text></g>
+        </svg>
+    </div>
+    <figcaption>Simplified architecture. Channel names are the real integrations; internal details are omitted.</figcaption>
+</figure>
+
+<h3>How a change flows through the system</h3>
+<ul>
+    <li><strong>Ingest:</strong> an order or stock change on any channel triggers an Azure Function through a webhook handler.</li>
+    <li><strong>Normalise:</strong> the function maps the channel-specific payload onto one shared inventory model.</li>
+    <li><strong>Persist:</strong> the current order and inventory state is written to Cosmos DB.</li>
+    <li><strong>Distribute:</strong> the new stock level is pushed to the other channels so all three agree.</li>
+</ul>
+
+<h2 id="decisions">Engineering decisions</h2>
+<div class="decisions">
+    <div class="decision">
+        <h3>Event-driven, serverless compute instead of scheduled polling</h3>
+        <p>Reacting to each change as it happens is what removes the multi-minute window; Azure Functions scale out with order bursts and cost nothing while idle.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> event-driven systems must tolerate duplicate and out-of-order deliveries, so handlers need to be idempotent and updates ordered per item.</p>
+    </div>
+    <div class="decision">
+        <h3>One normalised inventory model shared by every channel</h3>
+        <p>Instead of point-to-point mappings between each pair of marketplaces, every channel translates to and from a single model. Adding a channel means writing one adapter, not three.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> the shared model has to be designed carefully up front so channel-specific fields don&rsquo;t leak into it.</p>
+    </div>
+    <div class="decision">
+        <h3>Cosmos DB for order and inventory state</h3>
+        <p>A low-latency, horizontally scalable document store suits high-frequency reads and writes of small inventory records during traffic spikes.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> throughput is billed in request units, so partition-key choice and document size directly affect cost.</p>
+    </div>
+</div>
+
+<h2 id="outcomes">Outcomes</h2>
+<ul>
+    <li>Inventory sync latency reduced from <strong>about 5 minutes to under 2 seconds</strong>.</li>
+    <li><strong>Overselling eliminated</strong> across Shopify, Amazon and Walmart.</li>
+    <li><strong>$150k+</strong> in previously lost quarterly revenue recovered.</li>
+</ul>
+
+<h2 id="skills">Skills demonstrated</h2>
+<p>
+    Serverless and event-driven design with <a href="/#skills">Azure Functions</a>, data modelling on
+    <a href="/#skills">Cosmos DB</a>, and .NET integration work with ASP.NET Core &mdash; the same stack described in my
+    <a href="/#experience">experience</a> building multi-channel e-commerce integrations.
+</p>

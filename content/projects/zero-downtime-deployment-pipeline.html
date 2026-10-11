@@ -1,0 +1,101 @@
+<script type="application/json" data-meta>
+{
+  "order": 2,
+  "title": "Zero-Downtime Cloud Deployment Pipeline",
+  "seoTitle": "Zero-Downtime Pipeline with Bicep & Azure DevOps | Anand Vaidya",
+  "description": "Case study: an infrastructure-as-code pipeline with Azure Bicep and Azure DevOps that cut deployments from 2 days to 15 minutes with zero-downtime releases.",
+  "kicker": "Infrastructure as code & CI/CD",
+  "lede": "A fully automated infrastructure-as-code pipeline built with Azure Bicep and Azure DevOps — replacing manual deployment steps with consistent, immutable environments and zero-downtime releases.",
+  "context": "Client project",
+  "stack": ["Azure Bicep", "Azure DevOps", "YAML pipelines"],
+  "outcomes": [
+    ["2 days → 15 min", "deployment time"],
+    ["Zero", "downtime releases"],
+    ["0", "manual configuration errors"]
+  ],
+  "ogImage": "og/zero-downtime-deployment-pipeline.png",
+  "datePublished": "2026-10-11",
+  "dateModified": "2026-10-11"
+}
+</script>
+
+<h2 id="problem">The problem</h2>
+<p>
+    Releases depended on <strong>manual deployment steps</strong>. Environments drifted apart as people applied changes
+    by hand, a release could take <strong>days</strong>, and differences between environments surfaced in production
+    as <strong>frequent rollbacks</strong>.
+</p>
+<p>
+    The fix had to address both halves of the problem: how infrastructure is defined, and how changes reach production.
+</p>
+
+<h2 id="architecture">Architecture</h2>
+<p>
+    I engineered a <strong>fully automated infrastructure-as-code pipeline</strong>: environments are declared in
+    <strong>Azure Bicep</strong> and deployed through <strong>Azure DevOps</strong>, so every environment is
+    provisioned from the same templates and arrives in a consistent, immutable state.
+</p>
+
+<figure>
+    <div class="diagram">
+        <svg viewBox="0 0 360 220" role="img" aria-labelledby="d2-title">
+            <title id="d2-title">Pipeline: commit, build and test, Bicep provisioning, then deployment to staging and production</title>
+            <g class="d-edges">
+                <path class="flow" d="M80 60 H124"/>
+                <path class="flow" d="M224 60 H262"/>
+                <path class="flow" d="M300 78 C300 120,250 120,250 150"/>
+                <path class="flow" d="M200 166 H162"/>
+            </g>
+            <g class="d-node"><rect x="10" y="44" width="70" height="32" rx="8"/><text x="45" y="64">Commit</text></g>
+            <g class="d-node"><rect x="124" y="44" width="100" height="32" rx="8"/><text x="174" y="64">Build &amp; test</text></g>
+            <g class="d-node d-node--accent"><rect x="262" y="40" width="86" height="40" rx="10"/><text x="305" y="64">Bicep</text></g>
+            <g class="d-node"><rect x="200" y="150" width="100" height="32" rx="8"/><text x="250" y="170">Staging</text></g>
+            <g class="d-node d-node--ok"><rect x="52" y="150" width="110" height="32" rx="8"/><text x="107" y="170">Production</text></g>
+        </svg>
+    </div>
+    <figcaption>Simplified pipeline. Stage names are illustrative of a typical multi-stage Azure DevOps flow.</figcaption>
+</figure>
+
+<h3>What the pipeline does</h3>
+<ul>
+    <li><strong>Build and test</strong> the application on every change in multi-stage YAML pipelines.</li>
+    <li><strong>Provision infrastructure from Bicep</strong> &mdash; the same templates for every environment, so there is nothing to configure by hand.</li>
+    <li><strong>Promote through environments</strong> with approval gates, and release without taking the service down.</li>
+</ul>
+<p class="note">
+    Related work from the same toolset: Bicep templates for VMs, VNets, Key Vaults and App Services across environments,
+    ARM templates where legacy pipelines needed them, and staging/production slot swaps on App Service.
+</p>
+
+<h2 id="decisions">Engineering decisions</h2>
+<div class="decisions">
+    <div class="decision">
+        <h3>Infrastructure versioned alongside the application</h3>
+        <p>When infrastructure lives in the same repository and review process as the code, every environment can be rebuilt from a known commit &mdash; which is what removes drift.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> changes made directly in the portal are overwritten on the next deployment, so the team has to treat the templates as the only source of truth.</p>
+    </div>
+    <div class="decision">
+        <h3>Immutable environments: redeploy, don&rsquo;t patch</h3>
+        <p>Rather than editing servers in place, a change produces a fresh deployment from the templates. Rollback becomes &ldquo;redeploy the previous version&rdquo;.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> stateful resources such as databases need separate handling so redeployments never replace data.</p>
+    </div>
+    <div class="decision">
+        <h3>Bicep over hand-written ARM JSON</h3>
+        <p>Bicep compiles to ARM templates but is far shorter and easier to review, while keeping full coverage of Azure resource types.</p>
+        <p class="tradeoff"><strong>Trade-off:</strong> it is Azure-specific, which suits an Azure-only estate but doesn&rsquo;t carry over to other clouds.</p>
+    </div>
+</div>
+
+<h2 id="outcomes">Outcomes</h2>
+<ul>
+    <li>Deployment time reduced from <strong>2 days to 15 minutes</strong>.</li>
+    <li><strong>Zero-downtime releases</strong>.</li>
+    <li><strong>Manual configuration errors eliminated</strong> by removing manual steps altogether.</li>
+</ul>
+
+<h2 id="skills">Skills demonstrated</h2>
+<p>
+    Infrastructure as code with <a href="/#skills">Azure Bicep and ARM templates</a>, CI/CD design in
+    <a href="/#skills">Azure DevOps</a>, and release engineering for zero-downtime delivery. See how these pieces fit
+    into a wider system in the <a href="/#architecture">architecture lab</a>.
+</p>

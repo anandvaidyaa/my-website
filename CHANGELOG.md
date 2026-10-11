@@ -1,5 +1,23 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-11 (2) — SEO foundation
+
+**Audit findings (production, before)**
+- Lighthouse SEO 100 / accessibility 100; mobile performance 89, desktop 100. Domain setup correct (HTTPS, `www` and `github.io` → apex 301, real 404s, gzip).
+- **High:** the site was still deployed from the branch, so `src/`, `package.json`, `README.md`, `CHANGELOG.md` and `.claude/launch.json` were publicly served and indexable.
+- **High:** a single indexable URL — nothing could rank for project or technology queries.
+- **Medium:** no Search Console verification path; **low:** title didn't match "portfolio" searches, no per-page entities or breadcrumbs.
+
+**Implemented**
+- Three case-study pages at `/projects/<slug>/` (problem, architecture, decisions with trade-offs, verified outcomes, skills), linked from the homepage with descriptive anchors; breadcrumbs, author box, table of contents, next-case links.
+- Static page generator in `scripts/build-site.mjs`: reuses the homepage header/footer/sprite, renders `content/projects/*.html`, generates `sitemap.xml` (4 URLs, `lastmod`, images), validates title/description lengths and that every case study is linked from the homepage.
+- Structured data per case study: `WebPage` + `Article` (author/publisher = `#person`) + `BreadcrumbList`.
+- Per-page Open Graph/Twitter metadata and generated 1200×630 share images (`og/`).
+- Homepage title "Anand Vaidya — Azure Cloud Engineer Portfolio"; FAQ names both GitHub and LinkedIn profiles.
+- Optional Google Search Console tag via the `GSC_VERIFICATION` repository variable; `docs/SEO.md` with verification, monitoring and authority-building steps.
+
+**Verified locally (built `_site/`)**: 53/53 SEO checks (unique titles/descriptions, self canonicals, single H1, heading order, JSON-LD parses, share images exist, all internal links/anchors and external profile links resolve, sitemap/robots), 46/46 functional checks, axe-core 0 violations on homepage and case study in both themes. Lighthouse: homepage 93 / 100 (mobile / desktop performance), case study 100 / 100; accessibility, best practices and SEO 100 everywhere.
+
 ## 2026-10-11 — Redesign, performance & content accuracy
 
 **Design & UX**
