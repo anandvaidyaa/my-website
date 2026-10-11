@@ -48,7 +48,7 @@ What is already implemented in the repository, and the steps that need your acco
 
 ## 4. Analytics (optional)
 
-No analytics are installed, deliberately. Search Console already shows search queries and clicks. If you want visitor numbers too, prefer a cookie-free, lightweight option (Cloudflare Web Analytics or GoatCounter). Adding one means allowing its domain in the Content-Security-Policy in `index.html`, `404.html`, `src/templates/article.html` and `.htaccess`.
+No analytics are installed, deliberately. Search Console already shows search queries and clicks. If you want visitor numbers too, prefer a cookie-free, lightweight option (Cloudflare Web Analytics or GoatCounter). Adding one means allowing its domain in the Content-Security-Policy in `index.html`, `404.html`, and `src/templates/article.html`.
 
 To measure "conversions" without tracking scripts: count contact emails that arrive with subjects typed into the site's form, and LinkedIn profile views after sharing a case study.
 

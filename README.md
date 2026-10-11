@@ -26,7 +26,7 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 | `404.html` | Custom not-found page (GitHub Pages and Apache both serve it). |
 | `scripts/build-assets.mjs` | Generates the derived images (portrait, touch icon, social cards incl. one per case study in `og/`) with `sharp`. |
 | `scripts/build-site.mjs` | Assembles `_site/`: copies public files, renders case studies, generates `sitemap.xml`, hashes asset URLs, optional Search Console tag. |
-| `robots.txt`, `sitemap.xml`, `site.webmanifest`, `.htaccess`, `CNAME` | Crawling, PWA metadata, Apache config, custom domain. |
+| `robots.txt`, `sitemap.xml`, `site.webmanifest`, `CNAME` | Crawling, PWA metadata, custom domain. (`sitemap.xml` here is a fallback; the deploy build generates the full one.) |
 
 ## Working on it
 
@@ -87,8 +87,8 @@ commands in `src/script.js` (`COMMANDS`) and the JSON-LD in sync.
 ## Hosting & SEO
 
 - Canonical URL: `https://anandvaidya.in/` (apex, HTTPS). `CNAME` points GitHub Pages at the apex.
-- `.htaccess` (Apache only) adds HTTPS/www → apex redirects, compression, caching and security headers.
-  GitHub Pages ignores it; the CSP is duplicated as a `<meta>` tag in the HTML. Keep the two in sync.
+- GitHub Pages handles HTTPS, `www` → apex redirects and compression. Security headers can't be set there, so the
+  Content-Security-Policy is a `<meta>` tag in `index.html`, `404.html` and `src/templates/article.html` — keep them in sync.
 - After deploying: submit `https://anandvaidya.in/sitemap.xml` in Google Search Console (Domain property),
   request indexing of the homepage, and check the share card with LinkedIn's Post Inspector.
 
