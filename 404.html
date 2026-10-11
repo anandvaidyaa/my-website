@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script>
+        (function () {
+            var d = document.documentElement, t;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'light' && t !== 'dark') { t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+            d.setAttribute('data-theme', t);
+        })();
+    </script>
+    <title>Page not found — Anand Vaidya</title>
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="This page doesn't exist. Head back to Anand Vaidya's portfolio.">
+    <meta name="theme-color" content="#070a12">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-var.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/outfit-var.woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=31">
+</head>
+<body>
+    <main class="notfound">
+        <div class="hero__bg" aria-hidden="true">
+            <div class="mesh"><span></span><span></span><span></span></div>
+            <div class="grid-floor"></div>
+        </div>
+        <div>
+            <p class="notfound__code" aria-hidden="true">404</p>
+            <h1>This route doesn&rsquo;t resolve.</h1>
+            <p>The page you asked for isn&rsquo;t deployed here. It may have moved, or the link may be mistyped.</p>
+            <div class="hero__actions">
+                <a class="btn btn--primary" href="/">Back to the portfolio</a>
+                <a class="btn btn--ghost" href="/#projects">See projects</a>
+                <a class="btn btn--link" href="/#contact">Contact</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

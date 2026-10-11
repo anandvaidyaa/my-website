@@ -88,3 +88,9 @@ secrets.yml
 credentials.json
 
 # End of file
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# GitHub Pages build output
+_site/

@@ -1,92 +1,90 @@
-# Anand Vaidya — Enterprise Cloud Portfolio
+# Anand Vaidya — Portfolio (anandvaidya.in)
 
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Status: Production](https://img.shields.io/badge/Status-Production-success)
-![Tech Stack: HTML/CSS/JS](https://img.shields.io/badge/Tech-Vanilla_HTML_CSS_JS-orange)
+Single-page portfolio for **Anand Vaidya, Azure Cloud Engineer** — serverless integrations, secure APIs,
+infrastructure as code and DevOps on Microsoft Azure.
 
-A highly polished, ultra-performant single-page developer portfolio tailored specifically for a **Cloud Integration Engineer and Azure Specialist**. 
-
-This project completely eschews heavy modern frameworks (like React, Vue, or Next.js) in favor of **Vanilla HTML, CSS, and JavaScript**. This guarantees absolute maximum performance, instantaneous load times, and a deeply customized, native-feeling User Experience (UX). 
-
-The visual design language is heavily inspired by **Azure Portal, Linear, and Apple Vision Pro**, incorporating glassmorphism, dynamic 3D architecture diagrams, telemetry dashboards, and a custom GPU-accelerated cursor engine.
+Plain HTML, CSS and JavaScript. No framework, no runtime dependencies, no third-party requests:
+fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 
 ---
 
-## 🏗️ Project Architecture & File Structure
+## Project structure
 
-The entire application runs entirely client-side and is built to be hosted on any static edge network (GitHub Pages, Netlify, Cloudflare Pages, etc.).
+| Path | What it is |
+|------|------------|
+| `index.html` | The page: semantic markup, metadata, JSON-LD, inline SVG icon sprite. All content lives here and is crawlable without JavaScript. |
+| `src/styles.css` | **Edit this.** Design system — tokens (dark + light), layout, components, motion. Mobile-first. |
+| `src/script.js` | **Edit this.** Interactions, as small independent modules (theme, nav, reveals, skills inspector, architecture explorer, terminal, contact form). |
+| `styles.min.css`, `script.min.js` | Build output — don't edit by hand. |
+| `fonts/` | Self-hosted variable fonts (Outfit, Space Grotesk — SIL OFL 1.1, licences included). |
+| `profile.webp`, `profile-320.webp` | Portrait (450px source + generated 320px). |
+| `og-cover.png`, `apple-touch-icon.png` | Generated social card (1200×630) and touch icon. |
+| `favicon.svg` | Brand mark. |
+| `404.html` | Custom not-found page (GitHub Pages and Apache both serve it). |
+| `scripts/build-assets.mjs` | Generates the derived images above with `sharp`. |
+| `robots.txt`, `sitemap.xml`, `site.webmanifest`, `.htaccess`, `CNAME` | Crawling, PWA metadata, Apache config, custom domain. |
 
-| File | Purpose & Analysis |
-|------|---------------------|
-| **`index.html`** | The core skeleton. Contains all semantic markup, highly optimized SEO metadata (including JSON-LD Structured Data), and the structural definitions for the telemetry dashboards, timeline, and 3D architecture elements. |
-| **`styles.min.css`** | The complete design system. It handles CSS variables for theme switching (forced dark mode by default), responsive flexbox/grid layouts, glassmorphism filters, keyframe animations for the data pipelines, and hardware-accelerated transforms (`translate3d`) for 3D elements. |
-| **`script.min.js`** | The interaction engine. Bundles all interactive logic including the IntersectionObservers for scroll reveals, the simulated terminal typing effects, the telemetry counters, and the embedded **Premium Custom Cursor Engine**. |
-| **`profile.webp`** | Hero/profile image, heavily compressed and preloaded for optimal Largest Contentful Paint (LCP) scoring. |
-| **`.htaccess`** | Apache configuration for caching static assets and enforcing security headers. |
-| **`robots.txt` / `sitemap.xml`** | Essential SEO routing files ensuring web crawlers properly index the portfolio. |
+## Working on it
 
----
+```bash
+npm install          # build tools only (terser, csso, sharp, fonts)
+npm run build        # src/*.{css,js} → *.min.*
+npm run build:site   # build + assemble the deployable site in _site/
+npm run assets       # regenerate profile-320.webp, og-cover.png, apple-touch-icon.png
+npx serve _site      # preview exactly what will be deployed
+```
 
-## ✨ Core Features & Technical Highlights
+## Deployment (GitHub Pages)
 
-### 1. Ultra-Optimized Custom Cursor Engine
-The project features a custom-built, Apple/Linear-inspired "Glass Orb" cursor.
-- **GPU Accelerated:** Uses pure `transform: translate3d(x, y, 0)` updated inside a `requestAnimationFrame` loop to guarantee silky smooth 60 FPS without layout thrashing.
-- **Magnetic UX:** Snaps to interactive elements (buttons, links) with a subtle gravitational pull, providing premium tactile feedback.
-- **Mobile-Aware:** JavaScript strictly evaluates touch interfaces and immediately terminates the cursor engine on mobile devices to save battery and processing power.
+Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
+`npm ci` → `npm run build:site` → upload `_site/` → deploy to GitHub Pages.
 
-### 2. 3D Architecture & Telemetry Mockups
-To visually demonstrate cloud engineering skills, the portfolio includes embedded interactive UI modules:
-- **Interactive Architecture Diagram:** A CSS-driven representation of an event-driven Azure architecture (APIM ➔ Functions ➔ Cosmos DB) complete with glowing, animated data packets flowing through vertical and horizontal connection lines.
-- **Simulated Terminal:** A typing effect that mimics a PowerShell/Bash terminal running Azure CLI diagnostics.
-- **Live Metric Dashboards:** IntersectionObserver-triggered counters that simulate server telemetry.
+- Only public files are published (`scripts/build-site.mjs` lists them); `src/`, `scripts/`, docs and
+  `package.json` stay in the repo but are not served.
+- Cache-busting is automatic: the `?v=` on `styles.min.css` / `script.min.js` is replaced with a content hash.
+- You can re-run a deployment from the **Actions** tab (**Run workflow**).
 
-### 3. Absolute SEO & Performance Mastery
-- **JSON-LD Structured Data:** Embeds `@type: Person` and `@type: ProfilePage` directly into the DOM so Google creates a Rich Snippet for the profile.
-- **Hardcoded Dark Mode:** Injects an override script directly into the `<head>` of the HTML to force `localStorage.setItem('theme', 'dark')` before the page even begins to paint, entirely eliminating flash-of-white (FOUC).
-- **Zero Dependencies:** No jQuery, no Tailwind, no React. 
+**One-time repository settings** (Settings → Pages):
 
-### 4. Smart Interactive Elements
-- **Google Maps Integration:** The location card (Vadodara, Gujarat, India) is an active `<a>` tag that instantly opens a precise Google Maps pin in a new tab.
-- **Skill Hover States:** Clicking/hovering over Azure skill tags triggers a dynamic UI overlay providing deep-dive explanations of the specific technology.
+1. **Build and deployment → Source:** `GitHub Actions` (not "Deploy from a branch").
+2. **Custom domain:** `anandvaidya.in`, then tick **Enforce HTTPS** once the certificate is issued.
+   With Actions deployments, this setting (not the `CNAME` file) decides the domain.
+3. DNS at your registrar (already in place if the site works today): apex `A` records to
+   `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` and a `www` `CNAME`
+   to `anandvaidyaa.github.io` — GitHub then redirects `www` to the apex.
 
----
+## How the page works
 
-## 🚀 Local Development & Deployment
+- **Sections:** Hero · About · Skills (layered stack + inspector) · Architecture lab · Experience ·
+  Projects (case studies) · Credentials · FAQ · Terminal · Contact.
+- **Themes:** dark and light token sets on `:root[data-theme]`. An inline script in `<head>` picks the saved
+  choice, else the OS preference, before first paint (no flash). The toggle saves the choice in `localStorage`.
+- **Motion:** CSS for entrances and ambient motion (transform/opacity only, composited); IntersectionObserver
+  for reveals; one rAF-throttled scroll listener for the progress bar, timeline and parallax. Ambient motion
+  starts after `load` and pauses when off-screen. `prefers-reduced-motion` turns it all off.
+- **Architecture lab:** HTML buttons positioned over a generated SVG; two layouts (wide / phone) chosen by
+  container width; keyboard arrows move between nodes. It is labelled illustrative on the page.
+- **Performance:** below-the-fold sections use `content-visibility: auto`; in-page links are handled by
+  `scrollToId()` in `src/script.js`, which re-measures after lazy sections render so anchors land correctly.
+- **Without JavaScript:** everything is visible; the architecture diagram falls back to a list with all details.
+- **Contact form:** there is no backend. It validates, then opens the visitor's mail client with the message
+  pre-filled and says so. For delivery without a mail client, point the form at a service like Formspree.
 
-Because this is a vanilla static site, no `npm install` or build steps are required to run it locally.
+## Content rules
 
-### Running Locally
-1. Clone the repository.
-2. Open a terminal in the root directory.
-3. Start a simple web server (e.g., Python or Node):
-   ```bash
-   python -m http.server 8000
-   # OR
-   npx serve .
-   ```
-4. Navigate to `http://localhost:8000`.
+Every claim on the page comes from Anand's real experience. Metrics in the case studies are the ones Anand
+provided; diagrams are labelled as simplified or illustrative. When editing, keep `index.html`, the terminal
+commands in `src/script.js` (`COMMANDS`) and the JSON-LD in sync.
 
-### Deployment Instructions
-This project is perfectly optimized for free static hosting tiers:
-- **GitHub Pages:** Go to Settings -> Pages -> Deploy from Branch (`main` / `root`).
-- **Cloudflare Pages / Netlify / Vercel:** Simply connect your GitHub repository and set the build command to empty, and the output directory to the root `/`.
+## Hosting & SEO
 
----
+- Canonical URL: `https://anandvaidya.in/` (apex, HTTPS). `CNAME` points GitHub Pages at the apex.
+- `.htaccess` (Apache only) adds HTTPS/www → apex redirects, compression, caching and security headers.
+  GitHub Pages ignores it; the CSP is duplicated as a `<meta>` tag in the HTML. Keep the two in sync.
+- After deploying: submit `https://anandvaidya.in/sitemap.xml` in Google Search Console (Domain property),
+  request indexing of the homepage, and check the share card with LinkedIn's Post Inspector.
 
-## 🎨 Editing Guide (For Future Updates)
+## Licence & contact
 
-- **Changing Colors:** Open `styles.min.css` and modify the `:root` variables (e.g., `--accent`, `--bg-color`).
-- **Updating the Architecture Layout:** The connection lines in the "Experience" section use `flexbox` overrides (`justify-content: center !important`). To add new nodes, just copy an existing `<div class="arch-node">` block in `index.html`.
-- **Modifying the Cursor:** The cursor logic is tightly packed at the absolute bottom of `script.min.js`. Look for the `Premium Apple/Linear-inspired GPU Accelerated Cursor` comment block.
-
----
-
-## 🛡️ License & Authorship
-
-- **Author:** Anand Vaidya
-- **Role:** Cloud Integration Engineer & Azure Specialist
-- **Location:** Vadodara, Gujarat, India
-- **Contact:** [anand.svaidya24@gmail.com](mailto:anand.svaidya24@gmail.com)
-
-*Built with raw HTML, CSS, JavaScript, and an obsession for performance.*
+Content © Anand Vaidya. Fonts: SIL Open Font License 1.1 (see `fonts/`).
+Contact: [anand.svaidya24@gmail.com](mailto:anand.svaidya24@gmail.com)

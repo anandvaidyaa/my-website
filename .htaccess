@@ -1,6 +1,29 @@
+# ============================================================
+# Anand Vaidya — Portfolio .htaccess (Apache)
+# Note: GitHub Pages ignores .htaccess; these rules apply on
+# Apache/cPanel hosts. GitHub Pages handles canonical/HTTPS at
+# the platform level via the CNAME file.
+# ============================================================
+
+# ---------- Force HTTPS + apex (no www) ----------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off [OR]
+    RewriteCond %{HTTP_HOST} ^www\. [NC]
+    RewriteRule ^ https://anandvaidya.in%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# ---------- GZIP compression ----------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json image/svg+xml application/xml
+    AddOutputFilterByType DEFLATE font/woff2 application/x-font-woff
+</IfModule>
+
+# ---------- Caching & immutability ----------
 <IfModule mod_expires.c>
     ExpiresActive On
-    
     # Images
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
@@ -8,18 +31,16 @@
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/x-icon "access plus 1 year"
-
     # Fonts
     ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType application/x-font-woff "access plus 1 year"
-
     # CSS and JavaScript
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType text/javascript "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
-
     # Others
     ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
 </IfModule>
 
 <IfModule mod_headers.c>
@@ -29,4 +50,35 @@
     <FilesMatch "\.(html|htm)$">
         Header set Cache-Control "no-cache, no-store, must-revalidate"
     </FilesMatch>
+
+    # ---------- Security headers ----------
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+    Header always set X-UA-Compatible "IE=edge"
+
+    # Prevent MIME confusion for the manifest / JSON-LD
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';" env=HTTPS
 </IfModule>
+
+# ---------- Security: block dotfiles & sensitive files ----------
+<FilesMatch "(^\.|\.(bak|conf|sql|log|ini|sh)$)">
+    Require all denied
+</FilesMatch>
+
+# ---------- MIME types ----------
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType application/manifest+json .webmanifest
+    AddType image/avif .avif
+    AddType font/woff2 .woff2
+    AddType application/ld+json .jsonld
+</IfModule>
+
+# ---------- Custom 404 ----------
+ErrorDocument 404 /404.html
+
+# ---------- UTF-8 default ----------
+AddDefaultCharset UTF-8

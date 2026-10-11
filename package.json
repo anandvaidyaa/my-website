@@ -1,0 +1,19 @@
+{
+  "name": "anandvaidya-portfolio",
+  "private": true,
+  "description": "Static portfolio for anandvaidya.in. Edit src/, then run `npm run build` to regenerate the minified assets in the site root.",
+  "scripts": {
+    "build:js": "terser src/script.js --compress --mangle --comments false -o script.min.js",
+    "build:css": "csso src/styles.css -o styles.min.css",
+    "build": "npm run build:js && npm run build:css",
+    "assets": "node scripts/build-assets.mjs",
+    "build:site": "npm run build && node scripts/build-site.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/outfit": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "csso-cli": "^4.0.2",
+    "sharp": "^0.33.5",
+    "terser": "^5.48.0"
+  }
+}

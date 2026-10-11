@@ -1,8 +1,10 @@
+# robots.txt for https://anandvaidya.in/
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://anandvaidya.in/sitemap.xml
+# Build tooling and sources are not pages
+Disallow: /src/
+Disallow: /scripts/
+Disallow: /node_modules/
 
-# Crawl-delay (optional — polite crawling)
-Crawl-delay: 5
+Sitemap: https://anandvaidya.in/sitemap.xml

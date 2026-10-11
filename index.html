@@ -1,50 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" prefix="og: https://ogp.me/ns#">
+<html lang="en-IN" dir="ltr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script>
+        // Set the theme before first paint: saved choice → system preference → dark.
+        (function () {
+            var d = document.documentElement, t;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'light' && t !== 'dark') {
+                t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            }
+            d.setAttribute('data-theme', t);
+            d.classList.add('js');
+            if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
+        })();
+    </script>
 
-    <title>Anand Vaidya | Cloud Integration Engineer & Azure Specialist</title>
-
-    <!-- ======================== CORE SEO ======================== -->
-    <meta name="description" content="Anand Vaidya — Cloud Integration Engineer and Azure Specialist with 3+ years experience. Expert in Enterprise Integration, Azure Functions, Logic Apps, APIM, and Automation in Vadodara, India.">
-    <meta name="keywords" content="Anand Vaidya, Cloud Integration Engineer, Azure Integration Engineer, Enterprise Integration Engineer, Azure Specialist, Azure Solutions Architect, Azure Integration Specialist, Azure APIM Expert, Azure Functions Developer, Azure Bicep Engineer, Logic Apps Developer, Cloud Automation Engineer, Azure DevOps Engineer, Serverless Architect, Microsoft Azure Expert, Azure Consultant India, Azure Architect India, Cloud Engineer India, Vadodara, Gujarat, India, Zero Trust Security, OAuth 2.0, B2B Integration, E-Commerce Automation">
+    <title>Anand Vaidya — Azure Cloud Engineer | Serverless &amp; DevOps</title>
+    <meta name="description" content="Anand Vaidya, Azure Cloud Engineer in Vadodara, India: serverless integrations, secure APIs and infrastructure as code with Azure Functions, APIM and Bicep.">
     <meta name="author" content="Anand Vaidya">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <meta name="googlebot" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#070a12" id="meta-theme-color">
+    <meta name="color-scheme" content="dark light">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="format-detection" content="telephone=no">
     <meta name="geo.region" content="IN-GJ">
-    <meta name="geo.placename" content="Vadodara">
+    <meta name="geo.placename" content="Vadodara, Gujarat, India">
+    <!-- CSP as a meta tag so it also applies on GitHub Pages (which ignores .htaccess). frame-ancestors can only be set by a header. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 
-    <!-- Canonical — must match your actual live domain exactly -->
     <link rel="canonical" href="https://anandvaidya.in/">
+    <link rel="alternate" hreflang="en-IN" href="https://anandvaidya.in/">
+    <link rel="alternate" hreflang="x-default" href="https://anandvaidya.in/">
 
-    <!-- ======================== OPEN GRAPH (Facebook / LinkedIn) ======================== -->
+    <!-- Open Graph -->
     <meta property="og:type" content="profile">
     <meta property="og:url" content="https://anandvaidya.in/">
-    <meta property="og:site_name" content="Anand Vaidya Portfolio">
-    <meta property="og:title" content="Anand Vaidya | Cloud Integration Engineer & Azure Specialist">
-    <meta property="og:description" content="Anand Vaidya — Cloud Integration Engineer and Azure Specialist with 3+ years experience. Expert in Enterprise Integration, Azure Functions, Logic Apps, APIM, and Automation in Vadodara, India.">
-    <meta property="og:image" content="https://anandvaidya.in/profile.webp">
+    <meta property="og:site_name" content="Anand Vaidya">
+    <meta property="og:title" content="Anand Vaidya — Azure Cloud Engineer">
+    <meta property="og:description" content="Cloud Engineer at FSP Consulting building serverless integrations, secure APIs and automated Azure infrastructure. Azure Functions, API Management, Logic Apps, Bicep and Azure DevOps.">
+    <meta property="og:image" content="https://anandvaidya.in/og-cover.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Anand Vaidya - Cloud Integration Engineer & Azure Specialist">
+    <meta property="og:image:alt" content="Anand Vaidya, Azure Cloud Engineer — serverless, DevOps and infrastructure as code">
     <meta property="og:locale" content="en_IN">
     <meta property="profile:first_name" content="Anand">
     <meta property="profile:last_name" content="Vaidya">
 
-    <!-- ======================== TWITTER / X CARD ======================== -->
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@anandvaidya">
-    <meta name="twitter:creator" content="@anandvaidya">
-    <meta name="twitter:url" content="https://anandvaidya.in/">
-    <meta name="twitter:title" content="Anand Vaidya | Cloud Integration Engineer & Azure Specialist">
-    <meta name="twitter:description" content="Anand Vaidya — Cloud Integration Engineer and Azure Specialist with 3+ years experience. Expert in Enterprise Integration, Azure Functions, Logic Apps, APIM, and Automation.">
-    <meta name="twitter:image" content="https://anandvaidya.in/profile.webp">
-    <meta name="twitter:image:alt" content="Anand Vaidya - Cloud Integration Engineer">
+    <meta name="twitter:title" content="Anand Vaidya — Azure Cloud Engineer">
+    <meta name="twitter:description" content="Serverless integrations, secure APIs and automated Azure infrastructure. Azure Functions, API Management, Logic Apps, Bicep, Azure DevOps.">
+    <meta name="twitter:image" content="https://anandvaidya.in/og-cover.png">
+    <meta name="twitter:image:alt" content="Anand Vaidya, Azure Cloud Engineer">
 
-    <!-- ======================== ADVANCED JSON-LD SCHEMA ======================== -->
+    <!-- Structured data: only facts that are visible on this page -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -53,12 +65,13 @@
           "@type": "Person",
           "@id": "https://anandvaidya.in/#person",
           "name": "Anand Vaidya",
-          "alternateName": ["Anand S Vaidya", "Anand Sureshbhai Vaidya"],
-          "jobTitle": ["Cloud Integration Engineer", "Azure Solutions Architect", "Enterprise Integration Engineer", "Cloud Automation Engineer"],
-          "description": "Cloud Integration Engineer and Azure Specialist with 3+ years of experience. Expert in Enterprise Integration, Azure Functions, Logic Apps, APIM, and Workflow Automation.",
-          "url": "https://anandvaidya.in",
+          "givenName": "Anand",
+          "familyName": "Vaidya",
+          "jobTitle": "Cloud Engineer",
+          "description": "Azure Cloud Engineer building serverless integrations, secure APIs and automated infrastructure with Azure Functions, API Management, Logic Apps, Bicep and Azure DevOps.",
+          "url": "https://anandvaidya.in/",
           "image": "https://anandvaidya.in/profile.webp",
-          "email": "anand.svaidya24@gmail.com",
+          "email": "mailto:anand.svaidya24@gmail.com",
           "telephone": "+91-9913013470",
           "address": {
             "@type": "PostalAddress",
@@ -66,10 +79,18 @@
             "addressRegion": "Gujarat",
             "addressCountry": "IN"
           },
+          "worksFor": { "@type": "Organization", "name": "FSP Consulting" },
           "alumniOf": {
             "@type": "CollegeOrUniversity",
             "name": "Parul University",
             "sameAs": "https://www.paruluniversity.ac.in/"
+          },
+          "hasCredential": {
+            "@type": "EducationalOccupationalCredential",
+            "name": "Microsoft Certified: Azure AI Fundamentals (AI-900)",
+            "credentialCategory": "certification",
+            "recognizedBy": { "@type": "Organization", "name": "Microsoft" },
+            "dateCreated": "2025-05"
           },
           "sameAs": [
             "https://github.com/anandvaidyaa",
@@ -77,1494 +98,942 @@
           ],
           "knowsAbout": [
             "Microsoft Azure",
-            "Enterprise Integration",
-            "Azure APIM",
             "Azure Functions",
+            "Azure API Management",
             "Azure Logic Apps",
-            "Azure Bicep",
-            "OAuth 2.0",
-            "Zero Trust Security",
-            "Cloud Automation",
-            "E-Commerce Automation",
-            "B2B Integration",
-            "Azure DevOps Engineer",
             "Serverless Architecture",
-            "Cloud Engineering India"
-          ],
-          "worksFor": {
-            "@type": "Organization",
-            "name": "FSP"
-          },
-          "hasOccupation": {
-            "@type": "Occupation",
-            "name": "Azure Integration Engineer",
-            "educationRequirements": "Bachelor's Degree in Computer Science",
-            "experienceRequirements": "3+ years of enterprise cloud experience",
-            "skills": "Azure Integration Services, API Management, Serverless Architecture, Infrastructure as Code"
-          }
+            "Event-Driven Architecture",
+            "Infrastructure as Code",
+            "Azure Bicep",
+            "ARM Templates",
+            "Azure DevOps",
+            "CI/CD",
+            "Docker",
+            "Managed Identities",
+            "OAuth 2.0",
+            "Azure Cosmos DB",
+            "SQL Server",
+            "ASP.NET Core",
+            "Cloud Integration"
+          ]
         },
         {
           "@type": "WebSite",
           "@id": "https://anandvaidya.in/#website",
           "url": "https://anandvaidya.in/",
-          "name": "Anand Vaidya - Cloud Integration Engineer Portfolio",
-          "description": "Personal portfolio of Anand Vaidya, Azure Integration Engineer and Cloud Specialist based in Vadodara, Gujarat, India.",
-          "publisher": {
-            "@id": "https://anandvaidya.in/#person"
-          }
+          "name": "Anand Vaidya",
+          "inLanguage": "en-IN",
+          "publisher": { "@id": "https://anandvaidya.in/#person" }
         },
         {
           "@type": "ProfilePage",
-          "@id": "https://anandvaidya.in/#profile",
+          "@id": "https://anandvaidya.in/#webpage",
           "url": "https://anandvaidya.in/",
-          "name": "Anand Vaidya - Cloud Integration Engineer",
-          "description": "Azure Integration Engineer with 3+ years of experience. Specialist in Microsoft Azure, Azure APIM, Logic Apps, and Enterprise Integration.",
-          "mainEntity": {
-            "@id": "https://anandvaidya.in/#person"
-          }
+          "name": "Anand Vaidya — Azure Cloud Engineer",
+          "isPartOf": { "@id": "https://anandvaidya.in/#website" },
+          "mainEntity": { "@id": "https://anandvaidya.in/#person" },
+          "primaryImageOfPage": "https://anandvaidya.in/og-cover.png",
+          "inLanguage": "en-IN",
+          "datePublished": "2024-06-13",
+          "dateModified": "2026-10-11"
         }
       ]
     }
     </script>
 
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    
-    <!-- LCP Optimization: Preload Hero Image -->
-    <link rel="preload" as="image" href="profile.webp">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
 
-    <!-- Preconnect to Font Providers -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Boxicons (Render-Blocking Fix) -->
-    <link rel="preload" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"></noscript>
+    <link rel="preload" as="image" href="profile-320.webp" imagesrcset="profile-320.webp 320w, profile.webp 450w" imagesizes="(max-width: 600px) 240px, 360px" fetchpriority="high">
 
-    <!-- Custom CSS -->
-    <!-- Preload Critical CSS -->
-    <link rel="preload" href="styles.min.css" as="style">
-    <link rel="stylesheet" href="styles.min.css?v=27">
-    
-    <!-- Preload Critical JS -->
-    <link rel="preload" href="script.min.js" as="script">
-    
-    <script>
-        // Force dark mode and scroll to top on every fresh load
-        localStorage.setItem('theme', 'dark');
-        if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
-        window.scrollTo(0, 0);
-    </script>
+    <link rel="preload" as="font" type="font/woff2" href="fonts/space-grotesk-var.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="fonts/outfit-var.woff2" crossorigin>
+    <link rel="stylesheet" href="styles.min.css?v=31">
+    <script src="script.min.js?v=31" defer></script>
 </head>
 <body>
-    <!-- Premium Cursor -->
-    <div id="premium-cursor">
-        <div class="cursor-glow"></div>
-        <div class="cursor-ring"></div>
-    </div>
-    
-    <!-- Cyber-Telemetry Sidebar Navigation -->
-    <div class="sidebar-telemetry">
-        <div class="scroll-progress-ring">
-            <svg class="progress-ring-svg" width="48" height="48">
-                <circle class="progress-ring-circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="3" fill="transparent" r="20" cx="24" cy="24"/>
-                <circle class="progress-ring-circle" stroke="var(--accent)" stroke-width="3" fill="transparent" r="20" cx="24" cy="24"/>
-            </svg>
-            <div class="scroll-percent" id="scroll-percent">0%</div>
-        </div>
-        <div class="sidebar-nav-dots">
-            <a href="#about" class="sidebar-dot" data-section="about" aria-label="About section"><span class="tooltip">About</span></a>
-            <a href="#experience" class="sidebar-dot" data-section="experience" aria-label="Experience section"><span class="tooltip">Experience</span></a>
-            <a href="#projects" class="sidebar-dot" data-section="projects" aria-label="Projects section"><span class="tooltip">Projects</span></a>
-            <a href="#education" class="sidebar-dot" data-section="education" aria-label="Education section"><span class="tooltip">Education</span></a>
-            <a href="#contact" class="sidebar-dot" data-section="contact" aria-label="Contact section"><span class="tooltip">Contact</span></a>
-        </div>
-    </div>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Minimalist Cybernetic Preloader -->
-    <div id="preloader">
-        <div class="preloader-shutter shutter-1"></div>
-        <div class="preloader-shutter shutter-2"></div>
-        <div class="preloader-shutter shutter-3"></div>
-        <div class="preloader-shutter shutter-4"></div>
-        <div class="preloader-shutter shutter-5"></div>
-        <div class="preloader-loader-wrapper">
-            <div class="preloader-flex-container">
-                <div class="cyber-loader">
-                    <div class="loader-ring"></div>
-                    <div class="loader-nodes">
-                        <span class="l-node ln-1"></span>
-                        <span class="l-node ln-2"></span>
-                        <span class="l-node ln-3"></span>
-                    </div>
-                    <div class="loader-logo">AV</div>
-                </div>
-                <div class="preloader-terminal-mock">
-                    <div class="mock-header">
-                        <span class="mock-dot red"></span>
-                        <span class="mock-dot yellow"></span>
-                        <span class="mock-dot green"></span>
-                        <span class="mock-title">azure-init.ps1</span>
-                    </div>
-                    <div class="mock-body" id="preloader-boot-log">
-                        <!-- JS will stream boot logs here -->
-                    </div>
-                </div>
-            </div>
-            <div class="loader-text">CONNECTED TO ANANDVAIDYA.IN</div>
-        </div>
-    </div>
+    <!-- Icon sprite (inline SVG — no icon font download) -->
+    <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+            <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+            <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+            <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+            <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+            <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></symbol>
+            <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+            <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+            <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+            <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+            <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+            <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+            <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+            <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+            <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+            <symbol id="i-gateway" viewBox="0 0 24 24"><path d="M4 7h16M8 3 4 7l4 4M20 17H4M16 13l4 4-4 4"/></symbol>
+            <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h7M18 8.5v7M6 8.5V14a4 4 0 0 0 4 4h5.5"/></symbol>
+            <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14.5 8.5l2 2"/></symbol>
+            <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+            <symbol id="i-branch" viewBox="0 0 24 24"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+            <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+            <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01"/></symbol>
+            <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+            <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></symbol>
+            <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+            <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+            <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></symbol>
+            <symbol id="i-grad" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+            <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6M12 19h8"/></symbol>
+            <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+            <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+            <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></symbol>
+            <symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9zM9 21v-6h6v6"/></symbol>
+            <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 4h14v12H1zM15 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></symbol>
+            <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+            <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+        </defs>
+    </svg>
 
-    <!-- Dynamic Background -->
-    <div class="bg-animation">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="grain" aria-hidden="true"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
-        <div class="nav-content">
-            <a href="#" class="logo">AV<span>.</span></a>
-            <ul class="nav-links" id="nav-links">
+    <!-- ========================= NAVIGATION ========================= -->
+    <header class="site-header" id="site-header">
+        <nav class="nav container" aria-label="Main">
+            <a href="#home" class="brand" aria-label="Anand Vaidya — home">
+                <span class="brand__mark" aria-hidden="true">
+                    <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18.5"/><path d="M11 28 18.5 11h3L29 28M14.5 21h11"/></svg>
+                </span>
+                <span class="brand__name">Anand Vaidya</span>
+            </a>
+
+            <ul class="nav__links" id="nav-links">
                 <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#architecture">Architecture</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Mode"><i class='bx bx-sun'></i></button></li>
             </ul>
-            <div class="menu-icon" id="menu-icon">
-                <i class='bx bx-menu'></i>
+
+            <div class="nav__tools">
+                <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme">
+                    <svg class="i i-sun"><use href="#i-sun"/></svg>
+                    <svg class="i i-moon"><use href="#i-moon"/></svg>
+                </button>
+                <a class="btn btn--sm btn--primary nav__cta" href="#contact">Let&rsquo;s talk</a>
+                <button class="icon-btn nav__toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+                    <svg class="i i-menu"><use href="#i-menu"/></svg>
+                    <svg class="i i-close"><use href="#i-close"/></svg>
+                </button>
+            </div>
+        </nav>
+
+        <div class="mobile-menu" id="mobile-menu" hidden>
+            <ul>
+                <li><a href="#about"><span>01</span>About</a></li>
+                <li><a href="#skills"><span>02</span>Skills</a></li>
+                <li><a href="#architecture"><span>03</span>Architecture</a></li>
+                <li><a href="#experience"><span>04</span>Experience</a></li>
+                <li><a href="#projects"><span>05</span>Projects</a></li>
+                <li><a href="#credentials"><span>06</span>Credentials</a></li>
+                <li><a href="#contact"><span>07</span>Contact</a></li>
+            </ul>
+            <div class="mobile-menu__foot">
+                <a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me"><svg class="i"><use href="#i-github"/></svg> GitHub</a>
+                <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me"><svg class="i"><use href="#i-linkedin"/></svg> LinkedIn</a>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container hero-layout">
-            <div class="hero-content fade-in">
-                <span class="subtitle" style="display: block; font-weight: 600; font-size: 1rem; letter-spacing: 2px; color: var(--accent); margin-bottom: 0.5rem;"><i class='bx bx-cloud'></i> AZURE INTEGRATION ENGINEER</span>
-                <h1 class="title">Anand Vaidya<span class="sr-only"> — Cloud Integration Engineer & Azure Specialist</span></h1>
-                <h2 class="typing-text">Building <span class="highlight typed-role"></span><span class="cursor">|</span></h2>
-                <p class="description">
-                    Cloud Integration Engineer with 3+ years of experience building scalable Azure solutions, enterprise integrations, API ecosystems, and automation platforms.
-                </p>
-                <div class="hero-metrics">
-                    <div class="metric-item"><i class='bx bx-check-circle'></i> 3+ Years Building Enterprise Azure Solutions</div>
-                    <div class="metric-item"><i class='bx bx-check-circle'></i> Cloud Platforms Supporting Business-Critical Workflows</div>
-                    <div class="metric-item"><i class='bx bx-check-circle'></i> Enterprise API Ecosystems</div>
-                    <div class="metric-item"><i class='bx bx-check-circle'></i> Enterprise Automation & Integration Specialist</div>
-                </div>
-                <div class="hero-actions">
-                    <a href="#experience" class="btn btn-primary">View Experience <i class='bx bx-briefcase'></i></a>
-                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
-                </div>
+    <main id="main">
 
-                <!-- SaaS Tabbed Control Center Mockup -->
-                <div class="saas-dashboard glass-card" id="interactive-terminal">
-                    <div class="dash-header">
-                        <div class="dash-dot-indicators">
-                            <span class="dash-dot-red"></span>
-                            <span class="dash-dot-yellow"></span>
-                            <span class="dash-dot-green"></span>
-                        </div>
-                        <div class="dash-tabs">
-                            <div class="dash-tab active" data-tab="cli" onclick="switchHeroTab('cli')">
-                                <i class='bx bx-terminal'></i> powershell.exe
-                            </div>
-                            <div class="dash-tab" data-tab="gui" onclick="switchHeroTab('gui')">
-                                <i class='bx bx-pulse'></i> telemetry.gui
-                            </div>
-                        </div>
-                        <div class="dash-status-light"><span class="led led-green"></span> NOMINAL</div>
-                    </div>
-                    
-                    <!-- Tab Panel 1: Interactive PowerShell CLI -->
-                    <div class="dash-panel active" id="panel-cli">
-                        <div class="terminal-body" id="terminal-body">
-                            <!-- JS will initialize shell here -->
-                        </div>
-                        <div class="terminal-quick-actions">
-                            <button class="terminal-action-btn" onclick="runHeroTerminalCmd('neofetch')">neofetch</button>
-                            <button class="terminal-action-btn" onclick="runHeroTerminalCmd('about')">about</button>
-                            <button class="terminal-action-btn" onclick="runHeroTerminalCmd('skills')">skills</button>
-                            <button class="terminal-action-btn" onclick="runHeroTerminalCmd('projects')">projects</button>
-                            <button class="terminal-action-btn" onclick="runHeroTerminalCmd('clear')">clear</button>
-                        </div>
-                        <input type="text" id="terminal-input" autocomplete="off" style="position: absolute; opacity: 0; pointer-events: none;">
-                    </div>
-                    
-                    <!-- Tab Panel 2: Telemetry GUI -->
-                    <div class="dash-panel" id="panel-gui">
-                        <div class="dash-body">
-                            <!-- Upper Metrics Row -->
-                            <div class="dash-metrics-row">
-                                <div class="dash-metric-gauge">
-                                    <div class="gauge-ring-wrapper">
-                                        <svg class="gauge-svg" width="64" height="64">
-                                            <circle class="gauge-bg" stroke="rgba(255,255,255,0.05)" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
-                                            <circle class="gauge-fill" id="cpu-gauge" stroke="var(--accent)" stroke-dasharray="163.3" stroke-dashoffset="140" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
-                                        </svg>
-                                        <span class="gauge-value" id="cpu-val">14%</span>
-                                    </div>
-                                    <span class="gauge-label">CPU LOAD</span>
-                                </div>
-                                <div class="dash-metric-gauge">
-                                    <div class="gauge-ring-wrapper">
-                                        <svg class="gauge-svg" width="64" height="64">
-                                            <circle class="gauge-bg" stroke="rgba(255,255,255,0.05)" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
-                                            <circle class="gauge-fill" id="ram-gauge" stroke="var(--accent-secondary)" stroke-dasharray="163.3" stroke-dashoffset="90" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
-                                        </svg>
-                                        <span class="gauge-value" id="ram-val">45%</span>
-                                    </div>
-                                    <span class="gauge-label">MEM POOL</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Lower Resources Control Panel -->
-                            <div class="dash-resources-title">Active Resources Grid (Click to Toggle)</div>
-                            <div class="dash-resources-grid">
-                                <div class="dash-res-card active" data-resource="func" onclick="toggleRes('func')">
-                                    <i class='bx bx-bolt-circle'></i>
-                                    <span>Functions</span>
-                                </div>
-                                <div class="dash-res-card active" data-resource="apim" onclick="toggleRes('apim')">
-                                    <i class='bx bx-sitemap'></i>
-                                    <span>APIM</span>
-                                </div>
-                                <div class="dash-res-card active" data-resource="db" onclick="toggleRes('db')">
-                                    <i class='bx bxs-data'></i>
-                                    <span>Cosmos</span>
-                                </div>
-                                <div class="dash-res-card active" data-resource="vm" onclick="toggleRes('vm')">
-                                    <i class='bx bx-server'></i>
-                                    <span>DevOps</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Dashboard Latency Live Chart -->
-                            <div class="dash-chart-section">
-                                <div class="chart-header-row">
-                                    <span class="chart-title">Serverless Function Latency (ms)</span>
-                                    <span class="chart-legend"><span class="legend-color"></span> Live Telemetry</span>
-                                </div>
-                                <div class="dash-chart-canvas-wrapper">
-                                    <canvas id="dash-latency-chart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="social-links">
-                    <a href="https://github.com/anandvaidyaa" target="_blank" aria-label="Anand Vaidya on GitHub"><i class='bx bxl-github'></i></a>
-                    <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" aria-label="Anand Vaidya on LinkedIn"><i class='bx bxl-linkedin'></i></a>
-                    <a href="mailto:anand.svaidya24@gmail.com" aria-label="Email Anand Vaidya"><i class='bx bx-envelope'></i></a>
-                </div>
+        <!-- ========================= HERO ========================= -->
+        <section class="hero" id="home" aria-labelledby="hero-title">
+            <div class="hero__bg" aria-hidden="true">
+                <div class="mesh"><span></span><span></span><span></span></div>
+                <div class="grid-floor"></div>
+                <svg class="net" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+                    <g class="net__lines">
+                        <path d="M-20 640 C 260 560, 420 700, 720 610 S 1180 470, 1460 560"/>
+                        <path d="M-20 300 C 240 360, 520 220, 760 300 S 1200 420, 1460 330"/>
+                        <path d="M180 -20 C 220 240, 120 520, 260 920"/>
+                    </g>
+                    <g class="net__nodes">
+                        <circle cx="258" cy="595" r="3"/><circle cx="720" cy="610" r="3"/><circle cx="1180" cy="505" r="3"/>
+                        <circle cx="520" cy="262" r="3"/><circle cx="1010" cy="360" r="3"/><circle cx="196" cy="320" r="3"/>
+                    </g>
+                </svg>
+                <div class="cursor-glow"></div>
             </div>
 
-            <!-- Profile Picture Section -->
-            <div class="hero-image-wrapper fade-in" style="animation-delay: 0.3s;">
-                <div class="glow-ring"></div>
-                <div class="profile-pic-container">
-                    <img src="profile.webp" alt="Anand Vaidya - Cloud Engineer from Vadodara, India" class="profile-pic" width="450" height="450" fetchpriority="high" loading="eager">
-                    <div class="floating-badge-wrapper badge-top-wrapper">
-                        <div class="floating-badge badge-top"><i class='bx bxl-microsoft'></i> Azure</div>
-                    </div>
-                    <div class="floating-badge-wrapper badge-bottom-wrapper">
-                        <div class="floating-badge badge-bottom"><i class='bx bxs-server'></i> DevOps</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="hero-scroll">
-            <a href="#about" aria-label="Scroll Down"><i class='bx bx-mouse' ></i><br><i class='bx bx-chevron-down bx-fade-down'></i></a>
-        </div>
-    </section>
-
-    <!-- Metrics Section -->
-    <section class="metrics section">
-        <div class="container reveal-stagger">
-            <div class="metrics-grid">
-                <!-- Card 1: Highly Available Architecture -->
-                <div class="metric-card-wrapper reveal-item">
-                    <div class="metric-card-inner">
-                        <div class="metric-card-front metric-glass-card">
-                            <div class="metric-card-header">
-                                <div class="metric-icon-wrap"><i class='bx bx-cloud'></i></div>
-                                <span class="metric-badge"><span class="led-pulse led-green"></span> SLA: ACTIVE</span>
-                            </div>
-                            <div class="metric-card-body">
-                                <div class="metric-value-wrap">
-                                    <span class="metric-val" data-target="99.99" data-decimals="2" data-suffix="%">0.00%</span>
-                                </div>
-                                <h4 class="metric-title">Highly Available Architecture</h4>
-                                <p class="metric-desc">Multi-region active-active deployments with automatic failover telemetry.</p>
-                                <div class="metric-chart-wrap">
-                                    <svg viewBox="0 0 120 30" class="mini-chart">
-                                        <defs>
-                                            <linearGradient id="grad-ha" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4" />
-                                                <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M 0 25 L 20 22 L 40 24 L 60 18 L 80 20 L 100 12 L 120 15" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" class="sparkline-path"></path>
-                                        <path d="M 0 25 L 20 22 L 40 24 L 60 18 L 80 20 L 100 12 L 120 15 L 120 30 L 0 30 Z" fill="url(#grad-ha)" class="sparkline-area"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="metric-card-footer">
-                                <span>Diagnostics Panel</span> <i class='bx bx-chevron-right'></i>
-                            </div>
-                        </div>
-                        <div class="metric-card-back metric-glass-card">
-                            <div class="metric-card-back-header">
-                                <h5>HA System Health</h5>
-                                <button class="metric-close-btn" aria-label="Close telemetry diagnostics"><i class='bx bx-x'></i></button>
-                            </div>
-                            <div class="metric-card-back-body">
-                                <div class="metric-sub-status">
-                                    <div class="status-item">
-                                        <span class="status-lbl">Uptime (30d)</span>
-                                        <span class="status-val">99.99%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-ha-uptime" style="width: 99.99%"></div>
-                                    </div>
-                                    <div class="status-item">
-                                        <span class="status-lbl">Geo-Sync Latency</span>
-                                        <span class="status-val text-ha-latency">12ms</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-ha-latency" style="width: 12%"></div>
-                                    </div>
-                                </div>
-                                <button class="diag-action-btn" data-metric="ha">Run Cloud Health Diagnostics</button>
-                                <div class="micro-terminal-container">
-                                    <div class="micro-terminal" id="term-ha">
-                                        <div class="term-line prompt">> System ready. Click run to inspect.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Infrastructure as Code -->
-                <div class="metric-card-wrapper reveal-item">
-                    <div class="metric-card-inner">
-                        <div class="metric-card-front metric-glass-card">
-                            <div class="metric-card-header">
-                                <div class="metric-icon-wrap"><i class='bx bx-code-alt'></i></div>
-                                <span class="metric-badge"><span class="led-pulse led-blue"></span> IaC: SYNCED</span>
-                            </div>
-                            <div class="metric-card-body">
-                                <div class="metric-value-wrap">
-                                    <span class="metric-val" data-target="150" data-decimals="0" data-suffix="+">0+</span>
-                                </div>
-                                <h4 class="metric-title">Infrastructure as Code</h4>
-                                <p class="metric-desc">Declarative resource provisioning, drift detection, and multi-cloud templates.</p>
-                                <div class="metric-chart-wrap">
-                                    <svg viewBox="0 0 120 30" class="mini-chart">
-                                        <defs>
-                                            <linearGradient id="grad-iac" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4" />
-                                                <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M 0 28 L 20 20 L 40 25 L 60 15 L 80 10 L 100 5 L 120 2" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" class="sparkline-path"></path>
-                                        <path d="M 0 28 L 20 20 L 40 25 L 60 15 L 80 10 L 100 5 L 120 2 L 120 30 L 0 30 Z" fill="url(#grad-iac)" class="sparkline-area"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="metric-card-footer">
-                                <span>Diagnostics Panel</span> <i class='bx bx-chevron-right'></i>
-                            </div>
-                        </div>
-                        <div class="metric-card-back metric-glass-card">
-                            <div class="metric-card-back-header">
-                                <h5>IaC Configuration</h5>
-                                <button class="metric-close-btn" aria-label="Close telemetry diagnostics"><i class='bx bx-x'></i></button>
-                            </div>
-                            <div class="metric-card-back-body">
-                                <div class="metric-sub-status">
-                                    <div class="status-item">
-                                        <span class="status-lbl">Compliance Rating</span>
-                                        <span class="status-val text-iac-compliance">100%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-iac-compliance" style="width: 100%"></div>
-                                    </div>
-                                    <div class="status-item">
-                                        <span class="status-lbl">Configuration Drift</span>
-                                        <span class="status-val text-iac-drift">0%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-iac-drift" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                                <button class="diag-action-btn" data-metric="iac">Run Drift Detection Scan</button>
-                                <div class="micro-terminal-container">
-                                    <div class="micro-terminal" id="term-iac">
-                                        <div class="term-line prompt">> System ready. Click run to inspect.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3: Automated CI/CD Pipelines -->
-                <div class="metric-card-wrapper reveal-item">
-                    <div class="metric-card-inner">
-                        <div class="metric-card-front metric-glass-card">
-                            <div class="metric-card-header">
-                                <div class="metric-icon-wrap"><i class='bx bx-git-branch'></i></div>
-                                <span class="metric-badge"><span class="led-pulse led-purple"></span> BUILD: STABLE</span>
-                            </div>
-                            <div class="metric-card-body">
-                                <div class="metric-value-wrap">
-                                    <span class="metric-val" data-target="820" data-decimals="0" data-suffix="+">0+</span>
-                                </div>
-                                <h4 class="metric-title">Automated CI/CD Pipelines</h4>
-                                <p class="metric-desc">Continuous integration suites with built-in linting, scanning, and testing.</p>
-                                <div class="metric-chart-wrap">
-                                    <svg viewBox="0 0 120 30" class="mini-chart">
-                                        <defs>
-                                            <linearGradient id="grad-cicd" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4" />
-                                                <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M 0 25 L 20 18 L 40 22 L 60 12 L 80 15 L 100 8 L 120 5" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" class="sparkline-path"></path>
-                                        <path d="M 0 25 L 20 18 L 40 22 L 60 12 L 80 15 L 100 8 L 120 5 L 120 30 L 0 30 Z" fill="url(#grad-cicd)" class="sparkline-area"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="metric-card-footer">
-                                <span>Diagnostics Panel</span> <i class='bx bx-chevron-right'></i>
-                            </div>
-                        </div>
-                        <div class="metric-card-back metric-glass-card">
-                            <div class="metric-card-back-header">
-                                <h5>CI/CD Pipeline Telemetry</h5>
-                                <button class="metric-close-btn" aria-label="Close telemetry diagnostics"><i class='bx bx-x'></i></button>
-                            </div>
-                            <div class="metric-card-back-body">
-                                <div class="metric-sub-status">
-                                    <div class="status-item">
-                                        <span class="status-lbl">Pipeline Success Rate</span>
-                                        <span class="status-val text-cicd-success">98.4%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-cicd-success" style="width: 98.4%"></div>
-                                    </div>
-                                    <div class="status-item">
-                                        <span class="status-lbl">Unit Test Coverage</span>
-                                        <span class="status-val text-cicd-coverage">92.8%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-cicd-coverage" style="width: 92.8%"></div>
-                                    </div>
-                                </div>
-                                <button class="diag-action-btn" data-metric="cicd">Trigger Security & Lint Scan</button>
-                                <div class="micro-terminal-container">
-                                    <div class="micro-terminal" id="term-cicd">
-                                        <div class="term-line prompt">> System ready. Click run to inspect.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Zero-Trust Security Models -->
-                <div class="metric-card-wrapper reveal-item">
-                    <div class="metric-card-inner">
-                        <div class="metric-card-front metric-glass-card">
-                            <div class="metric-card-header">
-                                <div class="metric-icon-wrap"><i class='bx bx-check-shield'></i></div>
-                                <span class="metric-badge"><span class="led-pulse led-gold"></span> SEC: SHIELDED</span>
-                            </div>
-                            <div class="metric-card-body">
-                                <div class="metric-value-wrap">
-                                    <span class="metric-val" data-target="0" data-decimals="0" data-suffix=" Violations">0 Violations</span>
-                                </div>
-                                <h4 class="metric-title">Zero-Trust Security Models</h4>
-                                <p class="metric-desc">Identity-centric security using Managed Identities, RBAC, and VNet isolation.</p>
-                                <div class="metric-chart-wrap">
-                                    <svg viewBox="0 0 120 30" class="mini-chart">
-                                        <defs>
-                                            <linearGradient id="grad-sec" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4" />
-                                                <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M 0 15 L 20 15 L 40 15 L 60 15 L 80 15 L 100 15 L 120 15" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" class="sparkline-path"></path>
-                                        <path d="M 0 15 L 20 15 L 40 15 L 60 15 L 80 15 L 100 15 L 120 15 L 120 30 L 0 30 Z" fill="url(#grad-sec)" class="sparkline-area"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="metric-card-footer">
-                                <span>Diagnostics Panel</span> <i class='bx bx-chevron-right'></i>
-                            </div>
-                        </div>
-                        <div class="metric-card-back metric-glass-card">
-                            <div class="metric-card-back-header">
-                                <h5>Zero-Trust Audit</h5>
-                                <button class="metric-close-btn" aria-label="Close telemetry diagnostics"><i class='bx bx-x'></i></button>
-                            </div>
-                            <div class="metric-card-back-body">
-                                <div class="metric-sub-status">
-                                    <div class="status-item">
-                                        <span class="status-lbl">Managed Identities Auth</span>
-                                        <span class="status-val text-sec-identities">100%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-sec-identities" style="width: 100%"></div>
-                                    </div>
-                                    <div class="status-item">
-                                        <span class="status-lbl">Private Network Coverage</span>
-                                        <span class="status-val text-sec-network">98.5%</span>
-                                    </div>
-                                    <div class="progress-bar-wrap">
-                                        <div class="progress-bar-fill pb-sec-network" style="width: 98.5%"></div>
-                                    </div>
-                                </div>
-                                <button class="diag-action-btn" data-metric="sec">Audit IAM Access Policies</button>
-                                <div class="micro-terminal-container">
-                                    <div class="micro-terminal" id="term-sec">
-                                        <div class="term-line prompt">> System ready. Click run to inspect.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About / Tech Stack Section -->
-    <section class="about section" id="about">
-        <div class="container reveal-stagger">
-            <h2 class="section-title reveal-item">About Me &amp; Tech Stack</h2>
-            <div class="about-grid">
-                <div class="about-text reveal-item">
-                    <p>
-                        <strong>Azure Integration Engineer</strong> based in Vadodara, Gujarat, India, with 3+ years of experience building enterprise cloud solutions, scalable API ecosystems, and automated infrastructure. I specialize in connecting complex B2B systems using Azure Logic Apps, Functions, and API Management — delivering measurable cost savings and operational efficiency.
+            <div class="container hero__inner">
+                <div class="hero__copy">
+                    <p class="hero__status anim" style="--d:0">
+                        <span class="pulse" aria-hidden="true"></span>
+                        <span>Currently Cloud Engineer at <strong>FSP Consulting</strong></span>
                     </p>
-                    <ul class="about-bullets">
-                        <li><strong>Cloud Integration &amp; Automation:</strong> Architected event-driven pipelines at FSP, reducing workflow processing times from hours to seconds.</li>
-                        <li><strong>E-Commerce &amp; Logistics:</strong> Designed robust integrations syncing inventory across Shopify, Amazon, and Walmart while automating carrier dispatch.</li>
-                        <li><strong>Resiliency &amp; Security:</strong> Built zero-trust setups using Managed Identities, Azure RBAC, and Bicep/ARM for cost-effective, secure operations.</li>
+
+                    <h1 class="hero__title" id="hero-title">
+                        <span class="mask"><span class="anim" style="--d:1">Anand</span></span>
+                        <span class="mask"><span class="anim outline" style="--d:2">Vaidya</span></span>
+                    </h1>
+
+                    <p class="hero__role anim" style="--d:3">
+                        <span>Azure Cloud Engineer</span><span class="dot" aria-hidden="true"></span><span>Serverless &amp; Integration</span><span class="dot" aria-hidden="true"></span><span>DevOps &amp; IaC</span>
+                    </p>
+
+                    <p class="hero__lede anim" style="--d:4">
+                        I build <strong>serverless integrations</strong>, <strong>secure APIs</strong> and <strong>automated infrastructure</strong>
+                        on Microsoft Azure &mdash; event-driven systems that turn hours of manual processing into seconds.
+                    </p>
+
+                    <div class="hero__actions anim" style="--d:5">
+                        <a href="#projects" class="btn btn--primary magnetic">View projects <svg class="i"><use href="#i-arrow-right"/></svg></a>
+                        <a href="#architecture" class="btn btn--ghost magnetic">Explore the architecture</a>
+                        <a href="#contact" class="btn btn--link">Contact me <svg class="i"><use href="#i-arrow-right"/></svg></a>
+                    </div>
+
+                    <ul class="hero__social anim" style="--d:6" aria-label="Profiles">
+                        <li><a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me"><svg class="i"><use href="#i-github"/></svg><span>GitHub</span></a></li>
+                        <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me"><svg class="i"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></li>
+                        <li><a href="mailto:anand.svaidya24@gmail.com"><svg class="i"><use href="#i-mail"/></svg><span>Email</span></a></li>
                     </ul>
-                    <p class="skill-hint-text"><i class='bx bx-pointer'></i> Click any skill tag to learn what it is &amp; how I've used it</p>
                 </div>
-                
-                <div class="bento-grid">
-                    <div class="bento-box glass-card reveal-item">
-                        <h4><i class='bx bx-building'></i> Infrastructure</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag skill-interactive" data-skill="Azure Bicep" data-level="95" data-desc="Declarative IaC language for Azure — writes cloud resources as code so infrastructure is reproducible, version-controlled, and auditable." data-use="Used to define and deploy VMs, VNets, Key Vaults, and App Services across environments.">Azure Bicep</span>
-                            <span class="skill-tag skill-interactive" data-skill="ARM Templates" data-level="85" data-desc="JSON-based Azure Resource Manager templates for deploying and managing Azure resources at scale with full idempotency." data-use="Used alongside Bicep for legacy pipeline compatibility and complex nested deployments.">ARM Templates</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card reveal-item">
-                        <h4><i class='bx bx-server'></i> Compute &amp; Logic</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag skill-interactive" data-skill="Azure Functions" data-level="95" data-desc="Serverless compute that runs event-driven code on demand — scales to zero when idle, eliminating infrastructure overhead." data-use="Built order-processing, inventory-sync, and webhook handler functions that process millions of events per month.">Azure Functions</span>
-                            <span class="skill-tag skill-interactive" data-skill="Logic Apps" data-level="80" data-desc="Low-code workflow orchestrator that connects enterprise systems using 400+ pre-built connectors." data-use="Automated approval flows, cross-system data sync, and carrier dispatch workflows.">Logic Apps</span>
-                            <span class="skill-tag skill-interactive" data-skill="App Services" data-level="85" data-desc="Managed PaaS for hosting web apps, REST APIs, and backends — handles TLS, auto-scaling, and deployment slots." data-use="Hosted .NET Core APIs behind APIM with staging/production slot swap deployments.">App Services</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card reveal-item">
-                        <h4><i class='bx bx-git-branch'></i> DevOps</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag skill-interactive" data-skill="Azure DevOps" data-level="90" data-desc="End-to-end DevOps platform covering Repos, Pipelines, Boards, and Artifacts for full CI/CD lifecycle management." data-use="Configured multi-stage YAML pipelines for build, test, security scan, and blue-green deployments to Azure.">Azure DevOps</span>
-                            <span class="skill-tag skill-interactive" data-skill="Docker" data-level="80" data-desc="Container runtime for packaging apps with their dependencies into portable, isolated images that run anywhere." data-use="Containerised .NET microservices and deployed to Azure Container Apps with health probes.">Docker</span>
-                            <span class="skill-tag skill-interactive" data-skill="CI/CD" data-level="90" data-desc="Continuous Integration and Continuous Deployment — automated pipelines that build, test, and deploy code with every commit." data-use="Zero-downtime release pipelines with gate approvals, rollback triggers, and environment promotion.">CI/CD</span>
-                        </div>
-                    </div>
-                    <div class="bento-box glass-card reveal-item">
-                        <h4><i class='bx bxs-data'></i> Data &amp; APIs</h4>
-                        <div class="bento-items">
-                            <span class="skill-tag skill-interactive" data-skill="Cosmos DB" data-level="85" data-desc="Globally distributed NoSQL database with single-digit millisecond reads and multi-region write support." data-use="Stored order and inventory state for real-time e-commerce workloads handling peak traffic spikes.">Cosmos DB</span>
-                            <span class="skill-tag skill-interactive" data-skill="Azure APIM" data-level="90" data-desc="Enterprise API gateway providing rate-limiting, auth, caching, versioning, and analytics for backend services." data-use="Unified all microservice APIs behind a single gateway with JWT validation, throttling, and developer portal.">Azure APIM</span>
-                            <span class="skill-tag skill-interactive" data-skill="SQL Server" data-level="80" data-desc="Relational database engine for structured, transactional workloads with ACID guarantees." data-use="Persisted financial ledger and order history data with row-level security and automated backups.">SQL Server</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Recruiter Tech Tooltip Modal — Premium Glassmorphism -->
-            <div class="skill-tooltip-overlay" id="skill-overlay" aria-hidden="true">
-                <div class="skill-tooltip-card" id="skill-tooltip-card">
-                    <!-- Floating glass particles -->
-                    <div class="stc-particle stc-p1"></div>
-                    <div class="stc-particle stc-p2"></div>
-                    <div class="stc-particle stc-p3"></div>
-                    <div class="stc-particle stc-p4"></div>
-                    <!-- Corner accents -->
-                    <div class="stc-corner stc-corner-tl"></div>
-                    <div class="stc-corner stc-corner-br"></div>
+                <div class="hero__visual anim" style="--d:3">
+                    <div class="orbit-system" id="orbit-system">
+                        <svg class="orbit-rings" viewBox="0 0 520 520" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0" stop-color="var(--accent-2)"/>
+                                    <stop offset=".55" stop-color="var(--accent)"/>
+                                    <stop offset="1" stop-color="var(--accent-3)" stop-opacity=".2"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="ring ring--outer" cx="260" cy="260" r="250"/>
+                            <circle class="ring ring--mid" cx="260" cy="260" r="205"/>
+                            <circle class="ring ring--inner" cx="260" cy="260" r="160"/>
+                            <g class="ring-ticks">
+                                <path d="M260 2v14M260 504v14M2 260h14M504 260h14"/>
+                            </g>
+                        </svg>
 
-                    <button class="skill-tooltip-close" id="skill-tooltip-close" aria-label="Close"><i class='bx bx-x'></i></button>
+                        <svg class="orbit-arc" viewBox="0 0 520 520" aria-hidden="true">
+                            <circle cx="260" cy="260" r="205"/>
+                        </svg>
 
-                    <!-- Header with animated glow ring -->
-                    <div class="skill-tooltip-header stc-anim-item">
-                        <div class="skill-tooltip-icon-wrap">
-                            <div class="stc-icon-glow"></div>
-                            <div class="skill-tooltip-icon" id="skill-tooltip-icon"></div>
+                        <figure class="portrait">
+                            <img src="profile-320.webp"
+                                 srcset="profile-320.webp 320w, profile.webp 450w"
+                                 sizes="(max-width: 600px) 240px, 360px"
+                                 width="450" height="450"
+                                 alt="Portrait of Anand Vaidya, Azure Cloud Engineer"
+                                 fetchpriority="high" decoding="async">
+                        </figure>
+
+                        <div class="orbit orbit--outer" aria-hidden="true">
+                            <span class="chip-pos" style="--a:-20deg"><span class="orbit-chip"><svg class="i"><use href="#i-bolt"/></svg>Azure Functions</span></span>
+                            <span class="chip-pos" style="--a:70deg"><span class="orbit-chip"><svg class="i"><use href="#i-gateway"/></svg>API Management</span></span>
+                            <span class="chip-pos" style="--a:160deg"><span class="orbit-chip"><svg class="i"><use href="#i-flow"/></svg>Logic Apps</span></span>
+                            <span class="chip-pos" style="--a:250deg"><span class="orbit-chip"><svg class="i"><use href="#i-code"/></svg>Bicep</span></span>
                         </div>
-                        <div>
-                            <div class="skill-tooltip-name" id="skill-tooltip-name"></div>
-                            <div class="skill-tooltip-level-label">Proficiency</div>
-                        </div>
-                    </div>
-
-                    <!-- Progress bar -->
-                    <div class="stc-anim-item">
-                        <div class="skill-tooltip-bar-wrap">
-                            <div class="skill-tooltip-bar" id="skill-tooltip-bar"></div>
-                        </div>
-                        <span class="skill-tooltip-pct" id="skill-tooltip-pct"></span>
-                    </div>
-
-                    <!-- What is it? -->
-                    <div class="stc-section stc-anim-item">
-                        <div class="skill-tooltip-section-label"><i class='bx bx-info-circle'></i> What is it?</div>
-                        <p class="skill-tooltip-desc" id="skill-tooltip-desc"></p>
-                    </div>
-
-                    <!-- How I've used it -->
-                    <div class="stc-section stc-anim-item">
-                        <div class="skill-tooltip-section-label"><i class='bx bx-code-alt'></i> How I've used it</div>
-                        <p class="skill-tooltip-use" id="skill-tooltip-use"></p>
-                    </div>
-
-                    <!-- Why it matters — recruiter callout -->
-                    <div class="stc-recruiter-callout stc-anim-item">
-                        <div class="stc-recruiter-badge"><i class='bx bx-bulb'></i></div>
-                        <div class="stc-recruiter-text">
-                            <strong>Why it matters:</strong>
-                            <span id="skill-tooltip-why"></span>
+                        <div class="orbit orbit--inner" aria-hidden="true">
+                            <span class="chip-pos" style="--a:30deg"><span class="orbit-node"><svg class="i"><use href="#i-branch"/></svg></span></span>
+                            <span class="chip-pos" style="--a:150deg"><span class="orbit-node"><svg class="i"><use href="#i-db"/></svg></span></span>
+                            <span class="chip-pos" style="--a:270deg"><span class="orbit-node"><svg class="i"><use href="#i-key"/></svg></span></span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="container">
+                <dl class="hero__facts anim" style="--d:7">
+                    <div><dt>Experience</dt><dd><span class="num">3+</span> years engineering</dd></div>
+                    <div><dt>Core stack</dt><dd>Functions · APIM · Logic Apps</dd></div>
+                    <div><dt>Delivery</dt><dd>Bicep · Azure DevOps</dd></div>
+                    <div><dt>Based in</dt><dd>Vadodara, India</dd></div>
+                </dl>
+            </div>
 
-            <!-- Architecture Diagram & Telemetry Dashboard -->
-            <div class="architecture-diagram glass-card reveal-item">
-                <h3>Cloud Serverless Architecture & Live Telemetry</h3>
-                <div class="arch-dashboard-layout">
-                    <div class="arch-main-view">
-                        <div class="arch-details">
-                            <p><strong>What it does:</strong> Incoming orders from client apps hit the Azure APIM gateway for authentication and rate-limiting. Once validated, they trigger an Azure Function running serverless business logic (syncing inventory and calculating shipping rates) before persisting state to Cosmos DB.</p>
-                            <p><strong>Why this design:</strong> This decoupled, event-driven pattern ensures low execution costs by scaling compute dynamically to zero, protects database limits, and ensures zero order loss even during sudden traffic surges.</p>
-                        </div>
-                        <div class="arch-flow-area">
-                            <div class="arch-flow" id="telemetry-flow">
-                                <div class="arch-node floating" style="animation-delay: 0s;" data-node="client">
-                                    <div class="node-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class='bx bx-mobile-alt'></i></div>
-                                    <span>Client App</span>
-                                </div>
-                                <div class="arch-line" data-path="client-apim">
-                                    <div class="packet" style="animation-delay: 0s;"></div>
-                                    <div class="packet" style="animation-delay: 1s;"></div>
-                                </div>
-                                <div class="arch-node floating accent pulse-border" style="animation-delay: 0.2s;" data-node="apim">
-                                    <div class="node-icon" style="background: linear-gradient(135deg, #00d2ff, #3a7bd5);"><i class='bx bx-sitemap'></i></div>
-                                    <span>Azure APIM</span>
-                                </div>
-                                <div class="arch-line" data-path="apim-func">
-                                    <div class="packet" style="animation-delay: 0.5s;"></div>
-                                    <div class="packet" style="animation-delay: 1.5s;"></div>
-                                </div>
-                                <div class="arch-node floating pulse-border" style="animation-delay: 0.4s; border-color: #f59e0b;" data-node="func">
-                                    <div class="node-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);"><i class='bx bx-bolt-circle'></i></div>
-                                    <span>Azure Function</span>
-                                </div>
-                                <div class="arch-line" data-path="func-cosmos">
-                                    <div class="packet" style="animation-delay: 0s;"></div>
-                                    <div class="packet" style="animation-delay: 1s;"></div>
-                                </div>
-                                <div class="arch-node floating" style="animation-delay: 0.6s;" data-node="cosmos">
-                                    <div class="node-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);"><i class='bx bxs-data'></i></div>
-                                    <span>Cosmos DB</span>
-                                </div>
-                            </div>
-                            <div class="arch-node-diagnostics glass-card" id="arch-diagnostics">
-                                <div class="diag-global-dashboard">
-                                    <div class="diag-global-header">
-                                        <div class="diag-global-title"><i class='bx bx-network-chart'></i> Cluster Health</div>
-                                        <span class="diag-global-status" style="color: #27c93f;"><span class="led led-green"></span> ACTIVE</span>
-                                    </div>
-                                    <div class="diag-metrics-mini">
-                                        <div class="diag-metric-box">
-                                            <span class="diag-metric-lbl">SYSTEM SLA</span>
-                                            <span class="diag-metric-val">99.98%</span>
-                                        </div>
-                                        <div class="diag-metric-box">
-                                            <span class="diag-metric-lbl">ACTIVE ALERTS</span>
-                                            <span class="diag-metric-val green-text" id="diag-active-alerts">0</span>
-                                        </div>
-                                    </div>
-                                    <div class="diag-slider-group">
-                                        <div class="slider-header">
-                                            <span>Simulated Traffic Rate</span>
-                                            <span class="slider-val" id="traffic-rate-val">24 req/s</span>
-                                        </div>
-                                        <input type="range" id="traffic-rate-slider" aria-label="Traffic Load Simulation" min="5" max="120" value="24" class="diag-range-slider">
-                                    </div>
-                                    <div class="diag-services-list">
-                                        <div class="diag-service-row" data-service="client">
-                                            <span class="dot-led led-green" style="background-color: #27c93f; box-shadow: 0 0 8px #27c93f;"></span>
-                                            <span class="service-name">Client App</span>
-                                            <span class="service-stat">Avg Latency: 42ms</span>
-                                        </div>
-                                        <div class="diag-service-row" data-service="apim">
-                                            <span class="dot-led led-green" style="background-color: #27c93f; box-shadow: 0 0 8px #27c93f;"></span>
-                                            <span class="service-name">APIM Gateway</span>
-                                            <span class="service-stat">Cache hit: 84.2%</span>
-                                        </div>
-                                        <div class="diag-service-row" data-service="func">
-                                            <span class="dot-led led-green" style="background-color: #27c93f; box-shadow: 0 0 8px #27c93f;"></span>
-                                            <span class="service-name">Azure Function</span>
-                                            <span class="service-stat">12 active inst</span>
-                                        </div>
-                                        <div class="diag-service-row" data-service="cosmos">
-                                            <span class="dot-led led-green" style="background-color: #27c93f; box-shadow: 0 0 8px #27c93f;"></span>
-                                            <span class="service-name">Cosmos DB</span>
-                                            <span class="service-stat">1.8ms R / 1.2ms W</span>
-                                        </div>
-                                    </div>
-                                    <div class="diag-actions-row">
-                                        <button class="diag-action-btn btn-inject" id="btn-inject-incident">
-                                            <i class='bx bx-error-alt'></i> Inject DB Lag
-                                        </button>
-                                        <button class="diag-action-btn btn-spike" id="btn-trigger-spike">
-                                            <i class='bx bx-pulse'></i> Trigger Spike
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="arch-telemetry-panel">
-                        <div class="telemetry-section-title"><i class='bx bx-pulse'></i> Live Telemetry Stream</div>
-                        <div class="telemetry-chart-container">
-                            <canvas id="telemetry-chart" width="300" height="90"></canvas>
-                        </div>
-                        <div class="telemetry-metrics">
-                            <div class="telemetry-metric">
-                                <span class="metric-label">Status</span>
-                                <span class="metric-val status-val"><span class="led led-green"></span> ACTIVE</span>
-                            </div>
-                            <div class="telemetry-metric">
-                                <span class="metric-label">Throughput</span>
-                                <span class="metric-val" id="telemetry-throughput">24 req/s</span>
-                            </div>
-                            <div class="telemetry-metric">
-                                <span class="metric-label">Function App</span>
-                                <span class="metric-val">12 inst</span>
-                            </div>
-                            <div class="telemetry-metric">
-                                <span class="metric-label">Cosmos DB</span>
-                                <span class="metric-val" style="color: #27c93f;">1.8 ms</span>
-                            </div>
-                        </div>
-                        <div class="telemetry-logs-title"><i class='bx bx-git-commit'></i> Live Event Traces</div>
-                        <div class="telemetry-event-stream" id="telemetry-event-stream">
-                            <!-- JS will stream color coded event pills here -->
-                        </div>
-                    </div>
-                </div>
+            <a class="scroll-cue" href="#about" aria-label="Scroll to About">
+                <span class="scroll-cue__line" aria-hidden="true"></span>
+                <span class="scroll-cue__text">Scroll</span>
+            </a>
+        </section>
+
+        <!-- Tech ticker (decorative duplicate of the skills below) -->
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker__track">
+                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Azure Bicep</span><span>ARM Templates</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>SQL Server</span><span>Managed Identities</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
+                <span>Azure Functions</span><span>API Management</span><span>Logic Apps</span><span>Azure Bicep</span><span>ARM Templates</span><span>Azure DevOps</span><span>Docker</span><span>Cosmos DB</span><span>SQL Server</span><span>Managed Identities</span><span>OAuth 2.0</span><span>ASP.NET Core</span>
             </div>
         </div>
-    </section>
 
-    <!-- Experience Section -->
-    <section class="experience section" id="experience">
-        <div class="container reveal-stagger">
-            <h2 class="section-title reveal-item">Experience</h2>
-            <div class="timeline">
-                <div class="timeline-line">
-                    <div class="timeline-line-progress"></div>
-                </div>
-                
-                <!-- Experience Item 1 -->
-                <div class="timeline-item premium-glass reveal-item current-role" id="job-fsp">
-                    <div class="timeline-connector">
-                        <div class="timeline-dot"></div>
+        <!-- ========================= ABOUT ========================= -->
+        <section class="section about" id="about" aria-labelledby="about-title">
+            <div class="container">
+                <header class="section-head reveal">
+                    <p class="kicker"><span>01</span> About</p>
+                    <h2 class="section-title" id="about-title">I turn slow, manual processes into <em>event-driven systems</em> that run themselves.</h2>
+                </header>
+
+                <div class="about__grid">
+                    <div class="about__text reveal">
+                        <p class="lead">
+                            I&rsquo;m Anand Vaidya, a Cloud Engineer at FSP Consulting in Vadodara, India. I design and build
+                            serverless integrations on Microsoft Azure &mdash; Azure Functions, Logic Apps and API Management,
+                            secured with OAuth&nbsp;2.0 and Managed Identities, and shipped through Bicep and Azure DevOps pipelines.
+                        </p>
+                        <p>
+                            Before FSP, I spent two years at Atharva IT Services building a .NET Core integration layer that
+                            connected Shopify, Amazon and Walmart and automated shipping logistics. My work is moving toward
+                            platform engineering and cloud architecture: infrastructure defined as code, automated paths to
+                            production, and systems that are secure by default.
+                        </p>
+
+                        <dl class="about__facts">
+                            <div><dt>Current role</dt><dd>Cloud Engineer, FSP Consulting</dd></div>
+                            <div><dt>Engineering since</dt><dd>February 2023</dd></div>
+                            <div><dt>Certified</dt><dd>Azure AI Fundamentals (AI-900)</dd></div>
+                            <div><dt>Education</dt><dd>B.Tech. CSE, Parul University</dd></div>
+                        </dl>
                     </div>
-                    
-                    <div class="timeline-case-study">
-                        <div class="case-study-narrative">
-                            <div class="org-showcase-header">
-                                <div class="org-logo-container current-role-logo">
-                                    <img src="https://fsp.co/wp-content/uploads/2022/06/logo.svg" alt="FSP Logo" width="120" height="50" loading="lazy">
-                                    <div class="live-indicator" style="position: relative; width: 10px; height: 10px; background-color: #10B981; border-radius: 50%; box-shadow: 0 0 15px #10B981, 0 0 5px #10b981; margin-left: 12px; top: -10px; flex-shrink: 0;"></div>
-                                </div>
-                                <div class="org-meta">
-                                    <span class="role-title">Cloud Engineer <span class="current-role-badge">Current Role</span></span>
-                                    <div class="role-meta-row">
-                                        <span class="company-name">FSP</span>
-                                        <span class="separator">•</span>
-                                        <span class="location">Vadodara</span>
-                                        <span class="separator">•</span>
-                                        <span class="employment-type">Full-time</span>
-                                        <span class="separator">•</span>
-                                        <span class="date-text">Apr 2025 – Present</span>
-                                    </div>
-                                </div>
+
+                    <ol class="principles reveal-stagger" aria-label="How I build">
+                        <li class="principle reveal tilt">
+                            <span class="principle__no">01</span>
+                            <svg class="i principle__icon"><use href="#i-bolt"/></svg>
+                            <h3>Event-driven by default</h3>
+                            <p>Compute that scales with demand and down to zero when idle, so traffic bursts don&rsquo;t mean lost orders or idle cost.</p>
+                        </li>
+                        <li class="principle reveal tilt">
+                            <span class="principle__no">02</span>
+                            <svg class="i principle__icon"><use href="#i-key"/></svg>
+                            <h3>Identity over secrets</h3>
+                            <p>Managed Identities, OAuth&nbsp;2.0 and RBAC instead of credentials in config files.</p>
+                        </li>
+                        <li class="principle reveal tilt">
+                            <span class="principle__no">03</span>
+                            <svg class="i principle__icon"><use href="#i-code"/></svg>
+                            <h3>Everything as code</h3>
+                            <p>Environments declared in Bicep and ARM, versioned and reviewed like application code.</p>
+                        </li>
+                        <li class="principle reveal tilt">
+                            <span class="principle__no">04</span>
+                            <svg class="i principle__icon"><use href="#i-branch"/></svg>
+                            <h3>An automated path to production</h3>
+                            <p>Multi-stage pipelines that build, test, scan and deploy without manual steps.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================= SKILLS ========================= -->
+        <section class="section skills" id="skills" aria-labelledby="skills-title">
+            <div class="container">
+                <header class="section-head section-head--split reveal">
+                    <div>
+                        <p class="kicker"><span>02</span> Skills &amp; stack</p>
+                        <h2 class="section-title" id="skills-title">A stack built around <em>Azure</em>, organised the way systems are.</h2>
+                    </div>
+                    <p class="section-intro">Select any technology to see what it does and where I&rsquo;ve used it.</p>
+                </header>
+
+                <div class="stack">
+                    <div class="stack__layers" id="stack-layers">
+                        <div class="layer reveal" data-layer="01">
+                            <h3 class="layer__title"><span class="layer__no">L1</span><svg class="i"><use href="#i-cloud"/></svg> Microsoft Azure</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="Managed PaaS for hosting web apps, REST APIs and backends — handles TLS, auto-scaling and deployment slots." data-use="Hosted .NET Core APIs behind API Management with staging/production slot-swap deployments.">App Services</button>
+                                <button type="button" class="skill" data-desc="Entra ID identities for Azure resources, so services authenticate to each other without stored secrets." data-use="Replaced exposed credentials in legacy, on-premises processing with Managed Identities at FSP Consulting.">Managed Identities</button>
+                                <button type="button" class="skill" data-desc="Customer identity and access management for apps and APIs." data-use="Part of the identity layer in the carrier &amp; shipping integration project, together with OAuth 2.0.">Azure AD B2C</button>
                             </div>
-                            
-                            <div class="timeline-body-minimal">
-                                <ul class="achievement-list">
-                                    <li><strong>Challenge:</strong> Slow, manual data processing and exposed credentials in legacy on-prem systems.</li>
-                                    <li><strong>Solution:</strong> Engineered a serverless Azure event-driven architecture using Functions, Logic Apps, and APIM secured by OAuth 2.0 and Managed Identities.</li>
-                                    <li><strong>Impact:</strong> Reduced processing latency from hours to seconds and closed critical attack surfaces in production.</li>
+                        </div>
+                        <div class="layer reveal" data-layer="02">
+                            <h3 class="layer__title"><span class="layer__no">L2</span><svg class="i"><use href="#i-bolt"/></svg> Serverless &amp; integration</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="Serverless compute that runs event-driven code on demand — scales to zero when idle, eliminating infrastructure overhead." data-use="Built order-processing, inventory-sync and webhook-handler functions, and the event-driven architecture at FSP Consulting.">Azure Functions</button>
+                                <button type="button" class="skill" data-desc="Low-code workflow orchestrator that connects enterprise systems using hundreds of pre-built connectors." data-use="Automated approval flows, cross-system data sync and carrier dispatch workflows.">Logic Apps</button>
+                            </div>
+                        </div>
+                        <div class="layer reveal" data-layer="03">
+                            <h3 class="layer__title"><span class="layer__no">L3</span><svg class="i"><use href="#i-gateway"/></svg> APIs &amp; data</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="Enterprise API gateway providing rate-limiting, authentication, caching, versioning and analytics for backend services." data-use="Unified microservice APIs behind a single gateway with JWT validation and throttling; fronted the carrier integration layer.">Azure API Management</button>
+                                <button type="button" class="skill" data-desc="Industry-standard protocol for delegated authorisation of APIs." data-use="Secured APIM-fronted services at FSP Consulting and the carrier &amp; shipping integration layer.">OAuth 2.0</button>
+                                <button type="button" class="skill" data-desc="Globally distributed NoSQL database with low-latency reads and multi-region writes." data-use="Stored order and inventory state for real-time e-commerce workloads that handle traffic spikes.">Cosmos DB</button>
+                                <button type="button" class="skill" data-desc="Relational database engine for structured, transactional workloads with ACID guarantees." data-use="Persisted ledger and order-history data with row-level security and automated backups.">SQL Server</button>
+                            </div>
+                        </div>
+                        <div class="layer reveal" data-layer="04">
+                            <h3 class="layer__title"><span class="layer__no">L4</span><svg class="i"><use href="#i-code"/></svg> Infrastructure as code</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="Declarative IaC language for Azure — cloud resources written as code, so infrastructure is reproducible, version-controlled and auditable." data-use="Defined and deployed VMs, VNets, Key Vaults and App Services across environments; core of the zero-downtime deployment pipeline.">Azure Bicep</button>
+                                <button type="button" class="skill" data-desc="JSON-based Azure Resource Manager templates for deploying and managing Azure resources at scale, idempotently." data-use="Used alongside Bicep for legacy pipeline compatibility and complex nested deployments.">ARM Templates</button>
+                            </div>
+                        </div>
+                        <div class="layer reveal" data-layer="05">
+                            <h3 class="layer__title"><span class="layer__no">L5</span><svg class="i"><use href="#i-branch"/></svg> DevOps, CI/CD &amp; containers</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="End-to-end DevOps platform covering Repos, Pipelines, Boards and Artifacts for the full CI/CD lifecycle." data-use="Configured multi-stage YAML pipelines for build, test, security scanning and blue-green deployments to Azure.">Azure DevOps</button>
+                                <button type="button" class="skill" data-desc="Continuous integration and deployment — automated pipelines that build, test and deploy code with every commit." data-use="Zero-downtime release pipelines with approval gates, rollback triggers and environment promotion.">CI/CD pipelines</button>
+                                <button type="button" class="skill" data-desc="Container runtime for packaging apps and their dependencies into portable, isolated images." data-use="Containerised .NET services and shipped zero-downtime deployments at Atharva IT Services.">Docker</button>
+                            </div>
+                        </div>
+                        <div class="layer reveal" data-layer="06">
+                            <h3 class="layer__title"><span class="layer__no">L6</span><svg class="i"><use href="#i-terminal"/></svg> Programming &amp; automation</h3>
+                            <div class="layer__items">
+                                <button type="button" class="skill" data-desc="Microsoft&rsquo;s cross-platform framework (C#) for web APIs and backend services." data-use="Built the .NET Core integration layer connecting Shopify, Amazon and Walmart at Atharva IT Services.">ASP.NET Core &amp; C#</button>
+                                <button type="button" class="skill" data-desc="The language of the web, also used for tooling and automation." data-use="Built this site with plain HTML, CSS and JavaScript — no framework.">JavaScript</button>
+                                <button type="button" class="skill" data-desc="General-purpose language widely used for scripting, automation and data work." data-use="Completed a Python data science masterclass (Parul University &amp; Udemy).">Python</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="inspector" id="skill-inspector" aria-live="polite">
+                        <div class="inspector__card">
+                            <p class="inspector__label"><svg class="i"><use href="#i-target"/></svg> Inspector</p>
+                            <h3 class="inspector__name" id="inspector-name">Select a technology</h3>
+                            <div class="inspector__body" id="inspector-body">
+                                <p class="inspector__hint">Every item in the stack is something I&rsquo;ve used in production work or formal training. Pick one to see the details.</p>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================= ARCHITECTURE EXPLORER ========================= -->
+        <section class="section arch" id="architecture" aria-labelledby="arch-title">
+            <div class="container">
+                <header class="section-head section-head--split reveal">
+                    <div>
+                        <p class="kicker"><span>03</span> Architecture lab</p>
+                        <h2 class="section-title" id="arch-title">How the pieces <em>fit together</em>.</h2>
+                    </div>
+                    <p class="section-intro">
+                        An illustrative reference architecture for the kind of serverless integration I build. It is based on
+                        patterns from my work, not a diagram of a specific production system. Pick a flow or select any service.
+                    </p>
+                </header>
+
+                <div class="arch__shell reveal">
+                    <div class="arch__toolbar" role="group" aria-label="Highlight a flow">
+                        <button type="button" class="seg is-active" data-flow="all" aria-pressed="true">All</button>
+                        <button type="button" class="seg" data-flow="request" aria-pressed="false">Request path</button>
+                        <button type="button" class="seg" data-flow="identity" aria-pressed="false">Identity</button>
+                        <button type="button" class="seg" data-flow="delivery" aria-pressed="false">Delivery</button>
+                        <span class="arch__badge">Illustrative</span>
+                    </div>
+
+                    <div class="arch__body">
+                        <div class="arch__stage" id="arch-stage">
+                            <svg class="arch__edges" id="arch-edges" aria-hidden="true"></svg>
+                            <button type="button" class="arch-node" data-node="clients" aria-controls="arch-panel"><svg class="i"><use href="#i-user"/></svg><span>Clients &amp; partners</span></button>
+                            <button type="button" class="arch-node" data-node="apim" aria-controls="arch-panel"><svg class="i"><use href="#i-gateway"/></svg><span>API Management</span></button>
+                            <button type="button" class="arch-node" data-node="functions" aria-controls="arch-panel"><svg class="i"><use href="#i-bolt"/></svg><span>Azure Functions</span></button>
+                            <button type="button" class="arch-node" data-node="logicapps" aria-controls="arch-panel"><svg class="i"><use href="#i-flow"/></svg><span>Logic Apps</span></button>
+                            <button type="button" class="arch-node" data-node="data" aria-controls="arch-panel"><svg class="i"><use href="#i-db"/></svg><span>Cosmos DB / SQL</span></button>
+                            <button type="button" class="arch-node" data-node="identity" aria-controls="arch-panel"><svg class="i"><use href="#i-key"/></svg><span>Managed Identity</span></button>
+                            <button type="button" class="arch-node" data-node="iac" aria-controls="arch-panel"><svg class="i"><use href="#i-code"/></svg><span>Bicep (IaC)</span></button>
+                            <button type="button" class="arch-node" data-node="cicd" aria-controls="arch-panel"><svg class="i"><use href="#i-branch"/></svg><span>Azure DevOps</span></button>
+                        </div>
+
+                        <div class="arch__panel" id="arch-panel" aria-live="polite">
+                            <article class="arch-detail is-active" data-detail="overview">
+                                <p class="arch-detail__tag">Overview</p>
+                                <h3>Event-driven integration on Azure</h3>
+                                <p>Requests enter through API Management, which authenticates and throttles them. Azure Functions run the business logic and hand long-running workflows to Logic Apps. State lands in Cosmos DB or SQL. Services authenticate with Managed Identity, and everything is provisioned from Bicep through Azure DevOps.</p>
+                                <ul class="arch-detail__list">
+                                    <li>Scales with demand, down to zero when idle</li>
+                                    <li>No secrets stored in configuration</li>
+                                    <li>Every environment rebuilt from the same code</li>
                                 </ul>
-                                
-                                <div class="tech-groups-minimal">
-                                    <div class="tech-group">
-                                        <span class="group-label">Cloud:</span>
-                                        <span class="tech-chip">Azure Functions</span>
-                                        <span class="tech-chip">Logic Apps</span>
-                                    </div>
-                                    <div class="tech-group">
-                                        <span class="group-label">Integration:</span>
-                                        <span class="tech-chip">Azure APIM</span>
-                                        <span class="tech-chip">Azure Bicep</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="case-study-visual">
-                            <div class="arch-canvas">
-                                <div class="arch-flow-job1">
-                                    <!-- User to APIM -->
-                                    <div class="arch-row">
-                                        <div class="arch-node delay-1">
-                                            <i class='bx bx-user'></i> Client
-                                        </div>
-                                        <div class="conn-line-h">
-                                            <div class="arch-connection" style="top: 50%; left: 0; right: 0; height: 2px;"></div>
-                                            <div class="data-packet horizontal" style="top: calc(50% - 3px);"></div>
-                                        </div>
-                                        <div class="arch-node delay-2">
-                                            <i class='bx bx-shield-quarter'></i> Azure APIM
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- APIM down to Functions -->
-                                    <div class="arch-row" style="margin-top: -3rem;">
-                                        <div class="conn-line-v" style="margin-left: auto; margin-right: 7.5rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 0.5s;"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Functions -> Logic Apps -->
-                                    <div class="arch-row" style="margin-top: -3rem;">
-                                        <div class="arch-node delay-3">
-                                            <i class='bx bx-code-alt'></i> Azure Functions
-                                        </div>
-                                        <div class="conn-line-h">
-                                            <div class="arch-connection" style="top: 50%; left: 0; right: 0; height: 2px;"></div>
-                                            <div class="data-packet horizontal" style="top: calc(50% - 3px); animation-delay: 1s;"></div>
-                                        </div>
-                                        <div class="arch-node delay-4">
-                                            <i class='bx bx-git-branch'></i> Logic Apps
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Functions down to DB -->
-                                    <div class="arch-row" style="margin-top: -3rem;">
-                                        <div class="conn-line-v" style="margin-right: auto; margin-left: 7rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 1.5s;"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="arch-row" style="margin-top: -3rem; justify-content: flex-start; padding-left: 5rem;">
-                                        <div class="arch-node delay-5">
-                                            <i class='bx bx-data'></i> Cosmos DB
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </article>
+                            <article class="arch-detail" data-detail="clients">
+                                <p class="arch-detail__tag">Entry point</p>
+                                <h3>Clients &amp; partner systems</h3>
+                                <p>Web and mobile apps, marketplaces and carrier systems that send orders, events and webhooks.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> Shopify, Amazon and Walmart order channels; FedEx, DHL and UPS carrier integrations.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="apim">
+                                <p class="arch-detail__tag">Gateway</p>
+                                <h3>Azure API Management</h3>
+                                <p>A single front door for every API: OAuth&nbsp;2.0 / JWT validation, rate limiting, caching and versioning, so backends stay simple and protected.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> FSP Consulting&rsquo;s serverless architecture and the carrier &amp; shipping integration layer.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="functions">
+                                <p class="arch-detail__tag">Compute</p>
+                                <h3>Azure Functions</h3>
+                                <p>Event-driven business logic: validate, transform and route each message. Scales out under bursts and to zero when idle.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> order processing, inventory sync and webhook handlers.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="logicapps">
+                                <p class="arch-detail__tag">Orchestration</p>
+                                <h3>Logic Apps</h3>
+                                <p>Long-running and multi-step workflows with built-in connectors, retries and approvals, kept out of the request path.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> approval flows, cross-system data sync and carrier dispatch.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="data">
+                                <p class="arch-detail__tag">State</p>
+                                <h3>Cosmos DB &amp; SQL Server</h3>
+                                <p>Cosmos DB for high-throughput, low-latency order and inventory state; SQL Server for relational, transactional records.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> real-time e-commerce inventory, ledgers and order history.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="identity">
+                                <p class="arch-detail__tag">Security</p>
+                                <h3>Managed Identity</h3>
+                                <p>Each service gets its own Entra ID identity and least-privilege RBAC role, so nothing needs a stored password or connection string.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> replaced exposed credentials in legacy systems at FSP Consulting.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="iac">
+                                <p class="arch-detail__tag">Infrastructure as code</p>
+                                <h3>Azure Bicep</h3>
+                                <p>Every resource on this diagram is declared in Bicep, reviewed in pull requests and deployed identically to each environment.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> the zero-downtime deployment pipeline that cut release time from 2 days to 15 minutes.</p>
+                            </article>
+                            <article class="arch-detail" data-detail="cicd">
+                                <p class="arch-detail__tag">Delivery</p>
+                                <h3>Azure DevOps pipelines</h3>
+                                <p>Multi-stage YAML pipelines: build, test, security scan, provision with Bicep, then promote through environments with approval gates.</p>
+                                <p class="arch-detail__where"><strong>In my work:</strong> blue-green, zero-downtime releases to Azure.</p>
+                            </article>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Experience Item 2 -->
-                <div class="timeline-item premium-glass reveal-item past-role" id="job-atharva">
-                    <div class="timeline-connector">
-                        <div class="timeline-dot"></div>
+        <!-- ========================= EXPERIENCE ========================= -->
+        <section class="section experience" id="experience" aria-labelledby="exp-title">
+            <div class="container">
+                <header class="section-head reveal">
+                    <p class="kicker"><span>04</span> Experience</p>
+                    <h2 class="section-title" id="exp-title">From LMS operations to <em>cloud engineering</em>.</h2>
+                </header>
+
+                <ol class="timeline">
+                    <li class="job reveal" id="job-fsp">
+                        <div class="job__rail" aria-hidden="true"><span class="job__dot job__dot--live"></span></div>
+                        <div class="job__when">
+                            <span class="job__dates"><time datetime="2025-04">Apr 2025</time> &ndash; Present</span>
+                            <span class="job__type">Full-time · Vadodara</span>
+                        </div>
+                        <article class="job__card tilt">
+                            <header class="job__head">
+                                <span class="job__logo" aria-hidden="true">FSP</span>
+                                <div>
+                                    <h3 class="job__role">Cloud Engineer <span class="badge badge--live">Current</span></h3>
+                                    <p class="job__org">FSP Consulting</p>
+                                </div>
+                            </header>
+                            <p class="job__summary">Modernising slow, manual on-premises processing into secure, serverless services on Azure.</p>
+                            <ul class="job__points">
+                                <li>Engineered an event-driven architecture on <strong>Azure Functions</strong>, <strong>Logic Apps</strong> and <strong>API Management</strong>, replacing manual data processing in legacy systems.</li>
+                                <li>Secured service access with <strong>OAuth&nbsp;2.0</strong> and <strong>Managed Identities</strong>, removing exposed credentials and closing critical attack surfaces in production.</li>
+                                <li>Reduced processing latency <strong>from hours to seconds</strong>.</li>
+                            </ul>
+                            <ul class="tags" aria-label="Technologies">
+                                <li>Azure Functions</li><li>Logic Apps</li><li>Azure API Management</li><li>Managed Identities</li><li>OAuth 2.0</li><li>Azure Bicep</li>
+                            </ul>
+                        </article>
+                    </li>
+
+                    <li class="job reveal" id="job-atharva">
+                        <div class="job__rail" aria-hidden="true"><span class="job__dot"></span></div>
+                        <div class="job__when">
+                            <span class="job__dates"><time datetime="2023-02">Feb 2023</time> &ndash; <time datetime="2025-03">Mar 2025</time></span>
+                            <span class="job__type">Full-time · Ahmedabad</span>
+                        </div>
+                        <article class="job__card tilt">
+                            <header class="job__head">
+                                <span class="job__logo" aria-hidden="true">AIT</span>
+                                <div>
+                                    <h3 class="job__role">Junior Developer</h3>
+                                    <p class="job__org">Atharva IT Services</p>
+                                </div>
+                            </header>
+                            <p class="job__summary">Unifying fragmented e-commerce channels behind one integration layer.</p>
+                            <ul class="job__points">
+                                <li>Developed a unified <strong>.NET Core</strong> integration layer connecting <strong>Shopify, Amazon and Walmart</strong>, backed by globally distributed <strong>Cosmos DB</strong>.</li>
+                                <li>Eliminated manual order reconciliation and automated shipping logistics.</li>
+                                <li>Achieved zero-downtime deployments with <strong>Docker</strong> and <strong>Azure DevOps</strong>.</li>
+                            </ul>
+                            <ul class="tags" aria-label="Technologies">
+                                <li>ASP.NET Core</li><li>C#</li><li>Cosmos DB</li><li>Docker</li><li>Azure DevOps</li>
+                            </ul>
+                        </article>
+                    </li>
+
+                    <li class="job reveal" id="job-parul">
+                        <div class="job__rail" aria-hidden="true"><span class="job__dot"></span></div>
+                        <div class="job__when">
+                            <span class="job__dates"><time datetime="2021-09">Sep 2021</time> &ndash; <time datetime="2022-08">Aug 2022</time></span>
+                            <span class="job__type">Internship · Vadodara</span>
+                        </div>
+                        <article class="job__card tilt">
+                            <header class="job__head">
+                                <span class="job__logo" aria-hidden="true">PU</span>
+                                <div>
+                                    <h3 class="job__role">LMS Administrator Intern</h3>
+                                    <p class="job__org">Parul University</p>
+                                </div>
+                            </header>
+                            <p class="job__summary">Keeping a university-wide learning platform available for thousands of students.</p>
+                            <ul class="job__points">
+                                <li>Managed and optimised the <strong>Moodle LMS</strong> infrastructure across fragmented legacy database systems.</li>
+                                <li>Bridged data integrity with <strong>SQL</strong> and <strong>Active Directory</strong> authentication.</li>
+                                <li>Zero downtime during peak exam periods; streamlined semester-to-semester user onboarding.</li>
+                            </ul>
+                            <ul class="tags" aria-label="Technologies">
+                                <li>Moodle LMS</li><li>Active Directory</li><li>SQL</li>
+                            </ul>
+                        </article>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ========================= PROJECTS ========================= -->
+        <section class="section projects" id="projects" aria-labelledby="projects-title">
+            <div class="container">
+                <header class="section-head section-head--split reveal">
+                    <div>
+                        <p class="kicker"><span>05</span> Selected work</p>
+                        <h2 class="section-title" id="projects-title">Case studies in <em>integration</em> and <em>automation</em>.</h2>
                     </div>
-                    
-                    <div class="timeline-case-study">
-                        <div class="case-study-narrative">
-                            <div class="org-showcase-header">
-                                <div class="org-logo-container">
-                                    <img src="https://atharvaits.com/media/4i3bjide/brand-logo.png" alt="Atharva IT Services Logo" width="120" height="40" loading="lazy">
-                                </div>
-                                <div class="org-meta">
-                                    <span class="role-title">Junior Developer</span>
-                                    <div class="role-meta-row">
-                                        <span class="company-name">Atharva IT Services</span>
-                                        <span class="separator">•</span>
-                                        <span class="location">Ahmedabad</span>
-                                        <span class="separator">•</span>
-                                        <span class="employment-type">Full-time</span>
-                                        <span class="separator">•</span>
-                                        <span class="date-text">Feb 2023 – Mar 2025</span>
-                                    </div>
-                                </div>
+                    <p class="section-intro">Client projects, described without confidential detail. Diagrams are simplified to show the architecture, not exact deployments.</p>
+                </header>
+
+                <div class="cases">
+                    <!-- Case 1 -->
+                    <article class="case reveal" id="project-order-platform" aria-labelledby="case1-title">
+                        <div class="case__meta">
+                            <span class="case__no">01</span>
+                            <span class="case__type">Client project · Event-driven integration</span>
+                        </div>
+                        <div class="case__grid">
+                            <div class="case__text">
+                                <h3 class="case__title" id="case1-title">Multi-Channel Order Processing Platform</h3>
+                                <dl class="case__facts">
+                                    <div><dt>Problem</dt><dd>Sellers were losing orders and overselling stock because inventory syncs between Shopify, Amazon and Walmart lagged badly.</dd></div>
+                                    <div><dt>Architecture</dt><dd>An event-driven integration backend: Azure Functions ingest, normalise and distribute inventory updates in real time, with Cosmos DB holding order and inventory state.</dd></div>
+                                    <div><dt>Key decisions</dt><dd>Serverless, event-driven compute that scales with order bursts instead of fixed servers; one normalised inventory model shared by every channel.</dd></div>
+                                </dl>
+                                <ul class="tags" aria-label="Technologies"><li>Azure Functions</li><li>Cosmos DB</li><li>ASP.NET Core</li></ul>
                             </div>
-                            
-                            <div class="timeline-body-minimal">
-                                <ul class="achievement-list">
-                                    <li><strong>Challenge:</strong> Fragmented e-commerce channels requiring manual order sync and high-latency database queries.</li>
-                                    <li><strong>Solution:</strong> Developed a unified .NET Core integration layer connecting Shopify, Amazon, and Walmart, backed by a globally distributed Cosmos DB.</li>
-                                    <li><strong>Impact:</strong> Eliminated manual order reconciliation, completely automated shipping logistics, and achieved zero-downtime deployments via Docker.</li>
+                            <div class="case__side">
+                                <figure class="diagram" aria-label="Simplified architecture: three sales channels feed Azure Functions, which store state in Cosmos DB and sync inventory back to every channel">
+                                    <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
+                                        <g class="d-edges">
+                                            <path class="flow" d="M96 46 C150 46,150 110,182 110"/>
+                                            <path class="flow" d="M96 110 H182"/>
+                                            <path class="flow" d="M96 174 C150 174,150 110,182 110"/>
+                                            <path class="flow flow--alt" d="M250 128 V170"/>
+                                        </g>
+                                        <g class="d-node"><rect x="14" y="30" width="82" height="32" rx="8"/><text x="55" y="50">Shopify</text></g>
+                                        <g class="d-node"><rect x="14" y="94" width="82" height="32" rx="8"/><text x="55" y="114">Amazon</text></g>
+                                        <g class="d-node"><rect x="14" y="158" width="82" height="32" rx="8"/><text x="55" y="178">Walmart</text></g>
+                                        <g class="d-node d-node--accent"><rect x="182" y="88" width="136" height="40" rx="10"/><text x="250" y="112">Azure Functions</text></g>
+                                        <g class="d-node"><rect x="196" y="170" width="108" height="32" rx="8"/><text x="250" y="190">Cosmos DB</text></g>
+                                    </svg>
+                                </figure>
+                                <ul class="outcomes" aria-label="Outcomes">
+                                    <li><span class="outcome__val">5&nbsp;min &rarr; &lt;2&nbsp;s</span><span class="outcome__lbl">inventory sync latency</span></li>
+                                    <li><span class="outcome__val">$150k+</span><span class="outcome__lbl">previously lost quarterly revenue recovered</span></li>
+                                    <li><span class="outcome__val">Eliminated</span><span class="outcome__lbl">overselling across channels</span></li>
                                 </ul>
-                                
-                                <div class="tech-groups-minimal">
-                                    <div class="tech-group">
-                                        <span class="group-label">Backend:</span>
-                                        <span class="tech-chip">ASP.NET Core</span>
-                                    </div>
-                                    <div class="tech-group">
-                                        <span class="group-label">Data:</span>
-                                        <span class="tech-chip">Cosmos DB</span>
-                                    </div>
-                                    <div class="tech-group">
-                                        <span class="group-label">DevOps:</span>
-                                        <span class="tech-chip">Docker</span>
-                                        <span class="tech-chip">Azure DevOps</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        
-                        <div class="case-study-visual">
-                            <div class="arch-canvas">
-                                <div class="arch-layout-job2">
-                                    <!-- External Channels Column -->
-                                    <div class="arch-col">
-                                        <div class="arch-node delay-1"><i class='bx bxl-shopify'></i> Shopify</div>
-                                        <div class="arch-node delay-1"><i class='bx bxl-amazon'></i> Amazon</div>
-                                        <div class="arch-node delay-1"><i class='bx bx-store-alt'></i> Walmart</div>
-                                    </div>
-                                    
-                                    <!-- Connection to Backend -->
-                                    <div class="conn-line-h">
-                                        <div class="arch-connection" style="top: 50%; left: 0; right: 0; height: 2px;"></div>
-                                        <div class="data-packet horizontal" style="top: calc(50% - 3px);"></div>
-                                    </div>
-                                    
-                                    <!-- Central Backend & DB -->
-                                    <div class="arch-col" style="align-items: center;">
-                                        <div class="arch-node delay-2" style="border-color: var(--accent); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);">
-                                            <i class='bx bx-server'></i> .NET Core API
-                                        </div>
-                                        
-                                        <div class="conn-line-v" style="height: 2rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 0.5s;"></div>
-                                        </div>
-                                        
-                                        <div class="arch-node delay-3">
-                                            <i class='bx bx-data'></i> Cosmos DB
-                                        </div>
-                                        
-                                        <div class="conn-line-v" style="height: 2rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 0.8s;"></div>
-                                        </div>
-                                        
-                                        <div class="arch-node delay-4" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
-                                            <i class='bx bx-package'></i> Shipping APIs
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </article>
 
-                <!-- Experience Item 3 -->
-                <div class="timeline-item premium-glass reveal-item past-role" id="job-parul">
-                    <div class="timeline-connector">
-                        <div class="timeline-dot"></div>
-                    </div>
-                    
-                    <div class="timeline-case-study">
-                        <div class="case-study-narrative">
-                            <div class="org-showcase-header">
-                                <div class="org-logo-container">
-                                    <img src="https://www.paruluniversity.ac.in/wp-content/uploads/2025/09/Variant9.svg" alt="Parul University Logo" width="150" height="50" loading="lazy">
-                                </div>
-                                <div class="org-meta">
-                                    <span class="role-title">LMS Administrator Intern</span>
-                                    <div class="role-meta-row">
-                                        <span class="company-name">Parul University</span>
-                                        <span class="separator">•</span>
-                                        <span class="location">Vadodara</span>
-                                        <span class="separator">•</span>
-                                        <span class="employment-type">Internship</span>
-                                        <span class="separator">•</span>
-                                        <span class="date-text">Sep 2021 – Aug 2022</span>
-                                    </div>
-                                </div>
+                    <!-- Case 2 -->
+                    <article class="case case--flip reveal" id="project-deployment-pipeline" aria-labelledby="case2-title">
+                        <div class="case__meta">
+                            <span class="case__no">02</span>
+                            <span class="case__type">Client project · Infrastructure as code &amp; CI/CD</span>
+                        </div>
+                        <div class="case__grid">
+                            <div class="case__text">
+                                <h3 class="case__title" id="case2-title">Zero-Downtime Cloud Deployment Pipeline</h3>
+                                <dl class="case__facts">
+                                    <div><dt>Problem</dt><dd>Manual deployment steps caused environment drift, delayed releases by days and led to frequent production rollbacks.</dd></div>
+                                    <div><dt>Architecture</dt><dd>A fully automated infrastructure-as-code pipeline: Azure Bicep templates deployed through Azure DevOps to provision consistent, immutable environments.</dd></div>
+                                    <div><dt>Key decisions</dt><dd>Infrastructure versioned alongside the application so every environment is built from the same source; redeploy rather than patch servers by hand.</dd></div>
+                                </dl>
+                                <ul class="tags" aria-label="Technologies"><li>Azure Bicep</li><li>Azure DevOps</li><li>YAML pipelines</li></ul>
                             </div>
-                            
-                            <div class="timeline-body-minimal">
-                                <ul class="achievement-list">
-                                    <li><strong>Challenge:</strong> Maintaining 100% data availability for thousands of students across fragmented legacy database systems.</li>
-                                    <li><strong>Solution:</strong> Managed and optimized Moodle LMS infrastructure, bridging data integrity via SQL and Active Directory authentications.</li>
-                                    <li><strong>Impact:</strong> Achieved zero downtime during peak exam periods and completely streamlined semester-to-semester user lifecycle onboarding.</li>
+                            <div class="case__side">
+                                <figure class="diagram" aria-label="Simplified pipeline: commit, build and test, Bicep provisioning, then deployment to staging and production">
+                                    <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
+                                        <g class="d-edges">
+                                            <path class="flow" d="M80 60 H124"/>
+                                            <path class="flow" d="M224 60 H262"/>
+                                            <path class="flow" d="M300 78 C300 120,250 120,250 150"/>
+                                            <path class="flow" d="M200 166 H162"/>
+                                        </g>
+                                        <g class="d-node"><rect x="10" y="44" width="70" height="32" rx="8"/><text x="45" y="64">Commit</text></g>
+                                        <g class="d-node"><rect x="124" y="44" width="100" height="32" rx="8"/><text x="174" y="64">Build &amp; test</text></g>
+                                        <g class="d-node d-node--accent"><rect x="262" y="40" width="86" height="40" rx="10"/><text x="305" y="64">Bicep</text></g>
+                                        <g class="d-node"><rect x="200" y="150" width="100" height="32" rx="8"/><text x="250" y="170">Staging</text></g>
+                                        <g class="d-node d-node--ok"><rect x="52" y="150" width="110" height="32" rx="8"/><text x="107" y="170">Production</text></g>
+                                    </svg>
+                                </figure>
+                                <ul class="outcomes" aria-label="Outcomes">
+                                    <li><span class="outcome__val">2&nbsp;days &rarr; 15&nbsp;min</span><span class="outcome__lbl">deployment time</span></li>
+                                    <li><span class="outcome__val">Zero</span><span class="outcome__lbl">downtime releases</span></li>
+                                    <li><span class="outcome__val">0</span><span class="outcome__lbl">manual configuration errors</span></li>
                                 </ul>
-                                
-                                <div class="tech-groups-minimal">
-                                    <div class="tech-group">
-                                        <span class="group-label">System Admin:</span>
-                                        <span class="tech-chip">Moodle LMS</span>
-                                        <span class="tech-chip">Active Directory</span>
-                                    </div>
-                                    <div class="tech-group">
-                                        <span class="group-label">Data:</span>
-                                        <span class="tech-chip">SQL</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        
-                        <div class="case-study-visual">
-                            <div class="arch-canvas">
-                                <div class="arch-layout-job3">
-                                    <div class="arch-row">
-                                        <div class="arch-node delay-1">
-                                            <i class='bx bx-group'></i> Students & Faculty
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="arch-row" style="margin-top: -1.5rem;">
-                                        <div class="conn-line-v">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px);"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="arch-row" style="margin-top: -1.5rem;">
-                                        <div class="arch-node delay-2" style="border-color: var(--accent); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);">
-                                            <i class='bx bxs-graduation'></i> Moodle LMS Core
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="arch-row" style="margin-top: -1.5rem;">
-                                        <div class="conn-line-v" style="margin-right: 5rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 0.5s;"></div>
-                                        </div>
-                                        <div class="conn-line-v" style="margin-left: 5rem;">
-                                            <div class="arch-connection" style="left: 50%; top: 0; bottom: 0; width: 2px;"></div>
-                                            <div class="data-packet vertical" style="left: calc(50% - 3px); animation-delay: 0.8s;"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="arch-row" style="margin-top: -1.5rem;">
-                                        <div class="arch-node delay-3">
-                                            <i class='bx bx-id-card'></i> Active Directory
-                                        </div>
-                                        <div class="arch-node delay-4">
-                                            <i class='bx bx-data'></i> SQL Data
-                                        </div>
-                                    </div>
-                                </div>
+                    </article>
+
+                    <!-- Case 3 -->
+                    <article class="case reveal" id="project-carrier-gateway" aria-labelledby="case3-title">
+                        <div class="case__meta">
+                            <span class="case__no">03</span>
+                            <span class="case__type">Client project · API gateway &amp; security</span>
+                        </div>
+                        <div class="case__grid">
+                            <div class="case__text">
+                                <h3 class="case__title" id="case3-title">Carrier &amp; Shipping Integration Layer</h3>
+                                <dl class="case__facts">
+                                    <div><dt>Problem</dt><dd>Dispatch teams spent hours creating shipping labels and tracking packages by hand across separate FedEx, DHL and UPS portals.</dd></div>
+                                    <div><dt>Architecture</dt><dd>A centralised, secure API gateway on Azure API Management with OAuth&nbsp;2.0, automating carrier integrations, label generation and live webhook tracking.</dd></div>
+                                    <div><dt>Key decisions</dt><dd>One gateway in front of every carrier, so authentication, throttling and versioning live in one place; webhooks for live tracking updates.</dd></div>
+                                </dl>
+                                <ul class="tags" aria-label="Technologies"><li>Azure API Management</li><li>Azure AD B2C</li><li>OAuth 2.0</li></ul>
+                            </div>
+                            <div class="case__side">
+                                <figure class="diagram" aria-label="Simplified architecture: dispatch apps call Azure API Management secured with OAuth 2.0, which routes to FedEx, DHL and UPS">
+                                    <svg viewBox="0 0 360 220" role="img" aria-hidden="true">
+                                        <g class="d-edges">
+                                            <path class="flow" d="M92 110 H140"/>
+                                            <path class="flow" d="M250 110 C280 110,276 46,300 46"/>
+                                            <path class="flow" d="M250 110 H300"/>
+                                            <path class="flow" d="M250 110 C280 110,276 174,300 174"/>
+                                        </g>
+                                        <g class="d-node"><rect x="10" y="94" width="82" height="32" rx="8"/><text x="51" y="114">Dispatch</text></g>
+                                        <g class="d-node d-node--accent"><rect x="140" y="86" width="110" height="48" rx="10"/><text x="195" y="106">API Mgmt</text><text class="sub" x="195" y="123">OAuth 2.0</text></g>
+                                        <g class="d-node"><rect x="300" y="30" width="52" height="32" rx="8"/><text x="326" y="50">FedEx</text></g>
+                                        <g class="d-node"><rect x="300" y="94" width="52" height="32" rx="8"/><text x="326" y="114">DHL</text></g>
+                                        <g class="d-node"><rect x="300" y="158" width="52" height="32" rx="8"/><text x="326" y="178">UPS</text></g>
+                                    </svg>
+                                </figure>
+                                <ul class="outcomes" aria-label="Outcomes">
+                                    <li><span class="outcome__val">Zero clicks</span><span class="outcome__lbl">replacing a 20-minute manual process</span></li>
+                                    <li><span class="outcome__val">40+&nbsp;hrs</span><span class="outcome__lbl">dispatch overhead saved per week</span></li>
+                                    <li><span class="outcome__val">Improved</span><span class="outcome__lbl">shipping SLA compliance</span></li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
-                </div>                
+                    </article>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <!-- ========================= CREDENTIALS ========================= -->
+        <section class="section credentials" id="credentials" aria-labelledby="cred-title">
+            <div class="container">
+                <header class="section-head reveal">
+                    <p class="kicker"><span>06</span> Education &amp; certifications</p>
+                    <h2 class="section-title" id="cred-title">Credentials</h2>
+                </header>
 
-    <!-- Projects Section -->
-    <section class="projects section" id="projects">
-        <div class="container reveal-stagger">
-            <h2 class="section-title reveal-item">Featured Projects</h2>
-            <div class="projects-grid">
-                
-                <!-- Project 1 -->
-                <div class="project-card glass-card reveal-item">
-                    <div class="project-header">
-                        <div class="folder-icon"><i class='bx bx-store'></i></div>
-                        <span class="project-badge">Client Project</span>
-                    </div>
-                    <h3 class="project-title">Multi-Channel Order Processing Platform</h3>
-                    <div class="project-desc case-study">
-                        <div class="case-section">
-                            <h4><i class='bx bx-target-lock'></i> Challenge</h4>
-                            <p>Sellers were losing orders and overselling stock due to severe latency between Shopify, Amazon, and Walmart inventory syncs.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-bulb'></i> Solution</h4>
-                            <p>Architected an event-driven integration backend leveraging Azure Functions and Cosmos DB to ingest, normalize, and distribute multi-channel inventory updates in real-time.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-line-chart'></i> Business Impact</h4>
-                            <p>Eliminated overselling, recovered $150k+ in previously lost quarterly revenue, and reduced sync latency from 5 minutes to under 2 seconds.</p>
-                        </div>
-                    </div>
-                    <div class="project-tech">
-                        <span>Azure Functions</span>
-                        <span>Cosmos DB</span>
-                        <span>ASP.NET Core</span>
-                    </div>
-                    <div class="project-actions">
-                        <button class="btn btn-simulate-build" onclick="simulatePipeline(1, this)"><i class='bx bx-play-circle'></i> Run Pipeline Simulation</button>
-                    </div>
-                    <div class="project-pipeline-wrapper" id="pipeline-wrapper-1">
-                        <div class="pipeline-stages">
-                            <div class="pipeline-stage" id="stage-1-build">
-                                <div class="stage-dot"><i class='bx bx-code-alt'></i></div>
-                                <span class="stage-name">Build</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-1-1">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-1-test">
-                                <div class="stage-dot"><i class='bx bx-test-tube'></i></div>
-                                <span class="stage-name">Test</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-1-2">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-1-release">
-                                <div class="stage-dot"><i class='bx bx-package'></i></div>
-                                <span class="stage-name">Release</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-1-3">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-1-deploy">
-                                <div class="stage-dot"><i class='bx bx-cloud-upload'></i></div>
-                                <span class="stage-name">Deploy</span>
-                            </div>
-                        </div>
-                        <div class="pipeline-status" id="pipeline-status-1">
-                            <i class='bx bx-info-circle'></i> Ready to run pipeline simulation.
-                        </div>
-                    </div>
+                <div class="cred__grid">
+                    <article class="cred cred--edu reveal tilt">
+                        <svg class="i cred__icon"><use href="#i-grad"/></svg>
+                        <p class="cred__kind">Education</p>
+                        <h3>B.Tech. Computer Science &amp; Engineering</h3>
+                        <p class="cred__org">Parul University, Vadodara</p>
+                        <p class="cred__foot"><span>2019 &ndash; 2023</span><span class="cred__ok"><svg class="i"><use href="#i-award"/></svg> First Class with Distinction</span></p>
+                    </article>
+                    <article class="cred cred--ms reveal tilt">
+                        <svg class="i cred__icon"><use href="#i-award"/></svg>
+                        <p class="cred__kind">Certification</p>
+                        <h3>Microsoft Certified: Azure AI Fundamentals</h3>
+                        <p class="cred__org">Microsoft · AI-900</p>
+                        <p class="cred__foot"><span>May 2025</span><span class="cred__ok"><svg class="i"><use href="#i-check"/></svg> Verified</span></p>
+                    </article>
+                    <article class="cred reveal tilt">
+                        <svg class="i cred__icon"><use href="#i-code"/></svg>
+                        <p class="cred__kind">Course</p>
+                        <h3>Python Data Science &amp; Masterclass</h3>
+                        <p class="cred__org">Parul University &amp; Udemy</p>
+                    </article>
+                    <article class="cred reveal tilt">
+                        <svg class="i cred__icon"><use href="#i-shield"/></svg>
+                        <p class="cred__kind">Course</p>
+                        <h3>Deep Web &mdash; The Complete Introduction</h3>
+                        <p class="cred__org">Udemy</p>
+                    </article>
                 </div>
-
-                <!-- Project 2 -->
-                <div class="project-card glass-card reveal-item">
-                    <div class="project-header">
-                        <div class="folder-icon"><i class='bx bx-git-branch'></i></div>
-                        <span class="project-badge">Client Project</span>
-                    </div>
-                    <h3 class="project-title">Zero-Downtime Cloud Deployment Pipeline</h3>
-                    <div class="project-desc case-study">
-                        <div class="case-section">
-                            <h4><i class='bx bx-target-lock'></i> Challenge</h4>
-                            <p>Manual deployment steps caused severe environment drift, delayed releases by days, and resulted in frequent production rollbacks.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-bulb'></i> Solution</h4>
-                            <p>Engineered a fully automated Infrastructure as Code (IaC) pipeline using Azure Bicep and Azure DevOps to provision consistent, immutable environments.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-line-chart'></i> Business Impact</h4>
-                            <p>Reduced deployment times from 2 days to 15 minutes, enabled zero-downtime releases, and eliminated manual configuration errors.</p>
-                        </div>
-                    </div>
-                    <div class="project-tech">
-                        <span>Azure Bicep</span>
-                        <span>Azure DevOps</span>
-                        <span>ARM</span>
-                    </div>
-                    <div class="project-actions">
-                        <button class="btn btn-simulate-build" onclick="simulatePipeline(2, this)"><i class='bx bx-play-circle'></i> Run Pipeline Simulation</button>
-                    </div>
-                    <div class="project-pipeline-wrapper" id="pipeline-wrapper-2">
-                        <div class="pipeline-stages">
-                            <div class="pipeline-stage" id="stage-2-build">
-                                <div class="stage-dot"><i class='bx bx-code-alt'></i></div>
-                                <span class="stage-name">Build</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-2-1">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-2-test">
-                                <div class="stage-dot"><i class='bx bx-test-tube'></i></div>
-                                <span class="stage-name">Test</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-2-2">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-2-release">
-                                <div class="stage-dot"><i class='bx bx-package'></i></div>
-                                <span class="stage-name">Release</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-2-3">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-2-deploy">
-                                <div class="stage-dot"><i class='bx bx-cloud-upload'></i></div>
-                                <span class="stage-name">Deploy</span>
-                            </div>
-                        </div>
-                        <div class="pipeline-status" id="pipeline-status-2">
-                            <i class='bx bx-info-circle'></i> Ready to run pipeline simulation.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card glass-card reveal-item">
-                    <div class="project-header">
-                        <div class="folder-icon"><i class='bx bx-shield-quarter'></i></div>
-                        <span class="project-badge">Client Project</span>
-                    </div>
-                    <h3 class="project-title">Carrier & Shipping Integration Layer</h3>
-                    <div class="project-desc case-study">
-                        <div class="case-section">
-                            <h4><i class='bx bx-target-lock'></i> Challenge</h4>
-                            <p>Dispatch teams were wasting hours manually creating shipping labels and tracking packages across fragmented FedEx, DHL, and UPS portals.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-bulb'></i> Solution</h4>
-                            <p>Built a centralized, secure API gateway using Azure APIM and OAuth 2.0 to automate carrier integrations, label generation, and live webhook tracking.</p>
-                        </div>
-                        <div class="case-section">
-                            <h4><i class='bx bx-line-chart'></i> Business Impact</h4>
-                            <p>Turned a 20-minute manual process into zero clicks, saving 40+ hours per week in dispatch overhead and significantly improving shipping SLA compliance.</p>
-                        </div>
-                    </div>
-                    <div class="project-tech">
-                        <span>Azure APIM</span>
-                        <span>Azure AD B2C</span>
-                        <span>OAuth 2.0</span>
-                    </div>
-                    <div class="project-actions">
-                        <button class="btn btn-simulate-build" onclick="simulatePipeline(3, this)"><i class='bx bx-play-circle'></i> Run Pipeline Simulation</button>
-                    </div>
-                    <div class="project-pipeline-wrapper" id="pipeline-wrapper-3">
-                        <div class="pipeline-stages">
-                            <div class="pipeline-stage" id="stage-3-build">
-                                <div class="stage-dot"><i class='bx bx-code-alt'></i></div>
-                                <span class="stage-name">Build</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-3-1">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-3-test">
-                                <div class="stage-dot"><i class='bx bx-test-tube'></i></div>
-                                <span class="stage-name">Test</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-3-2">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-3-release">
-                                <div class="stage-dot"><i class='bx bx-package'></i></div>
-                                <span class="stage-name">Release</span>
-                            </div>
-                            <div class="pipeline-connector" id="connector-3-3">
-                                <div class="connector-progress"></div>
-                            </div>
-                            <div class="pipeline-stage" id="stage-3-deploy">
-                                <div class="stage-dot"><i class='bx bx-cloud-upload'></i></div>
-                                <span class="stage-name">Deploy</span>
-                            </div>
-                        </div>
-                        <div class="pipeline-status" id="pipeline-status-3">
-                            <i class='bx bx-info-circle'></i> Ready to run pipeline simulation.
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Education Section -->
-    <section class="education section" id="education">
-        <div class="container reveal-stagger">
-            <h2 class="section-title reveal-item">Education & Certifications</h2>
-            <div class="education-grid">
-                <div class="edu-column reveal-item">
-                    <h3 class="column-title"><i class='bx bxs-graduation'></i> Education</h3>
-                    <div class="edu-card glass-card premium-edu-card" style="padding: 2rem; border-color: rgba(59, 130, 246, 0.3); box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.2);">
-                        <div class="org-showcase-header" style="margin-bottom: 1.5rem;">
-                            <div class="org-logo-container">
-                                <img src="https://www.paruluniversity.ac.in/wp-content/uploads/2025/09/Variant9.svg" alt="Parul University Logo" width="150" height="50" loading="lazy">
-                            </div>
-                            <div class="org-meta">
-                                <h4 class="role-title" style="font-size: 1.3rem;">B.Tech. Computer Science & Engineering</h4>
-                                <div class="role-meta-row">
-                                    <span style="color: var(--accent); font-weight: 500;"><i class='bx bxs-institution'></i> Parul University, Vadodara</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="edu-details" style="display: flex; gap: 1rem; align-items: center; background: rgba(255,255,255,0.03); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                            <span class="edu-date" style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);"><i class='bx bx-calendar'></i> 2019 – 2023</span>
-                            <span class="separator" style="color: rgba(255,255,255,0.2);">|</span>
-                            <span class="edu-achievement" style="display: flex; align-items: center; gap: 0.5rem; color: #10B981; font-weight: 600;"><i class='bx bx-medal'></i> First Class with Distinction</span>
-                        </div>
-                    </div>
+        <!-- ========================= FAQ ========================= -->
+        <section class="section faq" id="faq" aria-labelledby="faq-title">
+            <div class="container faq__grid">
+                <header class="section-head reveal">
+                    <p class="kicker"><span>07</span> FAQ</p>
+                    <h2 class="section-title" id="faq-title">Quick answers</h2>
+                    <p class="section-intro">The questions recruiters and engineering managers ask most often.</p>
+                </header>
+                <div class="faq__list reveal">
+                    <details class="qa">
+                        <summary>Who is Anand Vaidya?<svg class="i"><use href="#i-chevron"/></svg></summary>
+                        <div class="qa__a"><p>Anand Vaidya is a Cloud Engineer at FSP Consulting in Vadodara, Gujarat, India, with 3+ years of engineering experience. He builds serverless integrations, secure APIs and automated infrastructure on Microsoft Azure.</p></div>
+                    </details>
+                    <details class="qa">
+                        <summary>What does Anand work on as a Cloud Engineer?<svg class="i"><use href="#i-chevron"/></svg></summary>
+                        <div class="qa__a"><p>Event-driven architectures on Azure Functions, Logic Apps and API Management, secured with OAuth&nbsp;2.0 and Managed Identities, with infrastructure defined in Bicep and ARM templates and delivered through Azure DevOps pipelines.</p></div>
+                    </details>
+                    <details class="qa">
+                        <summary>Does Anand do DevOps and infrastructure as code?<svg class="i"><use href="#i-chevron"/></svg></summary>
+                        <div class="qa__a"><p>Yes. He builds multi-stage YAML pipelines in Azure DevOps for build, test, security scanning and blue-green deployments, and provisions environments with Azure Bicep. One such pipeline cut deployment time from 2 days to 15 minutes.</p></div>
+                    </details>
+                    <details class="qa">
+                        <summary>How can I contact Anand Vaidya?<svg class="i"><use href="#i-chevron"/></svg></summary>
+                        <div class="qa__a"><p>Email <a href="mailto:anand.svaidya24@gmail.com">anand.svaidya24@gmail.com</a>, call +91-9913013470, or connect on <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener">LinkedIn</a>.</p></div>
+                    </details>
                 </div>
-                
-                <div class="edu-column reveal-item">
-                    <h3 class="column-title"><i class='bx bx-award'></i> Certifications & Badges</h3>
-                    <div class="cert-grid">
-                        <div class="cert-card glass-card premium-cert-card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; border-top: 2px solid rgba(0, 120, 212, 0.5);">
-                            <div class="cert-header" style="display: flex; gap: 1.2rem; align-items: center; margin-bottom: 1.5rem;">
-                                <img src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Azure AI-900" width="55" height="55" style="width: 55px; height: 55px; filter: drop-shadow(0 0 15px rgba(0, 120, 212, 0.4)); flex-shrink: 0;" loading="lazy">
-                                <div class="cert-title-group">
-                                    <h4 style="font-size: 1.1rem; line-height: 1.4; margin: 0;">Microsoft Certified:<br>Azure AI Fundamentals</h4>
-                                </div>
-                            </div>
-                            <div class="cert-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;">
-                                <span class="edu-date" style="margin: 0; display: flex; align-items: center; gap: 0.4rem;"><i class='bx bx-calendar'></i> May 2025</span>
-                                <span class="cert-status" style="color: #10B981; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.3rem;"><i class='bx bxs-check-circle'></i> Verified</span>
-                            </div>
-                        </div>
+            </div>
+        </section>
 
-                        <div class="cert-card glass-card premium-cert-card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; border-top: 2px solid rgba(75, 139, 190, 0.5);">
-                            <div class="cert-header" style="display: flex; gap: 1.2rem; align-items: center; margin-bottom: 1.5rem;">
-                                <div class="cert-icon-wrapper" style="width: 55px; height: 55px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); display: flex; justify-content: center; align-items: center; font-size: 2rem; color: #4B8BBE; box-shadow: inset 0 0 10px rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><i class='bx bxl-python'></i></div>
-                                <div class="cert-title-group">
-                                    <h4 style="font-size: 1.1rem; line-height: 1.4; margin: 0;">Python Data Science &<br>Masterclass</h4>
-                                </div>
-                            </div>
-                            <div class="cert-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;">
-                                <span class="edu-date" style="margin: 0; display: flex; align-items: center; gap: 0.4rem;"><i class='bx bxs-institution'></i> Parul Univ. & Udemy</span>
-                            </div>
-                        </div>
-
-                        <div class="cert-card glass-card premium-cert-card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; border-top: 2px solid rgba(164, 53, 240, 0.5);">
-                            <div class="cert-header" style="display: flex; gap: 1.2rem; align-items: center; margin-bottom: 1.5rem;">
-                                <div class="cert-icon-wrapper" style="width: 55px; height: 55px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); display: flex; justify-content: center; align-items: center; font-size: 2rem; color: #A435F0; box-shadow: inset 0 0 10px rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><i class='bx bx-globe'></i></div>
-                                <div class="cert-title-group">
-                                    <h4 style="font-size: 1.1rem; line-height: 1.4; margin: 0;">Deep Web - The Complete<br>Introduction</h4>
-                                </div>
-                            </div>
-                            <div class="cert-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;">
-                                <span class="edu-date" style="margin: 0; display: flex; align-items: center; gap: 0.4rem;"><i class='bx bx-certification'></i> Udemy</span>
-                            </div>
-                        </div>
+        <!-- ========================= TERMINAL ========================= -->
+        <section class="section console" id="console" aria-labelledby="console-title">
+            <div class="container console__grid">
+                <header class="section-head reveal">
+                    <p class="kicker"><span>08</span> Prefer a shell?</p>
+                    <h2 class="section-title" id="console-title">Explore this profile from the <em>command line</em>.</h2>
+                    <p class="section-intro">Type <code>help</code>, or tap a command. Everything here mirrors the page content.</p>
+                </header>
+                <div class="term reveal" id="term">
+                    <div class="term__bar">
+                        <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                        <span class="term__title">anand@portfolio: ~</span>
+                    </div>
+                    <div class="term__out" id="term-out" role="log" aria-live="polite" tabindex="0">
+                        <p class="t-muted">Portfolio shell. Type <span class="t-accent">help</span> to list commands.</p>
+                    </div>
+                    <form class="term__form" id="term-form" autocomplete="off">
+                        <label for="term-input" class="t-prompt">anand@portfolio:~$</label>
+                        <input id="term-input" name="cmd" type="text" spellcheck="false" autocapitalize="off" aria-label="Terminal command">
+                    </form>
+                    <div class="term__chips" aria-label="Quick commands">
+                        <button type="button" data-cmd="whoami">whoami</button>
+                        <button type="button" data-cmd="skills">skills</button>
+                        <button type="button" data-cmd="experience">experience</button>
+                        <button type="button" data-cmd="projects">projects</button>
+                        <button type="button" data-cmd="contact">contact</button>
+                        <button type="button" data-cmd="clear">clear</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section class="contact section" id="contact">
-        <div class="container reveal-stagger">
-            <h2 class="section-title reveal-item">Get In Touch</h2>
-            <p class="contact-intro reveal-item">I run on coffee and cloud compute. Whether you need an infrastructure audit, automated pipelines, or just want to talk about tabs vs. spaces, ping me!</p>
-            
-            <div class="contact-cards-row reveal-item">
-                <a href="mailto:anand.svaidya24@gmail.com" class="contact-detail-card glass-card">
-                    <div class="contact-icon-box"><i class='bx bx-envelope'></i></div>
-                    <div class="contact-meta">
-                        <span class="contact-label">Email</span>
-                        <span class="contact-val">anand.svaidya24@gmail.com</span>
-                    </div>
-                </a>
-                <a href="tel:+919913013470" class="contact-detail-card glass-card">
-                    <div class="contact-icon-box"><i class='bx bx-phone'></i></div>
-                    <div class="contact-meta">
-                        <span class="contact-label">Phone</span>
-                        <span class="contact-val">+91-9913013470</span>
-                    </div>
-                </a>
-                <a href="https://www.google.com/maps/place/Vadodara,+Gujarat,+India" target="_blank" class="contact-detail-card glass-card" style="text-decoration: none; color: inherit;">
-                    <div class="contact-icon-box"><i class='bx bx-map'></i></div>
-                    <div class="contact-meta">
-                        <span class="contact-label">Location</span>
-                        <span class="contact-val">Vadodara, Gujarat, India</span>
-                    </div>
-                </a>
-            </div>
-            
-            <!-- Stripe-Style Glassmorphism Contact Form -->
-            <div class="contact-form-wrapper reveal-item">
-                <div class="contact-form-card glass-card">
-                    <div class="form-header">
-                        <i class='bx bx-paper-plane form-header-icon'></i>
-                        <h3>Send Message</h3>
-                        <p>Establish a secure telemetry link</p>
-                    </div>
-                    <form id="contact-form" class="saas-contact-form">
-                        <div class="saas-input-group">
-                            <input type="text" id="form-subject" required autocomplete="off" placeholder=" " aria-label="Subject">
-                            <label for="form-subject">Subject</label>
-                            <span class="input-focus-line"></span>
-                        </div>
-                        <div class="saas-input-group">
-                            <textarea id="form-message" required placeholder=" " aria-label="Message"></textarea>
-                            <label for="form-message">Message</label>
-                            <span class="input-focus-line"></span>
-                        </div>
-                        <div class="form-actions-row">
-                            <button type="submit" class="btn btn-primary btn-submit-form" id="contact-submit-btn">
-                                <span class="btn-text">Invoke-Send <i class='bx bx-send'></i></span>
-                                <span class="btn-loader-rings"></span>
+        <!-- ========================= CONTACT ========================= -->
+        <section class="section contact" id="contact" aria-labelledby="contact-title">
+            <div class="contact__glow" aria-hidden="true"></div>
+            <div class="container">
+                <header class="contact__head reveal">
+                    <p class="kicker"><span>09</span> Contact</p>
+                    <h2 class="contact__title" id="contact-title">Let&rsquo;s build cloud systems that <em>run themselves</em>.</h2>
+                    <p class="section-intro">Cloud engineering, integration or DevOps roles and projects &mdash; the fastest way to reach me is email.</p>
+                </header>
+
+                <div class="contact__grid">
+                    <div class="contact__cards reveal-stagger">
+                        <div class="ccard ccard--primary reveal">
+                            <svg class="i ccard__icon"><use href="#i-mail"/></svg>
+                            <div class="ccard__meta">
+                                <span class="ccard__label">Email</span>
+                                <a class="ccard__val" href="mailto:anand.svaidya24@gmail.com">anand.svaidya24@<wbr>gmail.com</a>
+                            </div>
+                            <button type="button" class="icon-btn copy-btn" data-copy="anand.svaidya24@gmail.com" aria-label="Copy email address">
+                                <svg class="i i-copy"><use href="#i-copy"/></svg><svg class="i i-check"><use href="#i-check"/></svg>
                             </button>
                         </div>
-                    </form>
-                    <!-- Success Overlay Panel -->
-                    <div class="form-success-overlay" id="form-success-panel">
-                        <div class="success-icon-wrapper">
-                            <i class='bx bx-check-circle'></i>
-                        </div>
-                        <h3>Transmission Succeeded</h3>
-                        <p>Secure mail agent initialized. Launching client...</p>
+                        <a class="ccard reveal" href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me">
+                            <svg class="i ccard__icon"><use href="#i-linkedin"/></svg>
+                            <span class="ccard__meta"><span class="ccard__label">LinkedIn</span><span class="ccard__val">in/vaidya-anand</span></span>
+                            <svg class="i ccard__go"><use href="#i-external"/></svg>
+                        </a>
+                        <a class="ccard reveal" href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me">
+                            <svg class="i ccard__icon"><use href="#i-github"/></svg>
+                            <span class="ccard__meta"><span class="ccard__label">GitHub</span><span class="ccard__val">anandvaidyaa</span></span>
+                            <svg class="i ccard__go"><use href="#i-external"/></svg>
+                        </a>
+                        <a class="ccard reveal" href="tel:+919913013470">
+                            <svg class="i ccard__icon"><use href="#i-phone"/></svg>
+                            <span class="ccard__meta"><span class="ccard__label">Phone</span><span class="ccard__val">+91-9913013470</span></span>
+                            <svg class="i ccard__go"><use href="#i-arrow-right"/></svg>
+                        </a>
+                        <a class="ccard reveal" href="https://www.google.com/maps/place/Vadodara,+Gujarat,+India" target="_blank" rel="noopener">
+                            <svg class="i ccard__icon"><use href="#i-pin"/></svg>
+                            <span class="ccard__meta"><span class="ccard__label">Location</span><span class="ccard__val">Vadodara, Gujarat, India</span></span>
+                            <svg class="i ccard__go"><use href="#i-external"/></svg>
+                        </a>
                     </div>
+
+                    <form class="cform reveal" id="contact-form" novalidate>
+                        <h3 class="cform__title">Send a message</h3>
+                        <p class="cform__note">This opens your email app with the message ready to send.</p>
+                        <div class="field">
+                            <label for="form-subject">Subject</label>
+                            <input type="text" id="form-subject" name="subject" required maxlength="140" autocomplete="off" aria-describedby="err-subject">
+                            <p class="field__err" id="err-subject"></p>
+                        </div>
+                        <div class="field">
+                            <label for="form-message">Message</label>
+                            <textarea id="form-message" name="message" required rows="5" maxlength="4000" aria-describedby="err-message"></textarea>
+                            <p class="field__err" id="err-message"></p>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--block magnetic">Open in email app <svg class="i"><use href="#i-send"/></svg></button>
+                        <p class="cform__status" id="form-status" role="status"></p>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Infinite Marquee Section -->
-    <div class="marquee-wrapper">
-        <div class="marquee">
-            <span>LET'S WORK TOGETHER &nbsp; • &nbsp; BUILD SCALABLE CLOUD APPS &nbsp; • &nbsp; ARCHITECT THE FUTURE &nbsp; • &nbsp; </span>
-            <span>LET'S WORK TOGETHER &nbsp; • &nbsp; BUILD SCALABLE CLOUD APPS &nbsp; • &nbsp; ARCHITECT THE FUTURE &nbsp; • &nbsp; </span>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="social-links">
-                <a href="https://github.com/anandvaidyaa" target="_blank" aria-label="GitHub Profile"><i class='bx bxl-github'></i></a>
-                <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" aria-label="LinkedIn Profile"><i class='bx bxl-linkedin'></i></a>
+    <!-- ========================= FOOTER ========================= -->
+    <footer class="site-footer">
+        <div class="container footer__grid">
+            <div class="footer__brand">
+                <p class="footer__name">Anand Vaidya</p>
+                <p>Azure Cloud Engineer &middot; Vadodara, Gujarat, India</p>
             </div>
-            <p>Built with <i class='bx bxs-heart' style="color:var(--accent);"></i> by Anand Vaidya</p>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; opacity: 0.8;">Cloud Integration Engineer & Azure Specialist based in Vadodara, Gujarat, India.</p>
+            <nav class="footer__nav" aria-label="Footer">
+                <p class="footer__head">Sections</p>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#credentials">Credentials</a></li>
+                </ul>
+            </nav>
+            <div class="footer__nav">
+                <p class="footer__head">Elsewhere</p>
+                <ul>
+                    <li><a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me">GitHub</a></li>
+                    <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me">LinkedIn</a></li>
+                    <li><a href="mailto:anand.svaidya24@gmail.com">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer__bottom">
+            <p>&copy; <span id="year">2026</span> Anand Vaidya. Hand-built with HTML, CSS and JavaScript.</p>
+            <a href="#home" class="to-top">Back to top <svg class="i"><use href="#i-arrow-up"/></svg></a>
         </div>
     </footer>
-
-    <!-- Back to Top Button -->
-    <button id="back-to-top" class="back-to-top glass-card" aria-label="Back to Top">
-        <i class='bx bx-up-arrow-alt'></i>
-    </button>
-
-
-    <script src="script.min.js" defer></script>
 </body>
 </html>
