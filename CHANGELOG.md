@@ -1,5 +1,41 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (6) — Cinematic scroll pass
+
+Scroll position now drives a continuous story across the homepage, not just entrance animations. Every moment is deterministic: the same scroll position always gives the same picture, so scrolling up replays it in reverse.
+
+| Moment | What happens |
+|---|---|
+| Hero | The shards tremble and gather, and a luminous contour traces the sculpture. Four letters of the name come loose: one lifts off the baseline, one sinks, one stretches, one turns to outline. Then they fall back into line. The blossom folds through itself, so its silhouette twists and a warm inner surface shows. One shard pulls back, then escapes off the right edge, and the HUD reports `shard-03 detached`. The whole opening folds back into depth as About arrives. |
+| About | The escaped shard re-enters from the left, overshoots its place, stops, looks around, turns back and settles as a new shape. The section label is tugged along as it passes, then snaps back. The heading opens through a membrane-shaped mask. |
+| Into skills | Staged: the membranes peel away, the form slides into the margin, inner paths stretch into a network, nodes light one at a time, and the paths fill as glass again. |
+| Experience | As the timeline's line reaches each milestone, the card opens from the rail side, corner brackets draw around it (all four corners for the current role), the responsibilities branch from one stem, and the year turns from outline to glass. |
+| Projects | The shard arrives early at the first project's frame and waits, and the frame opens from it. Each frame opens in a shape that fits its subject: a faceted wedge for the order platform (channels converging), four stages promoted in turn for the deployment pipeline, a checkpoint slit for the API gateway. Titles have their own entrance: words close ranks, step up in discrete stages, or stay an outline until let through. |
+| Contact | The shard returns, is pushed back once by the monogram, lines itself up and slots in as its keystone. |
+
+Also:
+- On wide screens, supporting content arrives through a slanted glass edge instead of a fade-up.
+- The satellite "runaway" on first scroll is retired; the fragment is now the hero's incident (the satellite still responds to clicks).
+- The unused About prism styles are removed.
+
+**Under the hood:**
+- `topoFragment()`, `topoFold()` and `topoWake()` live in `src/script.js`, and `CASE_MASKS` holds the project frame shapes.
+- Project frames are measured on their untransformed container. Measuring the tilting lens lagged a frame, and Chrome's IntersectionObserver reports a fully clipped element as off-screen, which stalled a frame's scene.
+- Under reduced motion, there is no fragment, mask, clipping or loose letter, and all content shows immediately.
+
+**Creative-director pass — weakest moments fixed:**
+1. The escape left through the top, hidden under the header. It now crosses to the right edge in screen space and comes forward as it goes.
+2. The membrane heading had fully opened before it was seen. Its growth now starts small and accelerates.
+3. Midway into skills, tangled petals covered the principles text. That transition is now staged.
+4. On phones, the shard waited over project text. It now arrives just in time at the frame corner.
+
+**Tested:**
+- Functional 46/46, easter eggs 56/56, SEO 53/53, motion 23/23 (no overflow at 320–1920 px), case studies 64/64, recruiter 24/24, simulations 11/11.
+- New cinematic checks 8/8: identical states scrolling down and back up, fragment presence, rest state, frames fully open after reading, deep links, phone, reduced motion.
+- axe: 0 violations (homepage and case studies, both themes, 375 and 1366 px).
+- Scroll frame times: desktop median/p95 16.7/16.8 ms; phone at 4× CPU 16.7/16.8 ms, with 2 of 252 frames over 50 ms.
+- Lighthouse mobile, alternating against the previous build in the same session: before 85–90 (TBT 250–380 ms), after 85–89 (TBT 310–390 ms). LCP 2.0–2.2 s, CLS 0. Desktop 96–99.
+
 ## 2026-10-12 (5) — Living Topology
 
 A signature sculpture for the whole homepage: five folded glass ribbons (`initTopology()` in `src/script.js`, styles under "Living Topology" in `src/styles.css`). Each ribbon is a cubic spine with a width that twists through zero — that is what folds it. Scroll position picks the scene and how far it has progressed, and the spines, widths and fold counts are interpolated between states, so the silhouette genuinely changes shape and every scroll position maps to exactly one picture (it reverses when scrolling up).

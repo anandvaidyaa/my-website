@@ -209,7 +209,17 @@
             <linearGradient id="topo-edge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" class="topo-e1"/><stop offset=".5" class="topo-e2"/><stop offset="1" class="topo-e3"/></linearGradient>
             <linearGradient id="topo-sheen-grad" x1="0" y1="0" x2="1" y2="0"><stop offset=".38" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".42"/><stop offset=".62" stop-color="#fff" stop-opacity="0"/></linearGradient>
             <linearGradient id="topo-shard" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="topo-e1"/><stop offset="1" class="topo-s3"/></linearGradient>
+            <linearGradient id="topo-inner" x1="1" y1="0" x2="0" y2="1"><stop offset="0" class="topo-i1"/><stop offset="1" class="topo-i2"/></linearGradient>
         </defs>
+        </svg>
+    </div>
+    <!-- The fragment: one shard of the sculpture that escapes, wanders and comes back (decorative; moved by script.js) -->
+    <div class="frag" id="frag" aria-hidden="true">
+        <svg viewBox="-30 -30 60 60" width="60" height="60" focusable="false">
+            <defs><linearGradient id="frag-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="topo-e1" stop-opacity=".9"/><stop offset=".5" class="topo-e2" stop-opacity=".4"/><stop offset="1" class="topo-e3" stop-opacity=".75"/></linearGradient></defs>
+            <circle class="frag__glow" r="20"/>
+            <polygon class="frag__body" points="0,-22 15,10 2,13 -11,16"/>
+            <polyline class="frag__facet" points="0,-22 2,13"/>
         </svg>
     </div>
 
@@ -419,7 +429,7 @@
             <div class="container about__layout">
                 <header class="section-head about__head reveal">
                     <p class="kicker"><span>01</span> About</p>
-                    <h2 class="section-title" id="about-title">I turn slow, manual processes into <em>event-driven systems</em> that run themselves.</h2>
+                    <h2 class="section-title" id="about-title" data-membrane>I turn slow, manual processes into <em>event-driven systems</em> that run themselves.</h2>
                 </header>
 
                 <div class="about__badge reveal">
@@ -705,6 +715,7 @@
                             <span class="job__type">Full-time · Vadodara</span>
                         </div>
                         <article class="job__card glass glass--dark tilt">
+                            <span class="job__frame job__frame--now" aria-hidden="true"></span>
                             <span class="job__stamp" aria-hidden="true">now<br>shipping</span>
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">FSP</span>
@@ -732,6 +743,7 @@
                             <span class="job__type">Full-time · Ahmedabad</span>
                         </div>
                         <article class="job__card glass glass--dark tilt">
+                            <span class="job__frame" aria-hidden="true"></span>
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">AIT</span>
                                 <div>
@@ -758,6 +770,7 @@
                             <span class="job__type">Internship · Vadodara</span>
                         </div>
                         <article class="job__card glass glass--dark tilt">
+                            <span class="job__frame" aria-hidden="true"></span>
                             <header class="job__head">
                                 <span class="job__logo" aria-hidden="true">PU</span>
                                 <div>
