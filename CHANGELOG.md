@@ -1,5 +1,52 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (8) — Two cinematic sequences, and no more half-revealed headings
+
+**Diagnosis.** The motion system had no library: one scroll listener, IntersectionObservers and CSS. It felt generic for three reasons:
+- Several reveals that cover content were scrubbed by scroll position, so a visitor who paused or jumped to an anchor could be left with a half-masked heading or a frosted exhibit. A probe pausing every heading at three screen positions and jumping to every anchor found **111** such states across the four pages.
+- The sculpture's story stopped at the network: the shard dissolved there instead of carrying the story on.
+- The project gallery treated the sculpture as backdrop rather than the thing that frames the work.
+
+**Readability: trigger, then finish.** Anything that masks content now plays to the end once it is in view, and resets only after it has left the screen below:
+- headings opening through the membrane mask;
+- case-study frost;
+- project titles;
+- career cards.
+
+Project frames still follow the scroll while you scroll, but settle fully open as soon as you pause. The same probe now finds **0** half-revealed states, at 1440 px and 390 px.
+
+**Sequence A, hero to architecture:** the shard escapes the hero and settles in About, as before. Then:
+- as the sculpture becomes a network, it rides out to one of the network's nodes and stays there as a marker through Skills;
+- in Architecture it takes a shortcut, straight across with a spin, onto the real diagram's Azure Functions node;
+- it marks that node until the section ends, then leaves to the right.
+
+**Sequence B, the gallery:** the sculpture's ribbons physically assemble around each real project visual, with a frame built for its subject:
+- **Order platform:** an edged frame with two channels sweeping in from the outer side and converging.
+- **Deployment pipeline:** four stage bars stepping up beneath the visual, with a release line above.
+- **Carrier gateway:** pillars and a lintel hugging the visual; the request comes in on the left, and the answer drops away beneath.
+
+Between projects the frame falls apart into fragments and re-forms around the next. After the last project it goes straight on to the quiet state. On phones the gallery stays in natural flow (nothing is pinned) and the ribbons are fainter.
+
+**Case studies each get their own sculpture.** It sits in the empty column under the sticky chapter list (wide screens) and changes with how far you have read. It is a metaphor, not a diagram:
+- **Orders:** three feeds out of step → converging on one integration layer → normalised once → fanned out identically to every channel.
+- **Pipeline:** steps drifting, one rolling back → stages assembling → production waiting at an approval gate → every stage in line.
+- **Carrier:** a request arrives at the gateway → the gateway closes on it (token, scope, rate limit) → routed to a carrier → the answer returns.
+
+**Creative-director pass, weakest moments fixed:**
+1. The order platform's converging channels crossed the paragraph text. Frames on the right of the screen now take their arrivals from the outer side.
+2. The frames wrapped the whole column, outcomes included. They now measure the visual itself, at its untransformed size.
+3. The carrier gateway never formed, because the sculpture left for the next state while the third project was on screen; when it did form, its pillars and response path crossed the outcomes. The gallery now drives itself until the last project releases, and the gateway hugs the visual.
+
+The case-study sculptures had also sat behind the text column; they were moved into the empty chapter-list column.
+
+**Tested:**
+- Functional 46/46, SEO 53/53 (one earlier run lost network access to three external links), motion 23/23, case studies 64/64, recruiter 24/24, simulations 11/11, easter eggs 56/56.
+- Homepage cinematic checks 8/8. These were updated: they compare settled states, and the shard is now expected in Skills.
+- Case-study cinematic checks 15/15.
+- Clipped-content probe 0/0 at both widths. axe: 0 violations (all pages, both themes, 375 and 1366 px). Resizing mid-sequence from 1440 to 1024, 768, 390 and 1920: no overflow, no errors.
+- Scroll frame times: desktop 16.7/16.8 ms median/p95; phone at 4× CPU 16.7/16.8 ms, with 1 of 252 frames over 50 ms.
+- Lighthouse mobile, homepage: 77–94 over six runs (four at 91–94); the low runs coincided with other browser checks running. Desktop 98. Carrier case study: mobile 98–100, desktop 100. CLS 0 throughout.
+
 ## 2026-10-12 (7) — Cinematic case studies
 
 The homepage's motion language now carries through the three case studies. As on the homepage, every moment is set by the scroll position, so it replays in reverse.

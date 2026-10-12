@@ -193,7 +193,28 @@
         if (el) el.style.transform = "translate3d(" + px(x) + "," + px(y) + ",0)" + (extra || "");
     };
     var onResizeFns = [];
+    var settleFns = [];   // run once scrolling pauses (see initScroll)
 
+    /* Anything that masks content plays to the end once it is in view, and only resets after it
+       has left the screen again below. Scrubbing is kept for the sculpture; content never stays
+       half-revealed when the visitor pauses or jumps to an anchor. */
+    function membraneAt(el, top, vh) {
+        if (!el.classList.contains("has-membrane")) el.classList.add("has-membrane");
+        if (top < vh * 0.88 && !el.classList.contains("is-in")) {
+            el.classList.add("is-in");
+            window.clearTimeout(el._open);
+            el._open = window.setTimeout(function () { el.classList.add("is-open"); }, 1250);
+        } else if (top > vh && el.classList.contains("is-in")) {
+            window.clearTimeout(el._open);
+            el.classList.remove("is-in", "is-open");
+        }
+    }
+    function membraneOff(el) {
+        window.clearTimeout(el._open);
+        el.classList.remove("has-membrane", "is-in", "is-open");
+    }
+
+    var scrolling = false;
     function initScroll() {
         var header = $("#site-header");
         var bar = $(".scroll-progress span");
@@ -312,15 +333,12 @@
                 }
                 if (membrane) {
                     if (tOff === null) tOff = membrane.getBoundingClientRect().top - r.top;
-                    var m = Math.pow(range((vh - r.top - tOff) / vh, 0.06, 0.62), 2.2);
-                    if (!membrane.classList.contains("has-membrane")) membrane.classList.add("has-membrane");
-                    membrane.style.setProperty("--m", m.toFixed(4));
-                    if (membrane.classList.contains("is-open") !== m > 0.999) membrane.classList.toggle("is-open", m > 0.999);
+                    membraneAt(membrane, r.top + tOff, vh);
                 }
             }, {
                 reset: function () {
                     if (mega) { mega.style.transform = ""; mega.style.removeProperty("--fill"); }
-                    if (membrane) { membrane.classList.remove("has-membrane", "is-open"); membrane.style.removeProperty("--m"); }
+                    if (membrane) membraneOff(membrane);
                 }
             });
         }
@@ -350,13 +368,22 @@
                 var reach = prog * r.height;
                 if (!jobBox) jobBox = jobs.map(function (j) { return [j.offsetTop, Math.min(j.offsetHeight, 460)]; });
                 jobs.forEach(function (j, i) {
-                    lit(j, reach >= jobBox[i][0] + 4);
+                    var on = reach >= jobBox[i][0] + 4;
+                    lit(j, on);
                     if (still) return;
-                    // The path opens the milestone's frame from the rail side as it passes through it
-                    var k = clamp((reach - jobBox[i][0]) / (jobBox[i][1] * 0.5), 0, 1);
+                    // When the line reaches a milestone its frame opens from the rail side and plays
+                    // to the end (a CSS transition on --jk); it closes again only when scrolled back past
+                    // (it opens once the card is well on screen, so a card never waits hidden in view)
                     if (!j.classList.contains("has-k")) j.classList.add("has-k");
-                    j.style.setProperty("--k", k.toFixed(3));
-                    if (j.classList.contains("is-framed") !== k >= 1) j.classList.toggle("is-framed", k >= 1);
+                    var top = r.top + jobBox[i][0], shown = j.classList.contains("is-shown");
+                    if (!shown && top < vh * 0.95) {
+                        j.classList.add("is-shown");
+                        window.clearTimeout(j._framed);
+                        j._framed = window.setTimeout(function () { j.classList.add("is-framed"); }, 1000);
+                    } else if (shown && top > vh) {
+                        window.clearTimeout(j._framed);
+                        j.classList.remove("is-shown", "is-framed");
+                    }
                 });
                 if (comet && !still) {
                     move(comet, 0, reach);
@@ -364,7 +391,7 @@
                 }
             }, {
                 essential: true,
-                reset: function () { jobs.forEach(function (j) { j.classList.remove("has-k", "is-framed"); j.style.removeProperty("--k"); }); }
+                reset: function () { jobs.forEach(function (j) { window.clearTimeout(j._framed); j.classList.remove("has-k", "is-shown", "is-framed"); }); }
             });
         }
 
@@ -409,43 +436,47 @@
             if (!kind) return;
             // Measured on the frame's untransformed container: the lens tilts with the scroll (it would
             // lag a frame behind) and Chrome reports a fully clipped element as off-screen
+            // While scrolling, the opening follows the scroll; when the visitor pauses with the frame
+            // part-open, it settles fully open (and stays open until it has left the screen below)
+            var settled = false, settleT = 0;
             if (frame && lens) scene(lens.parentElement, function (p, r) {
                 if (!c.classList.contains("is-scrolly")) c.classList.add("is-scrolly");
+                if (r.top > vh && settled) { settled = false; window.clearTimeout(settleT); c.classList.remove("is-settled", "is-settling"); }
                 var o = caseOpen(r.top, vh);
+                if (!settled && !scrolling && o < 1 && r.top < vh - 1) {
+                    settled = true;
+                    c.classList.add("is-settled", "is-settling");
+                    frame.style.clipPath = casePoly(CASE_MASKS[kind](1));
+                    frame.style.setProperty("--o", "1");
+                    settleT = window.setTimeout(function () { c.classList.remove("is-settling"); frame.style.clipPath = "none"; }, 750);
+                    return;
+                }
+                if (settled) return;
                 frame.style.clipPath = o >= 1 ? "none" : casePoly(CASE_MASKS[kind](o));
                 frame.style.setProperty("--o", o.toFixed(3));
                 frame.style.setProperty("--edge", Math.sin(Math.PI * range(o, 0.3, 1)).toFixed(3));
             }, {
                 reset: function () {
-                    c.classList.remove("is-scrolly");
+                    settled = false;
+                    window.clearTimeout(settleT);
+                    c.classList.remove("is-scrolly", "is-settled", "is-settling");
                     frame.style.clipPath = "";
                     frame.style.removeProperty("--o");
                     frame.style.removeProperty("--edge");
                 }
             });
+            // Each title has its own entrance, armed while it is below the screen and played once in
+            // view (styles in "Cinematic pass"): the order platform's words close ranks like channels
+            // converging, the pipeline's step up in discrete stages, the gateway's stay an outline
+            // until let through
             if (title) scene(title, function (p, r) {
-                var k = easeOut(range((vh - r.top) / vh, 0.05, 0.5));
-                if (!words.length) words = $$(".w", title);
-                var n = words.length, mid = (n - 1) / 2;
-                if (kind === "case--cyan") {
-                    // Separate channels converge on one model: the words close ranks
-                    words.forEach(function (w, i) { w.style.transform = k < 1 ? "translate3d(" + px((i - mid) * (wide ? 26 : 12) * (1 - k)) + ",0,0)" : ""; });
-                } else if (kind === "case--lime") {
-                    // A staged rollout: each word is promoted in three discrete steps
-                    words.forEach(function (w, i) {
-                        var s = Math.ceil(range(k, i / n * 0.5, i / n * 0.5 + 0.5) * 3) / 3;
-                        w.style.transform = s < 1 ? "translate3d(0," + px((1 - s) * 18) + ",0)" : "";
-                    });
-                } else if (title.classList.contains("is-gated") !== k < 0.55) {
-                    // A gateway: the title stays an outline until it has been let through
-                    title.classList.toggle("is-gated", k < 0.55);
+                if (!words.length) {
+                    words = $$(".w", title);
+                    words.forEach(function (w, i) { w.style.setProperty("--wo", (i - (words.length - 1) / 2).toFixed(2)); w.style.setProperty("--wn", i); });
                 }
-            }, {
-                reset: function () {
-                    words.forEach(function (w) { w.style.transform = ""; });
-                    title.classList.remove("is-gated");
-                }
-            });
+                if (r.top > vh && !title.classList.contains("is-armed")) title.classList.add("is-armed");
+                else if (r.top < vh * 0.9 && title.classList.contains("is-armed")) title.classList.remove("is-armed");
+            }, { reset: function () { title.classList.remove("is-armed"); } });
         });
 
         // Track which scenes are near the viewport
@@ -498,6 +529,19 @@
         }
 
         window.addEventListener("scroll", request, { passive: true });
+        // Scrolling, or paused? (Synthetic scroll events from the settle step don't count.)
+        var idleT = 0;
+        window.addEventListener("scroll", function (e) {
+            if (!e.isTrusted) return;
+            scrolling = true;
+            window.clearTimeout(idleT);
+            idleT = window.setTimeout(function () {
+                scrolling = false;
+                request();
+                // Let the sculpture and fragment catch up with anything that settled
+                window.requestAnimationFrame(function () { window.dispatchEvent(new Event("scroll")); });
+            }, 240);
+        }, { passive: true });
         window.addEventListener("resize", resize, { passive: true });
         onChange(reduceMotion, request);
         // First measurement in a frame, not synchronously during boot
@@ -749,6 +793,145 @@
         return [cam.x + dx * Math.cos(a) - dy * Math.sin(a), cam.y + dx * Math.sin(a) + dy * Math.cos(a)];
     }
 
+    // A ribbon along a gently bent line from a to b (sculpture coordinates)
+    function topoLine(a, b, bend, w, f, p, t) {
+        var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l * bend, ny = dx / l * bend;
+        return { s: [a, [a[0] + dx / 3 + nx, a[1] + dy / 3 + ny], [a[0] + 2 * dx / 3 + nx, a[1] + 2 * dy / 3 + ny], b], w: w, f: f, p: p || 0, t: t == null ? 0.6 : t };
+    }
+    function topoState(r, n) {
+        n = n.slice();
+        while (n.length < 6) n.push([500, 500, 0]);
+        return { r: r, n: n, g: [0, 1, 2, 3, 4, 5].map(function () { return [500, 500, 0.2, 0, 0]; }) };
+    }
+
+    /* Sequence B: around each project the ribbons assemble into a frame of their own, built for its
+       subject. Sculpture units: the visual spans 150..850 across; its height follows its aspect. */
+    function topoFrameState(kind, aspect, mirror) {
+        var hy = 350 * clamp(aspect, 0.3, 1.2), L = 124, R = 876, T = 474 - hy, B = 526 + hy;
+        var edge = function (a, b, w, f) { return topoLine(a, b, 0, w || 9, f || 0.25, 0, 0.22); };
+        var st;
+        if (kind === "case--lime") {
+            // A pipeline: four stages promoted in turn beneath the visual, the release line above it
+            var r = [0, 1, 2, 3].map(function (k) { return edge([L + k * 188 + 10, B + 64 - k * 22], [L + (k + 1) * 188 - 10, B + 64 - k * 22], 11, 0.15); });
+            r.push(edge([L, T], [R, T]));
+            st = topoState(r, [0, 1, 2, 3].map(function (k) { return [L + (k + 1) * 188 - 10, B + 64 - k * 22, k === 2 ? 1 : 0.7]; }));
+        } else if (kind === "case--magenta") {
+            // A gateway: two pillars and a lintel; the request comes in on the left, the answer leaves right
+            // (kept tight to the visual: the pillars hug its sides and the answer drops away beneath it)
+            st = topoState([edge([L - 4, T], [L - 4, B + 50], 15, 0.2), edge([R + 4, T], [R + 4, B + 50], 15, 0.2),
+                edge([L - 40, T], [R + 40, T], 10), topoLine([L - 330, 470], [L - 4, 470], 30, 11, 1.4, 0.2, 0.8),
+                topoLine([R + 4, 540], [R - 180, B + 230], 70, 11, 1.4, 0.2, 0.8)], [[L - 4, 470, 1], [R + 4, 540, 1]]);
+        } else {
+            // Many channels, one model: two channels sweep in and converge on the visual's left edge
+            st = topoState([edge([L - 30, T], [R + 30, T]), edge([R + 30, B], [L - 30, B]), edge([R, T - 30], [R, B + 30]),
+                topoLine([L - 320, T - 50], [L, 500], 60, 12, 1.2, 0.2, 0.8), topoLine([L - 320, B + 50], [L, 500], -60, 12, 1.2, 0.2, 0.8)],
+                [[L, 500, 1], [L - 320, T - 50, 0.8], [L - 320, B + 50, 0.8]]);
+        }
+        st.g = [[L, T], [R, T], [R, B], [L, B], [L, 500], [R, 500]].map(function (q) { return [q[0], q[1], 0.3, 0, 0]; });
+        // A visual on the right of the screen gets its arrivals from the right, away from the text
+        if (mirror) {
+            var mx = function (q) { return [1000 - q[0], q[1]].concat(q.slice(2)); };
+            st.r.forEach(function (r) { r.s = r.s.map(mx); });
+            st.n = st.n.map(mx);
+            st.g = st.g.map(mx);
+        }
+        return st;
+    }
+    // Where the sculpture is through the gallery: assembled around the project nearest the middle of
+    // the screen, falling apart into fragments between projects, re-forming around the next
+    function topoProjects(S, rects, kinds, vw, vh, small, after, camAfter) {
+        var camE = topoCamera("E", vw, vh, small), vc = vh / 2, n = rects.length;
+        var smooth = function (t) { return t * t * (3 - 2 * t); };
+        var cams = rects.map(function (r) { return { x: r.left + r.width / 2, y: r.top + r.height / 2, size: r.width / 0.7, rot: 0, alpha: small ? 0.28 : 0.62 }; });
+        var shape = function (i) { return topoFrameState(kinds[i], rects[i].height / rects[i].width, cams[i].x > vw * 0.55); };
+        var a, A, B, CA, CB, key;
+        if (vc <= cams[0].y) {
+            a = smooth(range((vh * 1.1 - cams[0].y) / (vh * 0.6), 0, 1)); A = S.E; CA = camE; B = shape(0); CB = cams[0]; key = "in";
+        } else if (vc >= cams[n - 1].y) {
+            a = smooth(range((vc - cams[n - 1].y) / (vh * 0.6), 0, 1)); A = shape(n - 1); CA = cams[n - 1]; B = after; CB = camAfter; key = "out";
+        } else {
+            var i = 0;
+            while (vc > cams[i + 1].y) i++;
+            var u = (vc - cams[i].y) / (cams[i + 1].y - cams[i].y);
+            if (u < 0.5) { a = smooth(range(u, 0.28, 0.5)); A = shape(i); CA = cams[i]; B = S.E; CB = camE; key = i + "r"; }
+            else { a = smooth(range(u, 0.5, 0.72)); A = S.E; CA = camE; B = shape(i + 1); CB = cams[i + 1]; key = (i + 1) + "a"; }
+        }
+        return { st: lerpDeep(A, B, a), cam: lerpDeep(CA, CB, a), key: key + a.toFixed(3) + rects.map(function (r) { return (r.height / r.width).toFixed(2); }).join() };
+    }
+
+    /* Case studies: each project has its own sculpture beside the story, changing with how far the
+       visitor has read. A metaphor for the documented architecture, not a diagram of it. */
+    function caseSculptureStates(kind) {
+        var R = topoLine, st = topoState;
+        if (kind === "lime") {
+            var step = function (k) { return R([140 + k * 170, 780 - k * 120], [290 + k * 170, 780 - k * 120], 0, 18, 0.15, 0, 0.25); };
+            return [
+                // manual releases: steps drift apart, and one change rolls back
+                st([R([120, 240], [360, 420], 90, 22, 2, 0.3), R([480, 180], [560, 460], -70, 20, 1.7, 0.5), R([200, 640], [440, 560], 60, 22, 2.4, 0.1), R([620, 620], [860, 720], -80, 20, 1.9, 0.7), R([760, 420], [640, 260], 50, 18, 1.5, 0.2)], []),
+                // the stages assemble: build and test first
+                st([step(0), step(1), R([520, 420], [700, 300], 60, 18, 1.2, 0.3), R([620, 620], [860, 700], -60, 18, 1.4, 0.6), R([760, 380], [680, 240], 40, 16, 1, 0.2)], [[290, 780, 1], [460, 660, 1]]),
+                // environments from templates; production waits at an approval gate
+                st([step(0), step(1), step(2), R([712, 300], [728, 170], 0, 14, 0.2, 0, 0.3), R([840, 420], [880, 300], 20, 16, 1, 0.2)], [[290, 780, 1], [460, 660, 1], [630, 540, 1], [720, 300, 1]]),
+                // released: every stage in line
+                st([step(0), step(1), step(2), step(3), R([810, 300], [900, 300], 0, 10, 0.2, 0, 0.3)], [[290, 780, 1], [460, 660, 1], [630, 540, 1], [800, 420, 1], [900, 300, 1]])
+            ];
+        }
+        if (kind === "magenta") return [
+            // a label request arrives at the gateway
+            st([R([60, 500], [380, 500], 20, 16, 0.6, 0.2), R([440, 240], [440, 760], 0, 22, 0.25, 0, 0.2), R([560, 240], [560, 760], 0, 22, 0.25, 0, 0.2), R([700, 420], [760, 420], 0, 8, 0.3, 0), R([700, 580], [760, 580], 0, 8, 0.3, 0)], [[380, 500, 1]]),
+            // checked at the door (token, scope, rate limit): the gateway closes on it
+            st([R([60, 500], [500, 500], 0, 16, 2.2, 0.2), R([470, 260], [470, 740], 0, 24, 0.25, 0, 0.2), R([530, 260], [530, 740], 0, 24, 0.25, 0, 0.2), R([700, 420], [760, 420], 0, 8, 0.3, 0), R([700, 580], [760, 580], 0, 8, 0.3, 0)], [[500, 500, 1]]),
+            // routed to the right carrier
+            st([R([60, 500], [900, 500], 0, 14, 0.5, 0.2), R([430, 240], [430, 760], 0, 20, 0.25, 0, 0.2), R([570, 240], [570, 760], 0, 20, 0.25, 0, 0.2), R([570, 500], [900, 250], -40, 12, 0.5, 0.1), R([570, 500], [900, 750], 40, 12, 0.5, 0.1)], [[900, 250, 1], [900, 500, 1], [900, 750, 1], [500, 500, 0.6]]),
+            // and the answer comes back the same way
+            st([R([60, 500], [900, 500], 0, 10, 0.3, 0.2), R([430, 240], [430, 760], 0, 20, 0.25, 0, 0.2), R([570, 240], [570, 760], 0, 20, 0.25, 0, 0.2), R([570, 500], [900, 250], -40, 8, 0.3, 0.1), R([900, 560], [60, 600], -60, 14, 1.2, 0.5)], [[900, 250, 0.6], [900, 500, 1], [900, 750, 0.6], [60, 600, 1]])
+        ];
+        return [
+            // channels out of step: three twisted feeds that never meet
+            st([R([90, 180], [380, 300], 70, 26, 1.8, 0.2), R([60, 520], [360, 470], -60, 24, 2.2, 0.6), R([110, 820], [390, 700], 80, 26, 1.6, 0.4), R([560, 440], [620, 560], 30, 12, 0.6, 0), R([720, 500], [780, 520], 0, 8, 0.3, 0)], [[380, 300, 0.5], [360, 470, 0.5], [390, 700, 0.5]]),
+            // the signals converge on one integration layer
+            st([R([90, 180], [500, 500], 40, 16, 0.8, 0.2), R([60, 520], [500, 500], -20, 16, 0.8, 0.2), R([110, 820], [500, 500], -40, 16, 0.8, 0.2), R([500, 500], [640, 500], 0, 22, 1.2, 0, 0.4), R([640, 500], [700, 500], 0, 10, 0.3, 0)], [[500, 500, 1], [90, 180, 0.6], [60, 520, 0.6], [110, 820, 0.6]]),
+            // normalised once, in one place
+            st([R([200, 300], [500, 500], 20, 10, 0.4, 0.2), R([180, 500], [500, 500], 0, 10, 0.4, 0.2), R([200, 700], [500, 500], -20, 10, 0.4, 0.2), R([500, 500], [700, 500], 0, 30, 2, 0, 0.35), R([700, 500], [760, 500], 0, 12, 0.3, 0)], [[500, 500, 1], [700, 500, 1]]),
+            // and every channel shows the same inventory
+            st([R([200, 320], [500, 500], 20, 9, 0.3, 0.2), R([200, 680], [500, 500], -20, 9, 0.3, 0.2), R([620, 500], [900, 260], -30, 14, 0.5, 0.1), R([620, 500], [930, 500], 0, 14, 0.5, 0.1), R([620, 500], [900, 740], 30, 14, 0.5, 0.1)], [[500, 500, 1], [620, 500, 1], [900, 260, 1], [930, 500, 1], [900, 740, 1]])
+        ];
+    }
+    function initCaseSculpture() {
+        var cs = $(".cs"), story = $(".cs-story"), hero = $(".cs-hero"), nav = $(".cs-nav");
+        var kind = cs && ["cyan", "lime", "magenta"].filter(function (k) { return cs.classList.contains("cs--" + k); })[0];
+        if (!kind || !story || !nav || reduceMotion.matches) return;
+        var host = document.createElement("div");
+        host.className = "topo topo--case";
+        host.setAttribute("aria-hidden", "true");
+        host.setAttribute("data-scene", "C");   // signals run along its paths
+        host.innerHTML = '<svg viewBox="0 0 1000 1000" width="1000" height="1000" focusable="false"></svg>';
+        document.body.insertBefore(host, $("main"));
+        var g = topoBuild($("svg", host)), states = caseSculptureStates(kind), wideQ = window.matchMedia("(min-width: 1100px)");
+        var last = "", ticking = false, heroH = hero ? hero.offsetHeight : 1;
+        function frame() {
+            ticking = false;
+            if (!wideQ.matches) return;
+            var vh = window.innerHeight, r = story.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+            var p = clamp((vh * 0.5 - r.top) / (r.height || 1), 0, 1), s = p * 3, i = Math.min(Math.floor(s), 2);
+            var t = range(s - i, 0.35, 0.85);
+            t = t * t * (3 - 2 * t);
+            // It lives in the empty column beneath the sticky chapter list, never behind the text,
+            // and bows out before the footer
+            var free = vh - nr.bottom, size = Math.min(nr.width * 1.3, free * 1.05);
+            host.style.transform = "translate3d(" + px(nr.left + nr.width / 2 - 500) + "," + px(nr.bottom + free / 2 - 500) + ",0) scale(" + (Math.max(size, 1) / 1000).toFixed(4) + ")";
+            host.style.opacity = (0.8 * range(free, 160, 320) * range(window.scrollY / heroH, 0.35, 0.9) * range(r.bottom / vh, 0.55, 0.85)).toFixed(3);
+            host.style.setProperty("--light", (-p * 3).toFixed(4));
+            var key = i + ":" + t.toFixed(3);
+            if (key !== last) { last = key; topoPaint(g, lerpDeep(states[i], states[i + 1], t), 30); }
+        }
+        function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
+        window.addEventListener("scroll", request, { passive: true });
+        window.addEventListener("resize", function () { heroH = hero ? hero.offsetHeight : 1; request(); }, { passive: true });
+        request();
+    }
+
+
     /* The fragment: one shard of the sculpture with a mind of its own. Three appearances, all set
        by the scroll position, so scrolling back replays them in reverse:
          hero     — trembles with the others, pulls back, then escapes off the right edge
@@ -770,6 +953,7 @@
         var body = $(".frag__body", el), facet = $(".frag__facet", el);
         var head = $("#about .about__head"), kicker = head && $(".kicker", head);
         var frame = $(".case--featured .case__side");   // the frame's untransformed container
+        var archNode = $('#arch-stage [data-node="functions"]'), archStage = $("#arch-stage");
         var hud = $(".hud p");
         var lastFrag = "", lastKick = "", lastReport = "";
 
@@ -787,7 +971,9 @@
             read: function (cur) {
                 return {
                     head: cur === 1 && head ? head.getBoundingClientRect() : null,
-                    frame: cur === 5 && frame ? frame.getBoundingClientRect() : null
+                    arch: cur === 3 && archNode && archStage.hasAttribute("data-layout") ? archNode.getBoundingClientRect() : null,
+                    frame: cur === 5 && frame ? frame.getBoundingClientRect() : null,
+                    settled: cur === 5 && frame ? frame.closest(".case").classList.contains("is-settled") : false
                 };
             },
             write: function (c, rd) {
@@ -828,12 +1014,15 @@
                         p1 = mix2(over, home, easeOutBack(b));
                         shape = lerpDeep(FRAG_TRI, FRAG_KITE, easeInOut(b));
                     }
-                    // Later it melts into the hub as the sculpture becomes a network
-                    var merge = range(c.t, 0.1, 0.6);
-                    o.p = p1; o.r += rr; o.shape = shape;
-                    o.s *= (1 + 0.7 * Math.sin(Math.PI * range(q, 0, 0.75))) * (1 - 0.6 * merge);
-                    o.op = q > 0 ? 1 - merge : 0;
-                    o.glow = Math.max(0, 1 - Math.abs(q - 0.96) * 12);
+                    // Then, as the sculpture becomes a network, it rides out to one of the network's
+                    // nodes and stays there as a marker
+                    var merge = easeInOut(range(c.t, 0.35, 0.85)), mark = sm ? 0.4 : 0.5;
+                    var flight = 1.1 * sc * (1 + 0.7 * Math.sin(Math.PI * range(q, 0, 0.75)));
+                    o.p = merge > 0 ? mix2(p1, topoToScreen(cam, c.st.n[1]), merge) : p1;
+                    o.r += rr * (1 - merge); o.shape = shape;
+                    o.s = flight + (mark - flight) * merge;
+                    o.op = q > 0 ? 1 : 0;
+                    o.glow = Math.max(Math.max(0, 1 - Math.abs(q - 0.96) * 12), merge * 0.9);
                     if (rd.head) {
                         var K = [rd.head.left + 40, rd.head.top + 12], lim = sm ? 34 : 64;
                         if (q < 0.6) {
@@ -845,13 +1034,30 @@
                             kick = [base[0] * spring, base[1] * spring];
                         }
                     }
+                } else if (cur === 2) {
+                    // Skills: a quiet marker on its network node
+                    o.p = topoToScreen(cam, c.st.n[1]);
+                    o.s = sm ? 0.4 : 0.5; o.shape = FRAG_KITE; o.op = 1; o.glow = 0.9;
+                } else if (cur === 3) {
+                    // Architecture: it takes a shortcut, straight across, onto the real diagram and marks
+                    // the compute node; it leaves to the right as the section ends
+                    var from = topoToScreen(cam, c.st.n[1]), k3 = 0;
+                    o.p = from;
+                    if (rd.arch) {
+                        var to = [rd.arch.right - 6, rd.arch.top + 6], lv = range(f, 0.86, 1);
+                        k3 = easeInOut(range(f, 0.02, 0.2));
+                        o.p = mix2(mix2(from, to, k3), [vw + 60, to[1] - 90], lv * lv);
+                    }
+                    o.r = cam.rot + 360 * k3;
+                    o.s = sm ? 0.4 : 0.5; o.shape = FRAG_KITE; o.op = 1;
+                    o.glow = Math.max(0.7, Math.sin(Math.PI * k3));
                 } else if (cur === 5 && rd.frame) {
                     // Arrives before the first project does, and waits where its frame will be. (On
                     // narrow screens the frame sits below the text, so it arrives just in time instead
                     // of waiting over the words.)
                     var fr = rd.frame, corner = [Math.max(fr.left, 24), Math.min(fr.top, vh * 0.9)];
                     var en = easeOut(sm ? range((vh * 1.3 - fr.top) / (vh * 0.4), 0, 1) : range(f, 0, 0.04));
-                    var ab = range(caseOpen(fr.top, vh), 0, 0.22);
+                    var ab = rd.settled ? 1 : range(caseOpen(fr.top, vh), 0, 0.22);
                     o.p = qbez([vw + 60, vh * 0.25], [vw * 0.75, vh], corner, en);
                     o.r = -60 * (1 - en) + 10 * Math.sin(c.y * 0.018) * en * (1 - ab);
                     o.s = (sm ? 0.85 : 1.25) * (1 - 0.7 * ab);
@@ -933,12 +1139,14 @@
             }, { passive: true });
             window.addEventListener("resize", function () { heroH = hero.offsetHeight || 1; }, { passive: true });
         });
+        initCaseSculpture();
         if (!host) return;
         var svg = $("svg", host);
         var g = topoBuild(svg);
         var sheenGrad = $("#topo-sheen-grad", host);
         var anchors = TOPO_SCENES.map(function (sc) { return document.getElementById(sc[0]); });
         var portrait = $(".blob-portrait"), orbit = $(".contact__orbit");
+        var sides = $$(".case__side"), frames = sides.map(function (s) { return $(".case__frame", s); }), kinds = sides.map(function (s) { var c = s.closest(".case"); return Object.keys(CASE_MASKS).filter(function (k) { return c.classList.contains(k); })[0]; });
         var current = 0, ticking = false, last = "", lastVars = "";
         var vw = window.innerWidth, vh = window.innerHeight, small = vw < 900;
 
@@ -975,6 +1183,13 @@
             // Which two states, and how far between them (scenes hold, then morph late)
             var key = TOPO_SCENES[current][1];
             var next = TOPO_SCENES[Math.min(current + 1, TOPO_SCENES.length - 1)][1];
+            // Projects: the ribbons assemble around each real project visual in turn
+            var comp = null;
+            if ((key === "E" || next === "E") && sides.length) {
+                // the visual's box: its column's corner, the frame's untransformed size
+                var boxes = sides.map(function (s, i) { var r2 = s.getBoundingClientRect(); return { left: r2.left, top: r2.top, width: frames[i].offsetWidth, height: frames[i].offsetHeight }; });
+                comp = topoProjects(S, boxes, kinds, vw, vh, small, S.F, topoCamera("F", vw, vh, small));
+            }
             var t = current === 0 ? range(f, 0.02, 0.92) : range(f, 0.55, 1);
             t = t * t * (3 - 2 * t);
             // Geometry, camera and membranes usually move together. Into the network they are
@@ -987,7 +1202,9 @@
                 tg = range(t, 0.3, 1);
                 tg = tg * tg * (3 - 2 * tg);
             }
-            var camA = topoCamera(key, vw, vh, small), camB = topoCamera(next, vw, vh, small);
+            var camA = comp && key === "E" ? comp.cam : topoCamera(key, vw, vh, small);
+            var camB = comp && next === "E" ? comp.cam : topoCamera(next, vw, vh, small);
+            var SA = comp && key === "E" ? comp.st : S[key], SB = comp && next === "E" ? comp.st : S[next];
             // The opening is attached to the portrait; the ending to the contact orbit
             if (pr && key === "A") { camA.x = pr.left + pr.width / 2; camA.y = pr.top + pr.height / 2; }
             if (or && or.width) {
@@ -996,7 +1213,8 @@
                 if (key === "G") { camA.x = gx; camA.y = gy; }
             }
             var cam = lerpDeep(camA, camB, tc);
-            var st = key === next ? S[key] : lerpDeep(S[key], S[next], tg);
+            var st = key === next ? SA : lerpDeep(SA, SB, tg);
+            if (comp && key === "E") { cam = comp.cam; st = comp.st; t = 0; }
             if (key === "B" && next === "C") st.n.forEach(function (n, i) { n[2] = S.C.n[i][2] * range(t, 0.5 + i * 0.07, 0.68 + i * 0.07); });
             // The hero's own beats: the shards wake and gather, then the blossom folds through itself
             var fold = 0;
@@ -1004,7 +1222,7 @@
                 fold = Math.sin(Math.PI * range(f, 0.1, 0.62));
                 st = topoWake(topoFold(st, fold), f, y);
             }
-            var stateKey = key + next + t.toFixed(3) + (current === 0 ? f.toFixed(4) : "");
+            var stateKey = key + next + t.toFixed(3) + (current === 0 ? f.toFixed(4) : "") + (comp ? comp.key : "");
 
             // Write: camera every frame (cheap, composited); geometry only when it changes
             host.style.transform = "translate3d(" + px(cam.x - 500) + "," + px(cam.y - 500) + ",0) rotate(" + cam.rot.toFixed(2) + "deg) scale(" + (cam.size / 1000).toFixed(4) + ")";

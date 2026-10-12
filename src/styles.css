@@ -2973,6 +2973,10 @@ html:not(.js) [data-quick] { display: none !important; }
 
 /* About: the heading opens through a membrane-shaped mask that grows from inside it */
 .js .about__head.reveal { opacity: 1; translate: none; }
+@property --m { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --jk { syntax: "<number>"; inherits: true; initial-value: 1; }
+.has-membrane { --m: 0; transition: --m 1.15s cubic-bezier(.55, 0, .2, 1); }
+.has-membrane.is-in { --m: 1; }
 .has-membrane:not(.is-open) {
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Cpath d='M0 31C0 6 28 0 58 2c27 2 42 15 42 30 0 17-20 28-48 28C20 60 0 52 0 31Z'/%3E%3C/svg%3E") no-repeat 22% 45% / calc(var(--m, 0) * 300% + 1px) auto;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Cpath d='M0 31C0 6 28 0 58 2c27 2 42 15 42 30 0 17-20 28-48 28C20 60 0 52 0 31Z'/%3E%3C/svg%3E") no-repeat 22% 45% / calc(var(--m, 0) * 300% + 1px) auto;
@@ -2981,14 +2985,16 @@ html:not(.js) [data-quick] { display: none !important; }
 /* Experience: the path opens each milestone's frame from the rail side as it passes (--k) */
 .js .job.reveal { opacity: 1; translate: none; }
 .js .job.has-k .job__card { rotate: none; opacity: 1; }
+.js .job.has-k { --jk: 0; transition: --jk .95s var(--ease-expo); }
+.js .job.has-k.is-shown { --jk: 1; }
 .js .job.has-k:not(.is-framed) .job__card {
-    clip-path: polygon(-40px -50px, calc(var(--k) * (100% + 120px) - 40px) -50px, calc(var(--k) * (100% + 120px) - 100px) calc(100% + 40px), -40px calc(100% + 40px));
+    clip-path: polygon(-40px -50px, calc(var(--jk) * (100% + 120px) - 40px) -50px, calc(var(--jk) * (100% + 120px) - 100px) calc(100% + 40px), -40px calc(100% + 40px));
 }
-.js .job.has-k .job__when { opacity: calc(.25 + var(--k) * .75); translate: calc((1 - var(--k)) * -14px) 0; transition: none; }
+.js .job.has-k .job__when { opacity: calc(.25 + var(--jk) * .75); translate: calc((1 - var(--jk)) * -14px) 0; transition: none; }
 /* Corner brackets: the path frames the milestone; the current role is framed on all four corners */
 .job__frame {
     --c: color-mix(in srgb, var(--accent-2) 70%, transparent);
-    --L: calc(var(--k, 1) * 30px);
+    --L: calc(var(--jk) * 30px);
     position: absolute; inset: -9px; z-index: 3; pointer-events: none;
     background:
         linear-gradient(var(--c), var(--c)) 0 0 / var(--L) 1.5px no-repeat,
@@ -2998,7 +3004,7 @@ html:not(.js) [data-quick] { display: none !important; }
 }
 .job__frame--now {
     --c: color-mix(in srgb, var(--lime) 75%, transparent);
-    --L: calc(var(--k, 1) * 44px);
+    --L: calc(var(--jk) * 44px);
     background:
         linear-gradient(var(--c), var(--c)) 0 0 / var(--L) 1.5px no-repeat,
         linear-gradient(var(--c), var(--c)) 0 0 / 1.5px var(--L) no-repeat,
@@ -3011,8 +3017,8 @@ html:not(.js) [data-quick] { display: none !important; }
 }
 /* Responsibilities branch off one stem */
 .job__points { position: relative; }
-.job__points::before { content: ""; position: absolute; left: 3px; top: .9em; bottom: .9em; width: 1px; background: linear-gradient(var(--accent), transparent); opacity: .55; transform-origin: top; transform: scaleY(var(--k, 1)); }
-.job__points li::before { scale: calc(.4 + var(--k, 1) * .6); }
+.job__points::before { content: ""; position: absolute; left: 3px; top: .9em; bottom: .9em; width: 1px; background: linear-gradient(var(--accent), transparent); opacity: .55; transform-origin: top; transform: scaleY(var(--jk)); }
+.job__points li::before { scale: calc(.4 + var(--jk) * .6); }
 /* Once the path has passed, the year turns from outline to glass */
 .job::after { transition: color .9s var(--ease), -webkit-text-stroke-color .9s var(--ease); }
 .job.is-lit::after { color: color-mix(in srgb, var(--accent-2) 9%, transparent); -webkit-text-stroke-color: color-mix(in srgb, var(--accent-2) 55%, transparent); }
@@ -3025,7 +3031,15 @@ html:not(.js) [data-quick] { display: none !important; }
 @media (max-width: 899px) { .case.is-scrolly .case__frame::before { translate: calc(var(--o, 1) * 8px) calc(var(--o, 1) * 8px); } }
 /* The gateway's title stays an outline until it has been let through */
 .case--magenta .case__title .w > span { transition-property: transform, color, -webkit-text-stroke-color; transition-duration: var(--dur-reveal), .7s, .7s; transition-delay: var(--wd), 0s, 0s; -webkit-text-stroke: 1px transparent; }
-.case--magenta .case__title.is-gated .w > span { color: transparent; -webkit-text-stroke-color: var(--ca); }
+.case--magenta .case__title.is-armed .w > span { color: transparent; -webkit-text-stroke-color: var(--ca); }
+/* The order platform's title closes ranks; the pipeline's steps up in three discrete stages */
+.case--cyan .case__title .w { transition: transform 1s var(--ease-expo) .1s; }
+.case--cyan .case__title.is-armed .w { transform: translate3d(calc(var(--wo, 0) * 26px), 0, 0); transition: none; }
+.case--lime .case__title .w { transition: transform .9s steps(3, end) calc(var(--wn, 0) * 110ms + 100ms); }
+.case--lime .case__title.is-armed .w { transform: translate3d(0, 18px, 0); transition: none; }
+@media (max-width: 899px) { .case--cyan .case__title.is-armed .w { transform: translate3d(calc(var(--wo, 0) * 12px), 0, 0); } }
+/* A project frame settling open when the visitor pauses mid-reveal */
+.case.is-settling .case__frame { transition: clip-path .7s var(--ease-expo); }
 
 /* Supporting content arrives through a slanted glass edge rather than a fade-up (wide screens) */
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
@@ -3037,3 +3051,7 @@ html:not(.js) [data-quick] { display: none !important; }
     from { -webkit-mask-image: linear-gradient(112deg, #000 42%, transparent 58%); mask-image: linear-gradient(112deg, #000 42%, transparent 58%); -webkit-mask-size: 280% 100%; mask-size: 280% 100%; -webkit-mask-position: 100% 0; mask-position: 100% 0; }
     to { -webkit-mask-image: linear-gradient(112deg, #000 42%, transparent 58%); mask-image: linear-gradient(112deg, #000 42%, transparent 58%); -webkit-mask-size: 280% 100%; mask-size: 280% 100%; -webkit-mask-position: 0 0; mask-position: 0 0; }
 }
+
+/* Case studies: each project's own sculpture, beside the story (wide screens, motion allowed) */
+.topo--case { display: none; }
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) { .topo--case { display: block; } }

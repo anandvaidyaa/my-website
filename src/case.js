@@ -43,7 +43,6 @@
     var near = [];
     var ticking = false;
     var vh = window.innerHeight;
-    var docMax = 0;   // furthest the page can scroll, read once per frame before any writes
     var resizers = [];
 
     function scene(el, write, opts) {
@@ -55,7 +54,6 @@
         ticking = false;
         var still = reduceMotion.matches;
         var y = window.scrollY;
-        docMax = document.documentElement.scrollHeight - vh;
         var active = scenes.filter(function (s) { return (s.essential || !still) && near.indexOf(s.el) > -1; });
         var rects = active.map(function (s) { return s.measure ? s.el.getBoundingClientRect() : null; });
         active.forEach(function (s, i) {
@@ -788,15 +786,21 @@
     // Chapter headings open through a membrane-shaped mask that grows from inside them
     function initMembranes() {
         $$(".chapter__title[data-membrane]").forEach(function (h) {
+            // Plays to the end once in view; resets only after it has left the screen below
             scene(h, function (p, r) {
-                var m = Math.pow(range((vh - r.top) / vh, 0.05, 0.62), 3);
                 if (!h.classList.contains("has-membrane")) h.classList.add("has-membrane");
-                h.style.setProperty("--m", m.toFixed(4));
-                if (h.classList.contains("is-open") !== m > 0.999) h.classList.toggle("is-open", m > 0.999);
+                if (r.top < vh * 0.88 && !h.classList.contains("is-in")) {
+                    h.classList.add("is-in");
+                    window.clearTimeout(h._open);
+                    h._open = window.setTimeout(function () { h.classList.add("is-open"); }, 1250);
+                } else if (r.top > vh && h.classList.contains("is-in")) {
+                    window.clearTimeout(h._open);
+                    h.classList.remove("is-in", "is-open");
+                }
             });
         });
         reduceMotion.addEventListener && reduceMotion.addEventListener("change", function () {
-            if (reduceMotion.matches) $$(".has-membrane").forEach(function (h) { h.classList.remove("has-membrane", "is-open"); h.style.removeProperty("--m"); });
+            if (reduceMotion.matches) $$(".has-membrane").forEach(function (h) { window.clearTimeout(h._open); h.classList.remove("has-membrane", "is-in", "is-open"); });
         });
     }
 
@@ -848,17 +852,26 @@
                 var from = function (pts) { var i = 0; while (!same(pts[i], corner)) i++; return pts.slice(i).concat(pts.slice(0, i)); };
                 return "polygon(evenodd," + pct(from(a)) + "," + pct(from(b)) + ")";
             };
-            var last = "";
-            scene(ex, function (p, r, y) {
-                // Opens between 92% and 50% of the screen, or by the furthest point it can reach
-                // (an exhibit near the end of the page may never get to the middle)
-                var start = vh * 0.92, end = Math.min(Math.max(vh * 0.5, r.top - (docMax - y)), start - 60);
-                var o = range((start - r.top) / (start - end), 0, 1);
-                var key = o >= 1 ? "open" : o.toFixed(3);
-                if (key === last) return;
-                last = key;
-                if (ex.classList.contains("is-open") !== (o >= 1)) ex.classList.toggle("is-open", o >= 1);
-                if (o < 1) { frost.style.clipPath = "polygon(" + pct(FROST[kind](o)) + ")"; edge.style.clipPath = band(o); }
+            // Armed while below the screen; once it is well in view (or entirely visible) the glass
+            // opens on its own 1.1 s clock and never stays half-frosted when the visitor pauses
+            var paint = function (o) { frost.style.clipPath = "polygon(" + pct(FROST[kind](o)) + ")"; edge.style.clipPath = band(o); };
+            var state = "armed", raf = 0;
+            paint(0);
+            scene(ex, function (p, r) {
+                if (state === "armed" && (r.top < vh * 0.95 || r.bottom < vh)) {
+                    state = "opening";
+                    var t0 = performance.now();
+                    (function step(now) {
+                        var o = clamp((now - t0) / 1100, 0, 1);
+                        if (o < 1) { paint(o); raf = window.requestAnimationFrame(step); }
+                        else { state = "open"; ex.classList.add("is-open"); }
+                    })(t0);
+                } else if (state !== "armed" && r.top > vh) {
+                    window.cancelAnimationFrame(raf);
+                    state = "armed";
+                    ex.classList.remove("is-open");
+                    paint(0);
+                }
             });
         });
     }
