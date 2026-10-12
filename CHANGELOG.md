@@ -1,5 +1,27 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 — Cinematic scroll motion
+
+One motion language: things emerge from behind a physical edge (masks and wipes), depth is shown by speed (near layers move faster than the page, far layers slower), and the lighting follows the story. No new dependencies.
+
+**Motion system** (`initScroll` in `src/script.js`): one passive scroll listener, at most one animation frame per tick. Each scene is measured only near the viewport, reads happen before writes, and only transforms, opacity and leaf custom properties are written. Progress follows the scroll position 1:1 (no smoothing), so scrolling back up plays everything in reverse.
+
+- **Hero exit:** the two lines of the name part like a curtain from the first scroll while the outline echo falls behind; the sculpture lags and turns away; the HUD and sticker (foreground glass) travel fastest.
+- **Signature moment — the runaway satellite:** on the first scroll the satellite falls off its orbit, tumbles, fires its thrusters (a small particle puff) and snaps back. The orbit glows magenta meanwhile and the HUD reports "sat-01 off orbit → thrusters · correcting → orbit restored ✓". Runs again only after a return to the top and a 12 s pause.
+- **Signature type reveal:** headings rise line by line from a mask with a slight tilt; emphasised words arrive as outlines and then fill. Project titles now use it too.
+- **About:** the outline word fills in with scroll; a glass prism behind the ID badge drifts the wrong way, then settles.
+- **Skills:** a bus line runs down the stack and lights each layer (L1–L6) as it reaches it; chips arrive one after another.
+- **Experience:** a comet rides the tip of the timeline and lights each milestone as it passes; cards swing up into place.
+- **Projects:** frames hang in a lens that swings in, flattens at centre stage and tips away (hover straightens it); a slanted wipe reveals each frame from the side it sits on; diagrams assemble (components, then connections); the project number fills from the bottom; each project tints the room in its colour; parts of a project arrive in sequence instead of one block fade.
+- **Featured project (desktop):** as Problem → Architecture → Key decisions reach the middle of the screen, the diagram beside them highlights the matching components, with a small stage label. Mobile keeps a plain scrolling layout.
+- Reduced motion: no scroll-linked transforms, no satellite runaway, everything visible at once; progress indicators still update.
+
+**Fixed along the way:** the `spin` keyframes had gone missing, so the torus, polyhedron and stamp were static; the hero's background parallax no longer re-anchors the glow blobs (would have caused layout shift); the new sculpture wrapper passes pointer events through, so double-clicking the portrait still opens the business card.
+
+**Creative-director pass — the three weakest moments of the first version:** (1) the name split happened after the name had left the screen → now starts on the first scroll; (2) the satellite incident was too subtle → bigger path, tumble, thruster puff, glowing orbit; (3) each project faded in as one block, muddying its own reveals → parts arrive in sequence, with delays short enough that a deep jump never shows an empty screen.
+
+**Tested:** 46/46 functional, 56/56 easter-egg, 53/53 SEO checks; axe-core 0 violations (homepage and case study, both themes, 375 and 1366 px); a new 23-check motion suite (no horizontal overflow at 320/360/390/430/768/1024/1440/1920 px while scrolling through every scene, hero returns to rest on scroll-up, project lens follows scroll both ways, reveals settle after fast scrolling, timeline milestones lit, featured-project stages, keyboard reach and focus ring on project links, reduced-motion behaviour); no JS errors. Lighthouse 12 (same machine, same day): mobile performance 85–87 vs. 85–89 for the previous build, desktop 98–99; CLS 0; accessibility, best practices and SEO 100.
+
 ## 2026-10-11 (4) — Hidden rooms (easter eggs)
 
 New isolated module `src/eggs.js` + `src/eggs.css`, lazy-loaded on the first interaction (or ~7 s after load); keys pressed before it arrives are replayed from memory. No network requests, no analytics; only the list of found secrets is kept in `localStorage` (in-memory fallback).

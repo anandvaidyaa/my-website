@@ -177,22 +177,197 @@
         $$("main section[id]").forEach(function (s) { io.observe(s); });
     }
 
-    /* ---------------- Scroll-linked effects (one rAF-throttled listener) ---------------- */
+    /* ---------------- Motion system: scroll-linked scenes ----------------
+       One passive scroll listener and at most one animation frame per scroll tick drive every
+       scroll-linked effect. A scene is measured only while it is near the viewport (measuring one
+       inside a content-visibility:auto section would force that section to lay out), every read
+       happens before any write, and scenes write only transforms, opacity and leaf custom
+       properties. Progress follows the scroll position 1:1, with no smoothing, so nothing trails
+       behind the visitor and scrolling back up replays everything in reverse. */
+    var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+    var range = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+    var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+    var easeInOut = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+    var px = function (v) { return v.toFixed(1) + "px"; };
+    var move = function (el, x, y, extra) {
+        if (el) el.style.transform = "translate3d(" + px(x) + "," + px(y) + ",0)" + (extra || "");
+    };
+    var onResizeFns = [];
+
     function initScroll() {
         var header = $("#site-header");
         var bar = $(".scroll-progress span");
-        var timeline = $(".timeline");
-        var hero = $(".hero");
-        var sculpture = $("#sculpture");
-        var bands = $$("[data-band]");
-        var drifts = $$("[data-drift]");
         var ticking = false;
-
-        // Only measure scroll-linked elements while they are near the viewport. Measuring
-        // one inside a content-visibility:auto section would force that section to lay out.
+        var vw = 0, vh = 0, wide = false;
+        var scenes = [];
         var near = [];
-        var watch = [timeline].concat(bands, drifts.map(function (d) { return d.parentNode; })).filter(Boolean);
-        var isNear = function (el) { return near.indexOf(el) > -1; };
+
+        // A scene: `el` is watched, and `write(p, rect, y, still)` runs while it is near the viewport.
+        // p runs 0 -> 1 while the element crosses the viewport (enters at the bottom, leaves at the top).
+        // `essential` scenes (progress indicators) keep running when reduced motion is on.
+        function scene(el, write, opts) {
+            if (!el) return;
+            opts = opts || {};
+            scenes.push({ el: el, write: write, measure: opts.measure !== false, essential: !!opts.essential, reset: opts.reset });
+        }
+
+        function lit(el, on) {
+            if (el.classList.contains("is-lit") !== on) el.classList.toggle("is-lit", on);
+        }
+
+        /* --- Hero: the opening scene and its exit --- */
+        var hero = $(".hero");
+        if (hero) {
+            var head = $(".hero__head", hero);
+            var lines = $$(".hero__title .mask", hero);
+            var echo = $(".hero__echo", hero);
+            var sculpture = $("#sculpture");
+            var spin = $("#sculpture-spin");
+            var hud = $(".hud", hero);
+            var sticker = $(".sticker", hero);
+            var mesh = $(".mesh", hero);
+            var cue = $(".scroll-cue", hero);
+            var heroH = 1;
+            var heroParts = [head, echo, spin, hud, sticker, mesh].concat(lines);
+            var runaway = satelliteRunaway(hero);
+
+            scene(hero, function (_, __, y, still) {
+                var p = clamp(y / heroH, 0, 1);
+                if (cue) cue.style.setProperty("--hero-p", p.toFixed(3));
+                if (still) return;
+                runaway(p);
+                var k = wide ? 1 : 0.55;
+                // The name's two lines part like a curtain from the first scroll, while the name is
+                // still on screen; the outline echo behind them stays on a deeper, slower layer.
+                var split = easeOut(range(p, 0, 0.38)) * vw * 0.06 * k;
+                move(head, 0, -y * 0.05 * k);
+                if (head) head.style.opacity = (1 - range(p, 0.25, 0.7) * 0.8).toFixed(3);
+                move(lines[0], -split, 0);
+                move(lines[1], split, 0);
+                move(echo, split * 0.35, y * 0.24 * k);
+                if (echo) echo.style.opacity = (1 - range(p, 0.05, 0.55)).toFixed(3);
+                // The sculpture is the background: it lags, then turns away as the page moves on
+                if (sculpture) sculpture.style.translate = "0 " + px(y * 0.12 * k);
+                var turn = easeInOut(range(p, 0, 0.9));
+                if (spin) spin.style.transform = "rotateY(" + (turn * 38 * k).toFixed(2) + "deg) rotateX(" + (-turn * 12 * k).toFixed(2) + "deg)";
+                // Glass panels and labels are closest to the viewer, so they travel fastest
+                move(hud, -p * 24 * k, -y * 0.2 * k);
+                move(sticker, -p * 36 * k, -y * 0.3 * k, " rotate(" + (-p * 14).toFixed(2) + "deg)");
+                move(mesh, 0, y * 0.3);
+            }, {
+                measure: false,
+                essential: true,
+                reset: function () {
+                    heroParts.forEach(function (el) { if (el) { el.style.transform = ""; el.style.opacity = ""; } });
+                    if (sculpture) sculpture.style.translate = "";
+                }
+            });
+            onResizeFns.push(function () { heroH = hero.offsetHeight || 1; });
+        }
+
+        /* --- Scroll-linked type bands, alternating direction --- */
+        $$("[data-band]").forEach(function (b, i) {
+            var track = $(".band__track", b) || b;
+            var dir = i % 2 ? 1 : -1;
+            scene(b, function (p) {
+                var q = clamp(p, -0.2, 1.2);
+                track.style.transform = "translate3d(" + px(dir * (q * 480) - (dir > 0 ? 480 : 0)) + ",0,0)";
+            }, { reset: function () { track.style.transform = ""; } });
+        });
+
+        /* --- About: the outline word fills in; a glass prism drifts the wrong way, then settles --- */
+        var about = $("#about");
+        if (about) {
+            var mega = $(".mega", about);
+            var prism = $(".about__prism", about);
+            scene(about, function (p) {
+                var k = wide ? 1 : 0.6;
+                if (mega) {
+                    mega.style.setProperty("--fill", (range(p, 0.12, 0.42) * 100).toFixed(1) + "%");
+                    move(mega, (0.3 - p) * 160 * k, 0);
+                }
+                if (prism) {
+                    var t = range(p, 0.02, 0.45);
+                    var y = 150 * (1 - t) * Math.cos(t * 2.3) - range(p, 0.45, 1) * 90;
+                    var x = -42 * Math.sin(Math.PI * t);
+                    var r = -38 * (1 - t) + 9 * Math.sin(Math.PI * t);
+                    move(prism, x * k, y * k, " rotate(" + r.toFixed(2) + "deg)");
+                }
+            }, {
+                reset: function () {
+                    if (mega) { mega.style.transform = ""; mega.style.removeProperty("--fill"); }
+                    if (prism) prism.style.transform = "";
+                }
+            });
+        }
+
+        /* --- Skills: a bus line runs down the stack and lights each layer as it reaches it --- */
+        var layersEl = $("#stack-layers");
+        if (layersEl) {
+            var layerEls = $$(".layer", layersEl);
+            scene(layersEl, function (p, r) {
+                var prog = clamp((vh * 0.62 - r.top) / r.height, 0, 1);
+                layersEl.style.setProperty("--spine", prog.toFixed(4));
+                var reach = prog * r.height;
+                layerEls.forEach(function (l) { lit(l, reach >= l.offsetTop + 24); });
+            }, { essential: true });
+        }
+
+        /* --- Experience: the line draws itself; a comet rides its tip and lights each milestone --- */
+        var timeline = $(".timeline");
+        if (timeline) {
+            var comet = $(".timeline__comet");
+            var jobs = $$(".job", timeline);
+            scene(timeline, function (p, r, y, still) {
+                var prog = clamp((vh * 0.7 - r.top) / r.height, 0, 1);
+                timeline.style.setProperty("--progress", prog.toFixed(4));
+                var reach = prog * r.height;
+                jobs.forEach(function (j) { lit(j, reach >= j.offsetTop + 4); });
+                if (comet && !still) {
+                    move(comet, 0, reach);
+                    comet.style.opacity = prog > 0.002 && prog < 0.998 ? "1" : "0";
+                }
+            }, { essential: true });
+        }
+
+        /* --- Projects: frames swing into view, flatten at centre stage, and tip away as they leave --- */
+        $$(".case").forEach(function (c) {
+            var lens = $(".case__lens", c);
+            var no = $(".case__no", c);
+            var flip = c.classList.contains("case--flip");
+            var stack = c.classList.contains("case--stack");
+            scene(c, function (p) {
+                var t = clamp(p, 0, 1);
+                var arrive = 1 - easeOut(range(t, 0.06, 0.5));
+                var leave = range(t, 0.62, 1);
+                if (no) {
+                    no.style.setProperty("--fill", (range(t, 0.14, 0.42) * 100).toFixed(1) + "%");
+                    move(no, 0, (t - 0.5) * -90 * (wide ? 1 : 0.5));
+                }
+                if (!lens) return;
+                var ry = 0, rx, ly = 0;
+                if (!wide) {
+                    rx = 9 * arrive;
+                } else if (stack) {
+                    rx = 4 + 12 * arrive - 4 * leave;
+                    ly = (0.5 - t) * 50;
+                } else {
+                    ry = (flip ? 1 : -1) * (4 + 16 * arrive - 3 * leave);
+                    rx = 3 + 6 * arrive - 5 * leave;
+                    ly = (0.5 - t) * 60;
+                }
+                lens.style.setProperty("--ry", ry.toFixed(2) + "deg");
+                lens.style.setProperty("--rx", rx.toFixed(2) + "deg");
+                lens.style.setProperty("--ly", px(ly));
+            }, {
+                reset: function () {
+                    if (no) { no.style.transform = ""; no.style.removeProperty("--fill"); }
+                    if (lens) ["--ry", "--rx", "--ly"].forEach(function (k) { lens.style.removeProperty(k); });
+                }
+            });
+        });
+
+        // Track which scenes are near the viewport
         if ("IntersectionObserver" in window) {
             var nio = new IntersectionObserver(function (entries) {
                 entries.forEach(function (e) {
@@ -201,46 +376,31 @@
                     if (!e.isIntersecting && i > -1) near.splice(i, 1);
                 });
                 request();
-            }, { rootMargin: "120px 0px" });
-            watch.forEach(function (el) { nio.observe(el); });
+            }, { rootMargin: "160px 0px" });
+            scenes.forEach(function (s) { nio.observe(s.el); });
         } else {
-            near = watch.slice();
+            near = scenes.map(function (s) { return s.el; });
         }
 
+        var wasStill = reduceMotion.matches;
         function update() {
             ticking = false;
+            var still = reduceMotion.matches;
+            if (still !== wasStill) {
+                wasStill = still;
+                if (still) scenes.forEach(function (s) { if (s.reset) s.reset(); });
+            }
             // Read everything first …
             var y = window.scrollY;
-            var vh = window.innerHeight;
             var max = doc.scrollHeight - vh;
-            var tRect = timeline && isNear(timeline) ? timeline.getBoundingClientRect() : null;
-            var heroH = hero ? hero.offsetHeight : 1;
-            var still = reduceMotion.matches;
-            var bandPos = bands.map(function (b) { if (still || !isNear(b)) return null; var r = b.getBoundingClientRect(); return (vh - r.top) / (vh + r.height); });
-            var driftPos = drifts.map(function (d) { if (still || !isNear(d.parentNode)) return null; var r = d.parentNode.getBoundingClientRect(); return (vh - r.top) / (vh + r.height); });
-
+            var active = scenes.filter(function (s) { return (s.essential || !still) && near.indexOf(s.el) > -1; });
+            var rects = active.map(function (s) { return s.measure ? s.el.getBoundingClientRect() : null; });
             // … then write
             if (bar) bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, y / max) : 0).toFixed(4) + ")";
             if (header) header.classList.toggle("is-scrolled", y > 12);
-            if (tRect) {
-                var p = Math.min(1, Math.max(0, (vh * 0.7 - tRect.top) / tRect.height));
-                timeline.style.setProperty("--progress", p.toFixed(3));
-            }
-            if (hero) hero.style.setProperty("--hero-p", Math.min(1, y / heroH).toFixed(3));
-            if (sculpture && !still && y < vh * 1.3) {
-                sculpture.style.translate = "0 " + (y * 0.12).toFixed(1) + "px";
-            }
-            // Type bands slide with scroll, alternating direction
-            bands.forEach(function (b, i) {
-                if (bandPos[i] === null) return;
-                var p = Math.min(1.2, Math.max(-0.2, bandPos[i]));
-                var dir = i % 2 ? 1 : -1;
-                b.style.setProperty("--shift", (dir * (p * 480) - (dir > 0 ? 480 : 0)).toFixed(1) + "px");
-            });
-            drifts.forEach(function (d, i) {
-                if (driftPos[i] === null) return;
-                var k = parseFloat(d.getAttribute("data-drift")) || 0;
-                d.style.setProperty("--drift", (driftPos[i] * k * 1000).toFixed(1) + "px");
+            active.forEach(function (s, i) {
+                var r = rects[i];
+                s.write(r ? (vh - r.top) / (vh + r.height) : 0, r, y, still);
             });
         }
 
@@ -248,9 +408,91 @@
             if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
         }
 
+        function resize() {
+            vw = window.innerWidth;
+            vh = window.innerHeight;
+            wide = vw >= 900;
+            onResizeFns.forEach(function (fn) { fn(); });
+            request();
+        }
+
         window.addEventListener("scroll", request, { passive: true });
-        window.addEventListener("resize", request, { passive: true });
-        request(); // first measurement in a frame, not synchronously during boot
+        window.addEventListener("resize", resize, { passive: true });
+        onChange(reduceMotion, request);
+        // First measurement in a frame, not synchronously during boot
+        window.requestAnimationFrame(resize);
+    }
+
+    /* The signature moment: on the first scroll, the hero's satellite falls behind its orbit,
+       tumbles, fires its thrusters and snaps back. The HUD files a short incident report. */
+    function satelliteRunaway(hero) {
+        var sat = $("#satellite");
+        var sculpture = $("#sculpture");
+        var hudLine = $(".hud p");
+        var last = -1e9, home = true, timers = [];
+        if (!sat || !sat.animate) return function () {};
+
+        function report(text, state) {
+            if (!hudLine) return;
+            var node = hudLine.lastChild;
+            if (!node || node.nodeType !== 3) { node = document.createTextNode(""); hudLine.appendChild(node); }
+            node.textContent = text;
+            hudLine.setAttribute("data-state", state || "");
+        }
+
+        function go() {
+            home = false;
+            last = Date.now();
+            timers.forEach(window.clearTimeout);
+            sat.classList.add("is-adrift");
+            if (sculpture) sculpture.classList.add("is-incident");
+            report("sat-01 off orbit", "alert");
+            sat.animate([
+                { translate: "0 0", rotate: "0deg", scale: 1, easing: "cubic-bezier(.3,0,.6,1)" },
+                { translate: "-64px 40px", rotate: "-70deg", scale: 1.15, offset: 0.3, easing: "cubic-bezier(.4,0,.6,1)" },
+                { translate: "-104px 62px", rotate: "-200deg", scale: 1.25, offset: 0.55, easing: "cubic-bezier(.6,0,.1,1)" },
+                { translate: "8px -6px", rotate: "16deg", scale: 1.1, offset: 0.8, easing: "cubic-bezier(.3,0,.3,1)" },
+                { translate: "0 0", rotate: "0deg", scale: 1 }
+            ], { duration: 2800 });
+            timers = [
+                window.setTimeout(function () {
+                    // Thrusters: a short puff where the satellite turns back
+                    report("thrusters · correcting", "alert");
+                    var c = centerOf(sat);
+                    burst(c[0], c[1], 7);
+                }, 1540),
+                window.setTimeout(function () {
+                    sat.classList.remove("is-adrift");
+                    if (sculpture) sculpture.classList.remove("is-incident");
+                    report("orbit restored ✓", "ok");
+                }, 2300),
+                window.setTimeout(function () { report("engineering in progress", ""); }, 4800)
+            ];
+        }
+
+        return function (p) {
+            // Runs on the way down from the top; again only after a return to the top and a pause
+            if (p < 0.02) { home = true; return; }
+            if (home && p > 0.03 && p < 0.5 && Date.now() - last > 12000 &&
+                hero.classList.contains("is-ready") && !hero.classList.contains("is-offscreen")) go();
+        };
+    }
+
+    /* Desktop storytelling for the featured case study: as each part of the write-up
+       (problem, architecture, decisions) reaches the middle of the screen, the diagram
+       beside it highlights the matching components. */
+    function initFeature() {
+        var c = $(".case--featured");
+        if (!c || !("IntersectionObserver" in window)) return;
+        var facts = $$("[data-stage]", c);
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                c.setAttribute("data-stage", e.target.getAttribute("data-stage"));
+                facts.forEach(function (f) { f.classList.toggle("is-current", f === e.target); });
+            });
+        }, { rootMargin: "-42% 0px -48% 0px" });
+        facts.forEach(function (f) { io.observe(f); });
     }
 
     /* ---------------- Reveal on scroll + split headings ---------------- */
@@ -280,6 +522,17 @@
             });
         })(el);
         el.classList.add("split");
+        // Group the words into the lines they actually wrap onto, so each line rises as one layer
+        // just after the line above it (measured in the next frame, alongside normal layout)
+        window.requestAnimationFrame(function () {
+            var top = null, line = -1, wi = 0;
+            $$(".w", el).forEach(function (w) {
+                var t = w.offsetTop;
+                if (top === null || t > top + 4) { top = t; line++; wi = 0; }
+                w.firstChild.style.setProperty("--li", line);
+                w.firstChild.style.setProperty("--wi", wi++);
+            });
+        });
     }
 
     function initReveal() {
@@ -303,7 +556,7 @@
                 if (!entry.target.classList.contains("split") && !entry.target.closest(".is-visible")) splitWords(entry.target);
             });
         }, { rootMargin: "0px 0px 400px 0px" });
-        $$(".section-title, .contact__title").forEach(function (h) { splitter.observe(h); });
+        $$(".section-title, .contact__title, .case__title").forEach(function (h) { splitter.observe(h); });
 
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
@@ -1231,7 +1484,7 @@
         if (year) year.textContent = String(new Date().getFullYear());
 
         [initTheme, initNav, initAnchors, initScroll, initReveal].forEach(safe);
-        queue([initHero, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
+        queue([initHero, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
         whenNear("#architecture", initArchitecture);
 
         // Start ambient motion once the page has finished loading

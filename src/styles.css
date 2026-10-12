@@ -517,6 +517,8 @@ section[tabindex="-1"]:focus { outline: none; }
 
 .hero__bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
 
+/* Same box as .hero__bg, so the parallax transform on .mesh never re-anchors the blobs */
+.mesh { position: absolute; inset: 0; }
 .mesh span {
     position: absolute;
     border-radius: 50%;
@@ -992,7 +994,7 @@ html:not(.js) .arch-detail { display: block; margin-bottom: 1.5rem; }
     border: 2px solid var(--line-2);
     transition: border-color var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease);
 }
-.job.is-visible .job__dot { border-color: var(--accent-2); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-2) 14%, transparent); }
+.job.is-lit .job__dot, html:not(.js) .job__dot { border-color: var(--accent-2); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-2) 14%, transparent); }
 .job .job__dot--live { background: var(--ok); border-color: var(--ok); }
 
 .job__when { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem; }
@@ -2580,3 +2582,250 @@ a.ccard:hover .ccard__go { color: var(--accent-2); transform: translate(2px, -2p
 .is-warping .notfound__inner > :not(.portal) { transition: opacity .4s var(--ease); opacity: 0; }
 @keyframes warp { to { scale: 14; opacity: 0; filter: blur(4px); } }
 @media (prefers-reduced-motion: reduce) { .portal__ring, .portal__cube, .lost-stars i { animation: none; } }
+
+/* ==========================================================================
+   PASS 3 — Cinematic scroll motion
+   One motion language for the whole page:
+   - things emerge from behind a physical edge (masks and wipes), never just fade in;
+   - depth is expressed by speed: near layers move faster than the page, far layers slower;
+   - lighting follows the story (the atmosphere changes per chapter and per project).
+   Scroll-linked values are written by the motion system in src/script.js.
+   ========================================================================== */
+/* Restored: the torus, icosahedron and stamp rotate with this (it went missing in an earlier pass) */
+@keyframes spin { to { rotate: 360deg; } }
+
+:root {
+    --ease-expo: cubic-bezier(.16, 1, .3, 1);
+    --dur-reveal: 1.1s;
+    --stagger-line: 120ms;
+    --stagger-word: 30ms;
+}
+@property --ry { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@property --rx { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@property --ly { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --lens-h { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --fill { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+
+/* ---------- Hero: layers for the exit ---------- */
+.sculpture__spin { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+.sculpture__spin > * { pointer-events: auto; }
+.hud p[data-state] { transition: color .3s var(--ease); }
+.hud p[data-state="alert"] { color: var(--magenta); }
+.hud p[data-state="ok"] { color: var(--lime); }
+.satellite span { transition: background-color .4s var(--ease), box-shadow .4s var(--ease); }
+.satellite.is-adrift span { background: var(--magenta); box-shadow: 0 0 16px var(--magenta), 0 0 2px #fff; }
+/* While the satellite is adrift, the orbit it fell off glows as a warning */
+.sat-orbit { transition: transform 1.2s var(--spring), border-color .4s var(--ease), box-shadow .4s var(--ease); }
+.sculpture.is-incident .sat-orbit { border-color: color-mix(in srgb, var(--magenta) 80%, transparent); box-shadow: 0 0 24px -6px var(--magenta); }
+
+/* ---------- Signature type reveal ----------
+   Each line rises out of its own mask with a slight tilt, a beat after the line above.
+   Emphasised words arrive as outlines and then fill with light. */
+.split .w > span {
+    --wd: calc(var(--li, 0) * var(--stagger-line) + var(--wi, 0) * var(--stagger-word) + 60ms);
+    transform: translate3d(0, 112%, 0) rotate(5deg);
+    transform-origin: 0 100%;
+    transition: transform var(--dur-reveal) var(--ease-expo);
+    transition-delay: var(--wd);
+}
+.is-visible .split .w > span { transform: none; }
+.split em .w > span {
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--accent-2) 80%, transparent);
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    transition-property: transform, background-size, -webkit-text-stroke-color;
+    transition-duration: var(--dur-reveal), 1s, .6s;
+    transition-timing-function: var(--ease-expo), var(--ease-in-out), var(--ease);
+    transition-delay: var(--wd), calc(var(--wd) + .45s), calc(var(--wd) + 1.15s);
+}
+.is-visible .split em .w > span { background-size: 100% 100%; -webkit-text-stroke-color: transparent; }
+
+/* ---------- About: outline word fills in; a glass prism behind the badge ---------- */
+.mega {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--accent-2) 14%, transparent), color-mix(in srgb, var(--ultra) 16%, transparent) var(--fill), transparent var(--fill));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+.about__badge { isolation: isolate; }
+.about__prism { position: absolute; z-index: -1; left: -12%; top: -10%; width: clamp(96px, 13vw, 168px); aspect-ratio: 1; pointer-events: none; }
+.about__prism span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 30%;
+    rotate: 45deg;
+    background: linear-gradient(140deg, rgba(42, 212, 240, .6), rgba(123, 92, 255, .42) 50%, rgba(255, 79, 216, .36));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35), inset 14px 16px 30px rgba(255, 255, 255, .22), 0 30px 60px -22px rgba(123, 92, 255, .55);
+}
+.about__prism span::after { content: ""; position: absolute; inset: 18%; border-radius: 30%; border: 1px solid rgba(255, 255, 255, .28); }
+
+/* ---------- Skills: the bus line through the stack ---------- */
+.stack__layers { position: relative; padding-left: 1.6rem; }
+.stack__layers::before,
+.stack__layers::after { content: ""; position: absolute; left: 4px; top: 1.9rem; bottom: 1.9rem; width: 1px; pointer-events: none; }
+.stack__layers::before { background: var(--line-2); }
+.stack__layers::after { background: linear-gradient(var(--accent-2), var(--lime)); transform-origin: top; transform: scaleY(var(--spine, 0)); box-shadow: 0 0 10px color-mix(in srgb, var(--accent-2) 60%, transparent); }
+html:not(.js) .stack__layers::after { transform: none; }
+.layer::before { left: calc(-1.6rem + 3px); }
+.layer__no::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.6rem + 1px);
+    top: calc(1.35rem + .45rem);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    transition: background-color .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease), scale .5s var(--spring);
+}
+.layer__no { transition: color .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease); }
+.layer.is-lit .layer__no { color: var(--lime); border-color: color-mix(in srgb, var(--lime) 70%, transparent); box-shadow: 0 0 14px -4px var(--lime); }
+.layer.is-lit .layer__no::before { background: var(--lime); border-color: var(--lime); box-shadow: 0 0 10px var(--lime); scale: 1.3; }
+@media (min-width: 640px) { .layer__no::before { top: calc(50% - 3.5px); } }
+/* Chips arrive one after another once their layer is in view */
+.js .layer .skill {
+    --cd: calc(var(--i, 0) * 80ms + 200ms);
+    transition: border-color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), color var(--dur-2) var(--ease), opacity .6s var(--ease) var(--cd), translate .9s var(--ease-expo) var(--cd);
+}
+.js .layer:not(.is-visible) .skill { opacity: 0; translate: 0 14px; }
+.layer .skill:nth-child(2) { --cd: calc(var(--i, 0) * 80ms + 270ms); }
+.layer .skill:nth-child(3) { --cd: calc(var(--i, 0) * 80ms + 340ms); }
+.layer .skill:nth-child(4) { --cd: calc(var(--i, 0) * 80ms + 410ms); }
+
+/* ---------- Experience: comet on the timeline, cards swing up into place ---------- */
+.timeline-wrap { position: relative; }
+.timeline__comet {
+    position: absolute;
+    left: 4px;
+    top: 4.5px;
+    z-index: 2;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 35%, transparent), 0 0 18px 4px color-mix(in srgb, var(--accent-2) 70%, transparent);
+    opacity: 0;
+    transition: opacity .3s var(--ease);
+    pointer-events: none;
+}
+@media (min-width: 900px) { .timeline__comet { left: 204px; } }
+.job__dot { transition: border-color var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease), scale .5s var(--spring); }
+.js .job.is-lit .job__dot { scale: 1.15; }
+.job { perspective: 1600px; }
+.js .job .job__card {
+    transform-origin: 50% 0;
+    transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), transform .5s var(--ease), rotate 1.2s var(--ease-expo) .12s, opacity .9s var(--ease) .12s;
+}
+.js .job:not(.is-visible) .job__card { rotate: x 16deg; opacity: 0; }
+.js .job .job__when { transition: opacity .8s var(--ease), translate 1s var(--ease-expo); }
+.js .job:not(.is-visible) .job__when { opacity: 0; translate: -18px 0; }
+
+/* ---------- Projects: the exhibition ---------- */
+/* Frames hang in a lens whose angle follows the scroll; hovering straightens it */
+.case__lens {
+    --ry: -7deg;
+    --rx: 3deg;
+    transform: perspective(1400px) translate3d(0, calc(var(--ly) * (1 - var(--lens-h))), 0) rotateY(calc(var(--ry) * (1 - var(--lens-h)))) rotateX(calc(var(--rx) * (1 - var(--lens-h))));
+    transition: --lens-h .8s var(--ease);
+}
+.case--flip .case__lens { --ry: 7deg; }
+.case--stack .case__lens { --ry: 0deg; --rx: 5deg; }
+.case__frame, .case--flip .case__frame, .case--stack .case__frame, .case__frame:hover { transform: none; }
+@media (hover: hover) and (pointer: fine) { .case__lens:hover { --lens-h: 1; } }
+@media (max-width: 899px) { .case__lens, .case--flip .case__lens, .case--stack .case__lens { --ry: 0deg; --rx: 0deg; } }
+
+/* A slanted wipe reveals each frame, from the side the frame sits on */
+.case__frame { transition: clip-path 1.25s var(--mech); }
+.js .case:not(.is-visible) .case__frame { clip-path: polygon(-40px -40px, -40px -40px, calc(-40px - 18%) calc(100% + 40px), calc(-40px - 18%) calc(100% + 40px)); }
+.case.is-visible .case__frame { clip-path: polygon(-40px -40px, calc(118% + 40px) -40px, calc(100% + 40px) calc(100% + 40px), -40px calc(100% + 40px)); }
+.js .case--flip:not(.is-visible) .case__frame { clip-path: polygon(calc(100% + 40px) -40px, calc(100% + 40px) -40px, calc(118% + 40px) calc(100% + 40px), calc(118% + 40px) calc(100% + 40px)); }
+.case--flip.is-visible .case__frame { clip-path: polygon(calc(-18% - 40px) -40px, calc(100% + 40px) -40px, calc(100% + 40px) calc(100% + 40px), -40px calc(100% + 40px)); }
+.js .case--stack:not(.is-visible) .case__frame { clip-path: polygon(-40px calc(100% + 40px), calc(100% + 40px) calc(100% + 40px), calc(100% + 40px) calc(100% + 40px), -40px calc(100% + 40px)); }
+.case--stack.is-visible .case__frame { clip-path: polygon(-40px -40px, calc(100% + 40px) -40px, calc(100% + 40px) calc(100% + 40px), -40px calc(100% + 40px)); }
+
+/* Then the diagram assembles: components first, connections after */
+.d-node { transform-box: fill-box; transform-origin: center; }
+.case.is-visible .d-node { animation: node-in .7s var(--spring) backwards; animation-delay: calc(.55s + var(--n, 0) * 90ms); }
+.case.is-visible .d-edges { animation: fade-in .9s var(--ease) 1.05s backwards; }
+.d-node:nth-of-type(3) { --n: 1; } .d-node:nth-of-type(4) { --n: 2; } .d-node:nth-of-type(5) { --n: 3; }
+.d-node:nth-of-type(6) { --n: 4; } .d-node:nth-of-type(7) { --n: 5; } .d-node:nth-of-type(8) { --n: 6; }
+@keyframes node-in { from { opacity: 0; scale: .7; } }
+@keyframes fade-in { from { opacity: 0; } }
+
+/* No block-level fade for a project: its parts arrive in sequence instead
+   (number, then title lines, frame wipe, write-up, outcomes) */
+.js .case.reveal { opacity: 1; translate: none; }
+.js .case :is(.case__meta, .case__facts > div, .case__text .tags, .outcomes li) {
+    transition: opacity .8s var(--ease) var(--pd, 0s), translate 1s var(--ease-expo) var(--pd, 0s);
+}
+.js .case .case__link { transition: border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), opacity .8s var(--ease) .45s, translate 1s var(--ease-expo) .45s; }
+.js .case:not(.is-visible) :is(.case__meta, .case__facts > div, .case__text .tags, .case__link, .outcomes li) { opacity: 0; translate: 0 18px; }
+.case__facts > div:nth-child(1) { --pd: .15s; } .case__facts > div:nth-child(2) { --pd: .23s; } .case__facts > div:nth-child(3) { --pd: .31s; }
+.case__text .tags { --pd: .39s; }
+.outcomes li:nth-child(1) { --pd: .5s; } .outcomes li:nth-child(2) { --pd: .58s; } .outcomes li:nth-child(3) { --pd: .66s; }
+
+/* The big project number fills from the bottom as the project takes the stage */
+.case__no {
+    background: linear-gradient(0deg, color-mix(in srgb, var(--ca) 55%, transparent) var(--fill), transparent var(--fill));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Each project lights the room in its own colour */
+.atmo[data-chapter="case-cyan"] { --atmo-a: rgba(42, 212, 240, .18); --atmo-b: rgba(91, 140, 255, .10); }
+.atmo[data-chapter="case-lime"] { --atmo-a: rgba(198, 255, 61, .10); --atmo-b: rgba(42, 212, 240, .08); }
+.atmo[data-chapter="case-magenta"] { --atmo-a: rgba(255, 79, 216, .13); --atmo-b: rgba(123, 92, 255, .12); }
+
+/* Featured project (desktop): the diagram follows the write-up beside it */
+.case__stage { display: none; }
+@media (min-width: 900px) {
+    .case--featured .case__side { position: sticky; top: calc(var(--header-h) + 2rem); }
+    .case--featured .case__facts > div { position: relative; padding-left: 1rem; }
+    .case--featured .case__facts > div::before { content: ""; position: absolute; left: 0; top: .15rem; bottom: .15rem; width: 2px; border-radius: 2px; background: var(--line); transition: background-color .5s var(--ease), box-shadow .5s var(--ease); }
+    .case--featured .case__facts > div.is-current::before { background: var(--ca); box-shadow: 0 0 12px var(--ca); }
+    .case--featured .case__facts dt { transition: color .5s var(--ease); }
+    .case--featured .case__facts > div.is-current dt { color: var(--ca); }
+    .case__stage {
+        display: block;
+        position: absolute;
+        right: .75rem;
+        top: .75rem;
+        z-index: 2;
+        padding: .25rem .5rem;
+        border-radius: 6px;
+        border: 1px solid color-mix(in srgb, var(--ca) 40%, transparent);
+        background: color-mix(in srgb, var(--bg) 75%, transparent);
+        font-family: var(--font-mono);
+        font-size: .64rem;
+        letter-spacing: .08em;
+        color: var(--ca);
+        opacity: 0;
+        translate: 0 -4px;
+        transition: opacity .4s var(--ease), translate .4s var(--ease);
+    }
+    .case--featured[data-stage] .case__stage { opacity: 1; translate: 0 0; }
+    .case--featured[data-stage="problem"] .case__stage::before { content: "01 / channels drift out of sync"; }
+    .case--featured[data-stage="architecture"] .case__stage::before { content: "02 / functions normalise every update"; }
+    .case--featured[data-stage="decisions"] .case__stage::before { content: "03 / one model, every channel"; }
+    .case--featured .d-node, .case--featured .d-edges path { transition: opacity .5s var(--ease); }
+    .case--featured .d-node rect { transition: stroke .5s var(--ease), stroke-width .5s var(--ease); }
+    .case--featured[data-stage="problem"] [data-part="channel"] rect { stroke: var(--magenta); stroke-dasharray: 4 3; }
+    .case--featured[data-stage="problem"] [data-part="compute"],
+    .case--featured[data-stage="problem"] [data-part="state"] { opacity: .3; }
+    .case--featured[data-stage="problem"] .d-edges path { opacity: .15; }
+    .case--featured[data-stage="architecture"] [data-part="channel"] { opacity: .5; }
+    .case--featured[data-stage="architecture"] [data-part="compute"] rect { stroke-width: 2.4; }
+    .case--featured[data-stage="architecture"] [data-part="state"] rect { stroke: var(--ca); }
+    .case--featured[data-stage="decisions"] .d-node rect { stroke: var(--ca); }
+    .case--featured[data-stage="decisions"] .d-edges path { stroke-width: 2.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .split em .w > span { background-size: 100% 100%; -webkit-text-stroke-color: transparent; }
+    .timeline__comet { display: none; }
+    .js .job:not(.is-visible) .job__card, .js .job:not(.is-visible) .job__when { rotate: none; translate: none; opacity: 1; }
+    .js .layer:not(.is-visible) .skill { opacity: 1; translate: none; }
+    .js .case:not(.is-visible) .case__frame { clip-path: none; }
+    .case.is-visible .d-node, .case.is-visible .d-edges { animation: none; }
+}
