@@ -1,5 +1,5 @@
 // Generates responsive/derived images from the sources in the repo root.
-// Run with `npm run assets` after changing profile.webp or favicon.svg.
+// Run with `npm run assets` after changing profile.webp (the icons have their own script: `npm run favicon`).
 import sharp from "sharp";
 import { mkdir, readFile, readdir } from "node:fs/promises";
 
@@ -9,8 +9,7 @@ const path = (p) => new URL(p, root).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 // 1. Responsive portrait (the 450px original stays as the large candidate)
 await sharp(path("profile.webp")).resize(320, 320).webp({ quality: 80 }).toFile(path("profile-320.webp"));
 
-// 2. Apple touch icon from the SVG favicon
-await sharp(await readFile(path("favicon.svg")), { density: 600 }).resize(180, 180).png().toFile(path("apple-touch-icon.png"));
+// 2. The favicons and the Apple touch icon come from scripts/build-favicon.mjs (`npm run favicon`)
 
 // 3. Open Graph / social card (1200x630)
 const portrait = await sharp(path("profile.webp"))

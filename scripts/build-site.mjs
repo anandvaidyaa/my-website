@@ -18,11 +18,12 @@ const WEBSITE_ID = `${SITE}/#website`;
 
 const FILES = [
     "index.html", "404.html", "CNAME", "robots.txt", "site.webmanifest",
-    "favicon.svg", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
+    "favicon.svg", "favicon.gif", "favicon.ico", "favicon-16x16.png", "favicon-32x32.png", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
     "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js", "arcade.min.js", "arcade.min.css", "Anand-Vaidya-Resume.pdf"
 ];
 const DIRS = ["fonts", "og"];
-const HASHED = ["styles.min.css", "script.min.js", "case.min.css", "case.min.js"];
+const HASHED = ["styles.min.css", "script.min.js", "case.min.css", "case.min.js",
+    "favicon.ico", "favicon.svg", "favicon.gif", "favicon-16x16.png", "favicon-32x32.png", "apple-touch-icon.png"];
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const human = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });

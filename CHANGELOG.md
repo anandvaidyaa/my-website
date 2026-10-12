@@ -1,5 +1,22 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-13 (12) — A living glass shard for the favicon
+
+The favicon is now the site's own glass shard: the fragment that escapes the sculpture on the homepage. It replaces the "A" monogram, with the base notch deepened so it stays a shard rather than a triangle at 16 px.
+- **The shard:** a deep-blue facet and a cyan facet on a near-black tile, with a small lime signal core.
+- **The animation (`favicon.gif`):** a 2.4 s loop.
+  - It starts dormant.
+  - A narrow light runs through the facets and the lime core lights.
+  - The shard turns slightly to show its other facet, then settles.
+  - The last frame is the dormant pose the loop starts from, so there is no jump at the seam.
+  - It is 32×32 and about 13 KB: 51 frames, a 255-colour palette, and only changed pixels stored per frame.
+- **Static set:** `favicon.svg`, `favicon-16x16.png` (heavier edges, no inner light), `favicon-32x32.png`, `favicon.ico` (16/32/48), and `apple-touch-icon.png` (full square; iOS rounds it).
+- **Source:** everything comes from one drawing in `scripts/build-favicon.mjs` (`npm run favicon`), which also writes a 1024px transparent master to `src/brand/shard-master.png`.
+- **All pages declare the same set:** the homepage, the case studies and the 404.
+  - Every icon URL carries a content hash (`?v=`) after `npm run build:site`, so a changed icon isn't served from cache.
+  - The GIF is declared last, so browsers that animate favicons can use it.
+  - Many browsers, Chrome and Safari included, don't animate favicons. They show a static icon, so the animation is a bonus, never a dependency.
+
 ## 2026-10-13 (11) — After Hours becomes an engineering arcade
 
 **The world.**
