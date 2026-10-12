@@ -74,13 +74,20 @@
             var top = target.getBoundingClientRect().top + window.scrollY - headerH - 8;
             window.scrollTo({ top: Math.max(0, top), behavior: behavior });
         }
-        // Re-measure until the target stays put for two consecutive checks
-        var stable = 0;
+        // Re-measure until the target stays put for two consecutive checks. The moment the visitor
+        // scrolls, taps or types, stand down: never pull them back to where they no longer want to be.
+        var stable = 0, cancelled = false;
+        var INPUTS = ["wheel", "touchstart", "keydown", "pointerdown"];
+        function cancel() { cancelled = true; INPUTS.forEach(function (ev) { window.removeEventListener(ev, cancel, true); }); }
+        INPUTS.forEach(function (ev) { window.addEventListener(ev, cancel, { capture: true, passive: true }); });
+        window.setTimeout(cancel, 4000);
         function settle() {
+            if (cancelled) return;
             var off = target.getBoundingClientRect().top - headerH - 8;
             if (Math.abs(off) > 2) { stable = 0; go("instant"); }
             else stable++;
             if (stable < 2 && attempts++ < 12) window.setTimeout(settle, 80);
+            else cancel();
         }
 
         // "auto" would inherit CSS smooth scrolling, so use "instant" explicitly
@@ -667,12 +674,12 @@
     function topoCamera(state, vw, vh, small) {
         var cam = {
             A: small ? [0.5, 0.5, 620, -8, 0.95] : [0.73, 0.5, 1180, -8, 1],
-            B: small ? [0.86, 0.26, 380, 24, 0.38] : [0.8, 0.46, 820, 24, 0.6],
-            C: small ? [0.94, 0.58, 520, 0, 0.18] : [0.95, 0.62, 760, 0, 0.3],
-            D: small ? [0.96, 0.5, 680, 0, 0.22] : [0.9, 0.5, vh * 1.05, 0, 0.42],
+            B: small ? [0.84, 0.28, 400, 24, 0.5] : [0.8, 0.46, 820, 24, 0.6],
+            C: small ? [0.9, 0.6, 520, 0, 0.3] : [0.95, 0.62, 760, 0, 0.3],
+            D: small ? [0.94, 0.5, 680, 0, 0.3] : [0.9, 0.5, vh * 1.05, 0, 0.42],
             E: small ? [0.5, 0.5, 820, 0, 0.18] : [0.5, 0.5, vw * 1.04, 0, 0.42],
             F: small ? [0.9, 0.14, 210, 40, 0.24] : [0.9, 0.2, 360, 40, 0.3],
-            G: small ? [0.82, 0.2, 170, 0, 1] : [0.8, 0.32, 200, 0, 1]
+            G: small ? [0.86, 0.15, 140, 0, 0.8] : [0.8, 0.32, 200, 0, 1]
         }[state];
         return { x: cam[0] * vw, y: cam[1] * vh, size: cam[2], rot: cam[3], alpha: cam[4] };
     }
@@ -842,7 +849,7 @@
     function topoProjects(S, rects, kinds, vw, vh, small, after, camAfter) {
         var camE = topoCamera("E", vw, vh, small), vc = vh / 2, n = rects.length;
         var smooth = function (t) { return t * t * (3 - 2 * t); };
-        var cams = rects.map(function (r) { return { x: r.left + r.width / 2, y: r.top + r.height / 2, size: r.width / 0.7, rot: 0, alpha: small ? 0.28 : 0.62 }; });
+        var cams = rects.map(function (r) { return { x: r.left + r.width / 2, y: r.top + r.height / 2, size: r.width / 0.7, rot: 0, alpha: small ? 0.36 : 0.62 }; });
         var shape = function (i) { return topoFrameState(kinds[i], rects[i].height / rects[i].width, cams[i].x > vw * 0.55); };
         var a, A, B, CA, CB, key;
         if (vc <= cams[0].y) {
@@ -898,7 +905,7 @@
         ];
     }
     function initCaseSculpture() {
-        var cs = $(".cs"), story = $(".cs-story"), hero = $(".cs-hero"), nav = $(".cs-nav");
+        var cs = $(".cs"), story = $(".cs-story"), hero = $(".cs-hero"), nav = $(".cs-nav"), chapters = $$(".cs-story .chapter");
         var kind = cs && ["cyan", "lime", "magenta"].filter(function (k) { return cs.classList.contains("cs--" + k); })[0];
         if (!kind || !story || !nav || reduceMotion.matches) return;
         var host = document.createElement("div");
@@ -911,19 +918,33 @@
         var last = "", ticking = false, heroH = hero ? hero.offsetHeight : 1;
         function frame() {
             ticking = false;
-            if (!wideQ.matches) return;
-            var vh = window.innerHeight, r = story.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+            var vh = window.innerHeight, vw = window.innerWidth, r = story.getBoundingClientRect();
             var p = clamp((vh * 0.5 - r.top) / (r.height || 1), 0, 1), s = p * 3, i = Math.min(Math.floor(s), 2);
             var t = range(s - i, 0.35, 0.85);
             t = t * t * (3 - 2 * t);
+            var key = i + ":" + t.toFixed(3);
+            if (key !== last) { last = key; topoPaint(g, lerpDeep(states[i], states[i + 1], t), 30); }
+            host.style.setProperty("--light", (-p * 3).toFixed(4));
+            if (!wideQ.matches) {
+                // Phones: no spare column, so it becomes each chapter's emblem, beside the chapter's
+                // number as the heading arrives, in the state for that point of the story
+                var best = null, bd = 1e9;
+                chapters.forEach(function (c) {
+                    var top = c.getBoundingClientRect().top, d = Math.abs(top - vh * 0.3);
+                    if (top > -vh * 0.5 && top < vh && d < bd) { bd = d; best = top; }
+                });
+                var sz = Math.min(vw * 0.62, 280);
+                if (best === null) { host.style.opacity = "0"; return; }
+                host.style.transform = "translate3d(" + px(vw - sz * 0.38 - 500) + "," + px(best + 120 - 500) + ",0) scale(" + (sz / 1000).toFixed(4) + ")";
+                host.style.opacity = (0.6 * range(best + 120, -40, 140) * (1 - range(best, vh * 0.8, vh))).toFixed(3);
+                return;
+            }
+            var nr = nav.getBoundingClientRect();
             // It lives in the empty column beneath the sticky chapter list, never behind the text,
             // and bows out before the footer
             var free = vh - nr.bottom, size = Math.min(nr.width * 1.3, free * 1.05);
             host.style.transform = "translate3d(" + px(nr.left + nr.width / 2 - 500) + "," + px(nr.bottom + free / 2 - 500) + ",0) scale(" + (Math.max(size, 1) / 1000).toFixed(4) + ")";
             host.style.opacity = (0.8 * range(free, 160, 320) * range(window.scrollY / heroH, 0.35, 0.9) * range(r.bottom / vh, 0.55, 0.85)).toFixed(3);
-            host.style.setProperty("--light", (-p * 3).toFixed(4));
-            var key = i + ":" + t.toFixed(3);
-            if (key !== last) { last = key; topoPaint(g, lerpDeep(states[i], states[i + 1], t), 30); }
         }
         function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
         window.addEventListener("scroll", request, { passive: true });
@@ -1179,6 +1200,8 @@
             var pr = current <= 1 && portrait ? portrait.getBoundingClientRect() : null;
             var or = current >= 9 && orbit ? orbit.getBoundingClientRect() : null;
             var reads = fragment ? fragment.read(current) : null;
+            // Phones: where the next section begins (the only open stage between full-width cards)
+            var seam = small && anchors[current + 1] ? anchors[current + 1].getBoundingClientRect().top : null;
 
             // Which two states, and how far between them (scenes hold, then morph late)
             var key = TOPO_SCENES[current][1];
@@ -1206,7 +1229,11 @@
             var camB = comp && next === "E" ? comp.cam : topoCamera(next, vw, vh, small);
             var SA = comp && key === "E" ? comp.st : S[key], SB = comp && next === "E" ? comp.st : S[next];
             // The opening is attached to the portrait; the ending to the contact orbit
-            if (pr && key === "A") { camA.x = pr.left + pr.width / 2; camA.y = pr.top + pr.height / 2; }
+            if (pr && key === "A") {
+                camA.x = pr.left + pr.width / 2;
+                // (on phones the portrait scrolls away early; the sculpture stays for the fold and the escape)
+                camA.y = small ? Math.max(pr.top + pr.height / 2, vh * 0.34) : pr.top + pr.height / 2;
+            }
             if (or && or.width) {
                 var gx = or.left + or.width / 2, gy = or.top + or.height / 2;
                 if (next === "G") { camB.x = gx; camB.y = gy; }
@@ -1215,6 +1242,17 @@
             var cam = lerpDeep(camA, camB, tc);
             var st = key === next ? SA : lerpDeep(SA, SB, tg);
             if (comp && key === "E") { cam = comp.cam; st = comp.st; t = 0; }
+            // Phones have no empty margins, so the sculpture keeps a quiet corner while you read and
+            // takes the stage, larger and brighter, while it changes shape between sections
+            else if (small && key !== next && key !== "A") {
+                var stage = Math.sin(Math.PI * t);
+                // It rides the seam between the two sections, the one place no card covers it
+                var sy = seam === null ? vh * 0.5 : clamp(seam, vh * 0.15, vh * 0.85);
+                cam = lerpDeep(cam, { x: vw * 0.5, y: sy, size: vw * 1.2, rot: cam.rot, alpha: 0.6 }, stage * 0.9);
+                // on stage the ribbons fill out and keep their glass, so the change reads at phone size
+                st.r.forEach(function (r) { r.w *= 1 + 1.6 * stage; });
+                mem = Math.max(mem, 0.6 * stage + mem * (1 - stage));
+            }
             if (key === "B" && next === "C") st.n.forEach(function (n, i) { n[2] = S.C.n[i][2] * range(t, 0.5 + i * 0.07, 0.68 + i * 0.07); });
             // The hero's own beats: the shards wake and gather, then the blossom folds through itself
             var fold = 0;

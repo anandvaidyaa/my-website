@@ -2919,7 +2919,7 @@ html:not(.js) [data-quick] { display: none !important; }
 .topo__node { fill: var(--bg); stroke: var(--topo-node); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .topo__shard { fill: url(#topo-shard); fill-opacity: calc(.55 + var(--click, 0) * .45); stroke: var(--topo-e1); stroke-width: calc(1px + var(--click, 0) * 2px); stroke-opacity: .7; vector-effect: non-scaling-stroke; }
 /* Branching and trajectory scenes: signals run along the paths (desktop, motion allowed) */
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
     .topo[data-scene="C"] .topo__spine, .topo[data-scene="D"] .topo__spine { stroke: var(--topo-node); stroke-opacity: .7; stroke-dasharray: 3 11; animation: topo-flow 1.6s linear infinite; }
 }
 @keyframes topo-flow { to { stroke-dashoffset: -28; } }
@@ -3041,8 +3041,8 @@ html:not(.js) [data-quick] { display: none !important; }
 /* A project frame settling open when the visitor pauses mid-reveal */
 .case.is-settling .case__frame { transition: clip-path .7s var(--ease-expo); }
 
-/* Supporting content arrives through a slanted glass edge rather than a fade-up (wide screens) */
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+/* Supporting content arrives through a slanted glass edge rather than a fade-up */
+@media (prefers-reduced-motion: no-preference) {
     .js .reveal { translate: none; transition: opacity .25s var(--ease), transform .5s var(--ease), border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease); transition-delay: calc(var(--i, 0) * 80ms), 0s, 0s, 0s; }
     .js .reveal.is-visible { animation: membrane-in 1.15s var(--ease-expo) calc(var(--i, 0) * 80ms) backwards; }
     .js :is(.case, .job, .about__head).reveal.is-visible { animation: none; }
@@ -3054,4 +3054,5 @@ html:not(.js) [data-quick] { display: none !important; }
 
 /* Case studies: each project's own sculpture, beside the story (wide screens, motion allowed) */
 .topo--case { display: none; }
-@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) { .topo--case { display: block; } }
+@media (prefers-reduced-motion: no-preference) { .topo--case { display: block; } }
+@media (max-width: 899px) { .js .reveal.is-visible { animation-duration: .95s; } }

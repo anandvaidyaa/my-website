@@ -1,5 +1,37 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (9) — A cinematic phone experience
+
+Phones had been getting a shrunken desktop:
+- The hero sculpture was attached to the portrait and scrolled off-screen with it, so the fold and the shard's escape happened out of view.
+- From About to Experience the sculpture sat at the far edge at 18–38% opacity.
+- Supporting content used the plain fade-up.
+- The case-study sculptures and chapter shard were desktop-only.
+
+Phones have no empty margins, and the wide frosted cards cover anything behind them, so they now get their own choreography:
+
+- **Hero:** the sculpture stays on screen while the hero scrolls past it, so the fold, the inner surface and the escape are all seen.
+- **Between sections:** the sculpture keeps a quiet corner while you read. As it changes shape, it rides the seam between two sections, larger and brighter, with fuller ribbons that keep their glass. The seam is the one place no card covers it.
+- **Gallery:** the ribbons frame each project at a slightly higher opacity than before, still in natural flow.
+- **Case studies:** each project's sculpture becomes the emblem of each chapter. It sits beside the chapter number as the heading arrives, in the state for that point of the story.
+- **Everywhere:** supporting content uses the slanted glass-edge reveal (slightly quicker on phones), and signals run along the network and route paths.
+- **Reduced motion:** unchanged; none of the above runs.
+
+**Also fixed — anchor snap-back (all screens):** after a menu link, the scroll helper kept re-aiming at the target for up to a second after the smooth scroll ended. A visitor who started scrolling in that window was pulled back. It now stands down the moment the visitor scrolls, taps or presses a key. Checked with the mouse wheel at 1366 px and 390 px: no pull-back. Jumps still land exactly under the header for every link.
+
+**Tested:**
+- Functional 46/46 (three runs in a row), SEO 53/53, motion 23/23 (including no overflow at 320–1920 px), case studies 64/64, recruiter 24/24, simulations 11/11, easter eggs 56/56.
+- Cinematic checks: homepage 8/8, case studies 15/15.
+- The clipped-content probe at 390 px finds nothing left half-revealed.
+- axe: 0 violations on all pages, both themes, 375 and 1366 px.
+- Two test-harness fixes, not product changes:
+  - The functional test now waits for the menu scroll and the Skills scroll to settle before clicking. It had been clicking while the page was still moving.
+  - The cinematic test measures the tilting hero by its layout height.
+
+**Measured:**
+- Scroll frame times on a phone at 4× CPU: homepage and carrier case study both 16.7/16.8 ms median/p95, with no frames over 50 ms.
+- Lighthouse mobile: homepage 92–98 over three runs; the order and carrier case studies 99. CLS 0.
+
 ## 2026-10-12 (8) — Two cinematic sequences, and no more half-revealed headings
 
 **Diagnosis.** The motion system had no library: one scroll listener, IntersectionObservers and CSS. It felt generic for three reasons:
