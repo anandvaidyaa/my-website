@@ -3,15 +3,15 @@
   "order": 2,
   "title": "Zero-Downtime Cloud Deployment Pipeline",
   "seoTitle": "Zero-Downtime Pipeline with Bicep & Azure DevOps | Anand Vaidya",
-  "description": "Case study: an infrastructure-as-code pipeline with Azure Bicep and Azure DevOps that cut deployments from 2 days to 15 minutes with zero-downtime releases.",
+  "description": "Case study: an infrastructure-as-code pipeline with Azure Bicep and Azure DevOps that cut deployments from 2 days to 15 minutes and enabled zero-downtime releases.",
   "kicker": "Infrastructure as code & CI/CD",
   "lede": "A fully automated infrastructure-as-code pipeline built with Azure Bicep and Azure DevOps — replacing manual deployment steps with consistent, immutable environments and zero-downtime releases.",
   "context": "Client project",
   "stack": ["Azure Bicep", "Azure DevOps", "YAML pipelines"],
   "outcomes": [
     ["2 days → 15 min", "deployment time"],
-    ["Zero", "downtime releases"],
-    ["0", "manual configuration errors"]
+    ["Zero-downtime", "releases enabled"],
+    ["Eliminated", "manual configuration errors"]
   ],
   "accent": "lime",
   "status": "last release: uneventful (that’s the point)",
@@ -37,6 +37,16 @@
     <p class="hv__annot"><svg viewBox="0 0 90 50"><path d="M84 44C62 44 36 34 14 10m0 0 2 14M14 10l14 2"/></svg>no portal clicks were harmed</p>
 </div>
 <!-- /hero -->
+
+<aside class="contrib reveal" aria-labelledby="contrib-h">
+    <h2 class="contrib__h" id="contrib-h"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg> My part in this project</h2>
+    <dl class="contrib__list">
+        <div><dt>Role</dt><dd>Engineered the infrastructure-as-code release pipeline.</dd></div>
+        <div><dt>What I worked on</dt><dd>Bicep templates that provision each environment from the same source, multi-stage Azure DevOps YAML pipelines, and promotion between environments with approval gates.</dd></div>
+        <div><dt>Technologies I used</dt><dd>Azure Bicep, ARM templates, Azure DevOps (YAML pipelines)</dd></div>
+        <div class="contrib__muted"><dt>Not published here</dt><dd>The client, team size and timeline. Outcomes are as reported from the engagement; the client&rsquo;s systems are private, so the underlying measurements can&rsquo;t be shared.</dd></div>
+    </dl>
+</aside>
 
 <section class="chapter" id="problem" data-toc="The problem" data-chapter="cs-problem" aria-labelledby="problem-h">
     <header class="chapter__head reveal">
@@ -145,7 +155,7 @@
     </div>
     <div class="chapter__body prose">
         <h3 class="reveal">What &ldquo;same templates, every environment&rdquo; looks like</h3>
-        <p class="reveal">The shape of the approach, not the client&rsquo;s files: one parameterised template, and a pipeline that deploys it stage by stage.</p>
+        <p class="reveal">The shape of the approach, not the client&rsquo;s files: one parameterised template, and a pipeline that deploys it stage by stage. Both are conceptual fragments &mdash; not complete, runnable files &mdash; and contain no real names or credentials.</p>
     </div>
     <div class="code-tabs reveal" data-tabs>
         <div class="code-tabs__list" role="tablist" aria-label="Illustrative files">
@@ -154,7 +164,7 @@
         </div>
         <div id="panel-bicep" role="tabpanel" aria-labelledby="tab-bicep">
         <figure class="code" data-lang="bicep">
-            <figcaption><span class="code__file">main.bicep</span><span class="code__tag">Illustrative · the pattern, not client code</span></figcaption>
+            <figcaption><span class="code__file">main.bicep</span><span class="code__tag">Conceptual fragment · the pattern, not client code</span></figcaption>
             <pre tabindex="0"><code>// One template for every environment: only the parameters change
 param environment string   // 'dev' | 'staging' | 'prod'
 param location string = resourceGroup().location
@@ -182,7 +192,7 @@ resource staging 'Microsoft.Web/sites/slots@2023-12-01' = {
         </div>
         <div id="panel-yaml" role="tabpanel" aria-labelledby="tab-yaml">
         <figure class="code" data-lang="yaml">
-            <figcaption><span class="code__file">azure-pipelines.yml</span><span class="code__tag">Illustrative · the pattern, not client code</span></figcaption>
+            <figcaption><span class="code__file">azure-pipelines.yml</span><span class="code__tag">Conceptual fragment · the pattern, not client code</span></figcaption>
             <pre tabindex="0"><code># Build once, then promote the same artefact through environments
 stages:
 - stage: Build
@@ -200,7 +210,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=staging
+          - task: AzureCLI@2   # signs in through the pipeline's service connection
+            inputs:
+              azureSubscription: $(serviceConnection)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=staging
 
 - stage: Production
   dependsOn: Staging
@@ -211,7 +226,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=prod</code></pre>
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: $(serviceConnection)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=prod</code></pre>
         </figure>
         </div>
     </div>
@@ -225,9 +245,10 @@ stages:
     </header>
     <ul class="results">
         <li class="reveal"><span class="results__val">2&nbsp;days &rarr; 15&nbsp;min</span><span class="results__lbl">Deployment time.</span></li>
-        <li class="reveal"><span class="results__val">Zero</span><span class="results__lbl">Downtime during releases.</span></li>
-        <li class="reveal"><span class="results__val">0</span><span class="results__lbl">Manual configuration errors, by removing manual steps altogether.</span></li>
+        <li class="reveal"><span class="results__val">Zero-downtime</span><span class="results__lbl">Releases enabled: new versions go out without taking the service down.</span></li>
+        <li class="reveal"><span class="results__val">Eliminated</span><span class="results__lbl">Manual configuration errors, by removing the manual steps altogether.</span></li>
     </ul>
+    <p class="results__note reveal">As reported from the engagement. The client&rsquo;s systems are private, so the raw measurements aren&rsquo;t published; the simulations and code on this page are illustrative.</p>
 </section>
 
 <section class="chapter" id="skills" data-toc="Skills demonstrated" data-chapter="cs-skills" aria-labelledby="skills-h">

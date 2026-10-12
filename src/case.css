@@ -653,3 +653,17 @@ html:not(.js) .code-tabs [role="tabpanel"] + [role="tabpanel"] { margin-top: 1re
 @keyframes cs-peek { 0%, 70%, 100% { translate: 0 6px; } 80%, 92% { translate: 0 -4px; } }
 .next-card--lead:hover .cloudlet--peek-next { animation-play-state: paused; translate: 0 -6px; }
 @media (prefers-reduced-motion: reduce) { .cs-status__sat, .cloudlet--peek-next { animation: none; } }
+
+/* ---------- My part in this project (near the top of every case study) ---------- */
+.contrib { margin-top: clamp(1.5rem, 4vw, 2.5rem); padding: 1.25rem 1.4rem; border-radius: var(--r-l); border: 1px solid color-mix(in srgb, var(--ca) 35%, transparent); background: linear-gradient(140deg, var(--ca-soft), transparent 55%), var(--surface); }
+.contrib__h { display: flex; align-items: center; gap: .55rem; font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ca-ink); }
+.contrib__h .i { width: 18px; height: 18px; }
+.contrib__list { margin-top: 1rem; display: grid; gap: .9rem 2rem; }
+.contrib__list dt { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.contrib__list dd { margin-top: .2rem; color: var(--text); }
+.contrib__muted dd { color: var(--muted); font-size: .92rem; }
+@media (min-width: 760px) { .contrib__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.results__note { margin-top: 1rem; max-width: 52rem; font-size: .88rem; color: var(--dim); }
+
+/* Scenario picker wraps on small screens */
+.sim__modes--wrap { border-radius: var(--r-l); }

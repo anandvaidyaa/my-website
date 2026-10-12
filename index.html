@@ -134,8 +134,8 @@
           "mainEntity": { "@id": "https://anandvaidya.in/#person" },
           "primaryImageOfPage": "https://anandvaidya.in/og-cover.png",
           "inLanguage": "en-IN",
-          "datePublished": "2024-06-13",
-          "dateModified": "2026-10-11"
+          "datePublished": "2026-06-13",
+          "dateModified": "2026-10-12"
         }
       ]
     }
@@ -471,7 +471,7 @@
                         <span class="principle__no" aria-hidden="true">01</span>
                         <div>
                             <h3>Event-driven by default</h3>
-                            <p>Compute that scales with demand and down to zero when idle, so traffic bursts don&rsquo;t mean lost orders or idle cost.</p>
+                            <p>Compute that scales out with demand &mdash; and, on consumption-based plans, in to zero when idle &mdash; so bursts don&rsquo;t mean lost orders and quiet hours cost little.</p>
                         </div>
                         <span class="principle__tag" aria-hidden="true">fig. scale &rarr; 0</span>
                     </li>
@@ -521,13 +521,13 @@
                             <div class="layer__items">
                                 <button type="button" class="skill" data-desc="Managed PaaS for hosting web apps, REST APIs and backends — handles TLS, auto-scaling and deployment slots." data-use="Hosted .NET Core APIs behind API Management with staging/production slot-swap deployments." data-related="Azure DevOps|Azure Bicep" data-work="pipeline">App Services</button>
                                 <button type="button" class="skill" data-desc="Entra ID identities for Azure resources, so services authenticate to each other without stored secrets." data-use="Replaced exposed credentials in legacy, on-premises processing with Managed Identities at FSP Consulting." data-related="OAuth 2.0|Azure Functions|Logic Apps" data-work="fsp">Managed Identities</button>
-                                <button type="button" class="skill" data-desc="Customer identity and access management for apps and APIs." data-use="Part of the identity layer in the carrier &amp; shipping integration project, together with OAuth 2.0." data-related="OAuth 2.0|Azure API Management" data-work="carrier">Azure AD B2C</button>
+                                <button type="button" class="skill" data-desc="Customer identity and access management for apps and APIs. Microsoft no longer sells Azure AD B2C to new customers; for new builds its successor is Microsoft Entra External ID." data-use="Part of the identity layer in the carrier &amp; shipping integration project, together with OAuth 2.0." data-related="OAuth 2.0|Azure API Management" data-work="carrier">Azure AD B2C</button>
                             </div>
                         </div>
                         <div class="layer reveal" data-layer="02">
                             <h3 class="layer__title"><span class="layer__no">L2</span><svg class="i"><use href="#i-bolt"/></svg> Serverless &amp; integration</h3>
                             <div class="layer__items">
-                                <button type="button" class="skill" data-desc="Serverless compute that runs event-driven code on demand — scales to zero when idle, eliminating infrastructure overhead." data-use="Built order-processing, inventory-sync and webhook-handler functions, and the event-driven architecture at FSP Consulting." data-related="Logic Apps|Cosmos DB|Azure API Management" data-work="orders|fsp">Azure Functions</button>
+                                <button type="button" class="skill" data-desc="Serverless compute that runs event-driven code on demand. On consumption-based plans it scales in to zero when idle, so compute is billed mainly per execution (storage and connected services still cost)." data-use="Built order-processing, inventory-sync and webhook-handler functions, and the event-driven architecture at FSP Consulting." data-related="Logic Apps|Cosmos DB|Azure API Management" data-work="orders|fsp">Azure Functions</button>
                                 <button type="button" class="skill" data-desc="Low-code workflow orchestrator that connects enterprise systems using hundreds of pre-built connectors." data-use="Automated approval flows, cross-system data sync and carrier dispatch workflows." data-related="Azure Functions|Managed Identities" data-work="fsp">Logic Apps</button>
                             </div>
                         </div>
@@ -625,7 +625,7 @@
                                 <h3>Event-driven integration on Azure</h3>
                                 <p>Requests enter through API Management, which authenticates and throttles them. Azure Functions run the business logic and hand long-running workflows to Logic Apps. State lands in Cosmos DB or SQL. Services authenticate with Managed Identity, and everything is provisioned from Bicep through Azure DevOps.</p>
                                 <ul class="arch-detail__list">
-                                    <li>Scales with demand, down to zero when idle</li>
+                                    <li>Scales with demand (on consumption-based plans, in to zero when idle)</li>
                                     <li>No secrets stored in configuration</li>
                                     <li>Every environment rebuilt from the same code</li>
                                 </ul>
@@ -645,7 +645,7 @@
                             <article class="arch-detail" data-detail="functions">
                                 <p class="arch-detail__tag">Compute</p>
                                 <h3>Azure Functions</h3>
-                                <p>Event-driven business logic: validate, transform and route each message. Scales out under bursts and to zero when idle.</p>
+                                <p>Event-driven business logic: validate, transform and route each message. Scales out under bursts and, on consumption-based plans, in to zero when idle.</p>
                                 <p class="arch-detail__where"><strong>In my work:</strong> order processing, inventory sync and webhook handlers.</p>
                             </article>
                             <article class="arch-detail" data-detail="logicapps">
@@ -669,7 +669,7 @@
                             <article class="arch-detail" data-detail="iac">
                                 <p class="arch-detail__tag">Infrastructure as code</p>
                                 <h3>Azure Bicep</h3>
-                                <p>Every resource on this diagram is declared in Bicep, reviewed in pull requests and deployed identically to each environment.</p>
+                                <p>In this pattern every Azure resource on the diagram is declared in Bicep, reviewed in pull requests and deployed identically to each environment. External systems (marketplaces, carriers) are outside its scope.</p>
                                 <p class="arch-detail__where"><strong>In my work:</strong> the zero-downtime deployment pipeline that cut release time from 2 days to 15 minutes.</p>
                             </article>
                             <article class="arch-detail" data-detail="cicd">
@@ -787,7 +787,7 @@
                         <p class="kicker"><span>05</span> Selected work</p>
                         <h2 class="section-title" id="projects-title">Case studies in <em>integration</em> and <em>automation</em>.</h2>
                     </div>
-                    <p class="section-intro">Client projects, described without confidential detail. Diagrams are simplified to show the architecture, not exact deployments. Each one has a full write-up covering the architecture, decisions and trade-offs.</p>
+                    <p class="section-intro">Client projects, described without confidential detail. Diagrams are simplified to show the architecture, not exact deployments, and outcomes are as reported from each engagement. Each one has a full write-up covering the architecture, decisions and trade-offs.</p>
                 </header>
 
                 <div class="cases">
@@ -824,7 +824,8 @@
                                         <g class="d-node" data-part="state"><rect x="196" y="170" width="108" height="32" rx="8"/><text x="250" y="190">Cosmos DB</text></g>
                                     </svg>
                                 </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span><span class="case__stage" aria-hidden="true"></span></div></div>
-                                <ul class="outcomes" aria-label="Outcomes">
+                                <p class="outcomes__cap" aria-hidden="true">Reported outcomes</p>
+                                <ul class="outcomes" aria-label="Reported outcomes">
                                     <li><span class="outcome__val">5&nbsp;min &rarr; &lt;2&nbsp;s</span><span class="outcome__lbl">inventory sync latency</span></li>
                                     <li><span class="outcome__val">$150k+</span><span class="outcome__lbl">previously lost quarterly revenue recovered</span></li>
                                     <li><span class="outcome__val">Eliminated</span><span class="outcome__lbl">overselling across channels</span></li>
@@ -866,10 +867,11 @@
                                         <g class="d-node d-node--ok"><rect x="52" y="150" width="110" height="32" rx="8"/><text x="107" y="170">Production</text></g>
                                     </svg>
                                 </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span></div></div>
-                                <ul class="outcomes" aria-label="Outcomes">
+                                <p class="outcomes__cap" aria-hidden="true">Reported outcomes</p>
+                                <ul class="outcomes" aria-label="Reported outcomes">
                                     <li><span class="outcome__val">2&nbsp;days &rarr; 15&nbsp;min</span><span class="outcome__lbl">deployment time</span></li>
-                                    <li><span class="outcome__val">Zero</span><span class="outcome__lbl">downtime releases</span></li>
-                                    <li><span class="outcome__val">0</span><span class="outcome__lbl">manual configuration errors</span></li>
+                                    <li><span class="outcome__val">Zero-downtime</span><span class="outcome__lbl">releases enabled</span></li>
+                                    <li><span class="outcome__val">Eliminated</span><span class="outcome__lbl">manual configuration errors, by removing manual steps</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -908,7 +910,8 @@
                                         <g class="d-node"><rect x="300" y="158" width="52" height="32" rx="8"/><text x="326" y="178">UPS</text></g>
                                     </svg>
                                 </figure><span class="case__label" aria-hidden="true">fig. — simplified, not to scale</span></div></div>
-                                <ul class="outcomes" aria-label="Outcomes">
+                                <p class="outcomes__cap" aria-hidden="true">Reported outcomes</p>
+                                <ul class="outcomes" aria-label="Reported outcomes">
                                     <li><span class="outcome__val">Zero clicks</span><span class="outcome__lbl">replacing a 20-minute manual process</span></li>
                                     <li><span class="outcome__val">40+&nbsp;hrs</span><span class="outcome__lbl">dispatch overhead saved per week</span></li>
                                     <li><span class="outcome__val">Improved</span><span class="outcome__lbl">shipping SLA compliance</span></li>
@@ -944,7 +947,7 @@
                             <dl class="adr__rec">
                                 <div><dt>Context</dt><dd>Inventory was synchronised between Shopify, Amazon and Walmart about every five minutes &mdash; long enough for the same item to sell on two channels at once.</dd></div>
                                 <div><dt>Constraints</dt><dd>Three marketplaces with different payload formats, order traffic that arrives in bursts, and no new manual reconciliation work.</dd></div>
-                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep the scheduled sync.</b> Whatever the interval, there is still a window in which the same item can sell twice.</li><li><span class="sr-only">Not chosen: </span><b>Fixed, always-on servers.</b> Sized for the bursts and paid for while idle.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Event-driven Azure Functions.</b> React to each change as it happens; scale out with order bursts and cost nothing while idle.</li></ul></dd></div>
+                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep the scheduled sync.</b> Whatever the interval, there is still a window in which the same item can sell twice.</li><li><span class="sr-only">Not chosen: </span><b>Fixed, always-on servers.</b> Sized for the bursts and paid for while idle.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Event-driven Azure Functions.</b> React to each change as it happens; scale out with order bursts and, on consumption-based plans, in to zero while idle.</li></ul></dd></div>
                                 <div><dt>Decision</dt><dd>Event-driven Azure Functions behind every channel, one normalised inventory model shared by all of them, and order and inventory state in Cosmos DB.</dd></div>
                                 <div><dt>Trade-off accepted</dt><dd>Events can arrive twice or out of order, so every handler is idempotent and updates are ordered per item.</dd></div>
                                 <div class="adr__outcome"><dt>Outcome</dt><dd>Sync latency from about 5&nbsp;minutes to under 2&nbsp;seconds, overselling eliminated, and $150k+ of previously lost quarterly revenue recovered.</dd></div>
@@ -989,7 +992,7 @@
                                 <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep applying changes by hand.</b> This is where the drift comes from.</li><li><span class="sr-only">Not chosen: </span><b>Hand-written ARM JSON.</b> Full coverage of Azure resource types, but long and hard to review.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Azure Bicep templates in the same repository as the code.</b> Compiles to ARM, far shorter to review, and every environment can be rebuilt from a known commit.</li></ul></dd></div>
                                 <div><dt>Decision</dt><dd>Environments are declared in Bicep and deployed through multi-stage Azure DevOps pipelines. A change is a fresh deployment, never an edit to a running server.</dd></div>
                                 <div><dt>Trade-off accepted</dt><dd>Changes made in the portal are overwritten on the next deployment, databases need separate handling, and Bicep is Azure-specific.</dd></div>
-                                <div class="adr__outcome"><dt>Outcome</dt><dd>Deployment time from 2&nbsp;days to 15&nbsp;minutes, zero-downtime releases, and no manual configuration errors.</dd></div>
+                                <div class="adr__outcome"><dt>Outcome</dt><dd>Deployment time from 2&nbsp;days to 15&nbsp;minutes, zero-downtime releases enabled, and manual configuration errors eliminated by removing the manual steps.</dd></div>
                             </dl>
                             <p class="adr__links"><a class="case__link" href="/projects/zero-downtime-deployment-pipeline/">Read the case study <svg class="i"><use href="#i-arrow-right"/></svg></a></p>
                         </div>
@@ -1288,7 +1291,7 @@
                     </ul>
                 </section>
                 <section aria-labelledby="qv-work">
-                    <h3 class="qv__h" id="qv-work">Selected work</h3>
+                    <h3 class="qv__h" id="qv-work">Selected work &middot; reported outcomes</h3>
                     <ul class="qv__list qv__list--work">
                         <li><a href="/projects/multi-channel-order-processing/">Multi-channel order processing</a><span>sync 5&nbsp;min &rarr; &lt;2&nbsp;s</span></li>
                         <li><a href="/projects/zero-downtime-deployment-pipeline/">Zero-downtime deployment pipeline</a><span>2&nbsp;days &rarr; 15&nbsp;min</span></li>

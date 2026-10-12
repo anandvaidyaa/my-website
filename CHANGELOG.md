@@ -1,5 +1,14 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (4) — Production-readiness audit
+
+Full report with evidence, the claim-by-claim table and open questions for the owner: [`docs/AUDIT-2026-10-12.md`](docs/AUDIT-2026-10-12.md).
+
+- **Accuracy:** every metric traced to the owner's own June 2026 commits; wording aligned with what he wrote ("zero-downtime releases enabled", "manual configuration errors eliminated"); figures labelled as reported outcomes on project cards, in the quick view and on every case study; Azure Functions idle cost qualified by hosting plan (7 places); the illustrative architecture's Bicep scope stated; Azure AD B2C's current status noted.
+- **Case studies:** a "My part in this project" panel near the top of each; the gateway inspector now covers 200, 401, 403, 429 and a carrier 503, each failing at the right layer; both exhibits say they are frontend simulations; the YAML fragment authenticates through `AzureCLI@2` and is labelled conceptual.
+- **Fixes:** homepage JSON-LD `datePublished` (2024 typo → 2026-06-13); stacked project card layout.
+- **Tested:** functional 46/46, easter eggs 56/56, SEO 53/53, motion 23/23, case studies 64/64, recruiter 24/24, simulations 11/11; axe 0 violations everywhere tested. Lighthouse same-session A/B: no regression (homepage mobile 87–92, case studies 94–99, desktop 97–99).
+
 ## 2026-10-12 (3) — Recruiter quick view, résumé, engineering decisions
 
 An audit against the full brief showed most of it already in place (cinematic hero and scroll system, case studies, architecture explorer, terminal with `sudo hire anand`, ten easter eggs with a finale, 404 portal). This round adds what was missing.

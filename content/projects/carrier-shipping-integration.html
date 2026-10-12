@@ -45,6 +45,16 @@
 </div>
 <!-- /hero -->
 
+<aside class="contrib reveal" aria-labelledby="contrib-h">
+    <h2 class="contrib__h" id="contrib-h"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg> My part in this project</h2>
+    <dl class="contrib__list">
+        <div><dt>Role</dt><dd>Built the centralised API gateway for the carrier integrations.</dd></div>
+        <div><dt>What I worked on</dt><dd>The Azure API Management gateway and its OAuth&nbsp;2.0 token validation, automated label generation through FedEx, DHL and UPS, and tracking updates via webhooks.</dd></div>
+        <div><dt>Technologies I used</dt><dd>Azure API Management, OAuth&nbsp;2.0, Azure AD B2C</dd></div>
+        <div class="contrib__muted"><dt>Not published here</dt><dd>The client, team size and timeline. Outcomes are as reported from the engagement; the client&rsquo;s systems are private, so the underlying measurements can&rsquo;t be shared.</dd></div>
+    </dl>
+</aside>
+
 <section class="chapter" id="problem" data-toc="The problem" data-chapter="cs-problem" aria-labelledby="problem-h">
     <header class="chapter__head reveal">
         <span class="chapter__no" aria-hidden="true">01</span>
@@ -106,7 +116,7 @@
                 <div class="archx__panel" aria-live="polite">
                     <div class="archx__detail is-active" data-detail="overview"><p class="archx__tag">Overview</p><h3>A gateway in front of every carrier</h3><p>Requests from dispatch go through one gateway that authenticates them and routes them to the right carrier; tracking flows back as webhooks. Select any component for details.</p></div>
                     <div class="archx__detail" data-detail="dispatch"><p class="archx__tag">Callers</p><h3>Dispatch applications</h3><p>Integrate once, with one API. They authenticate with short-lived tokens and never hold carrier API keys.</p></div>
-                    <div class="archx__detail" data-detail="b2c"><p class="archx__tag">Identity</p><h3>Azure AD B2C &amp; OAuth 2.0</h3><p>Issues the tokens callers present. Token issuance and app registrations add setup, and every client must handle expiring tokens gracefully.</p></div>
+                    <div class="archx__detail" data-detail="b2c"><p class="archx__tag">Identity</p><h3>Azure AD B2C &amp; OAuth 2.0</h3><p>Issues the tokens callers present. Token issuance and app registrations add setup, and every client must handle expiring tokens gracefully. Microsoft no longer sells Azure AD B2C to new customers; for new builds its successor is Microsoft Entra External ID.</p></div>
                     <div class="archx__detail" data-detail="apim"><p class="archx__tag">Gateway</p><h3>Azure API Management</h3><p>Token validation, throttling, versioning and logging in one place. It becomes a critical dependency, so its tier, scaling and availability are planned like any production service.</p></div>
                     <div class="archx__detail" data-detail="fedex"><p class="archx__tag">Carrier</p><h3>FedEx</h3><p>One of the three real carrier integrations. Carrier-specific logic only; cross-cutting concerns stay in the gateway.</p></div>
                     <div class="archx__detail" data-detail="dhl"><p class="archx__tag">Carrier</p><h3>DHL</h3><p>Same pattern: the gateway handles authentication and throttling, the integration handles DHL&rsquo;s API.</p></div>
@@ -125,20 +135,23 @@
         <h2 class="chapter__title" id="inspector-h">Send a label request through the gateway.</h2>
     </header>
     <div class="chapter__body prose">
-        <p class="reveal">Pick a carrier and try it with and without a token. The checks are the ones the gateway is responsible for; timings are slowed down so you can follow them.</p>
+        <p class="reveal">Pick a carrier and a scenario. Each failure stops at a different layer &mdash; authentication, authorization, throttling, or the carrier itself &mdash; and gets a different answer. The checks are the ones the gateway is responsible for; timings are slowed down so you can follow them.</p>
     </div>
     <div class="sim sim--gate reveal" data-sim="gate">
         <div class="sim__head">
-            <p class="sim__tag">Illustrative · one request, step by step</p>
+            <p class="sim__tag">Frontend simulation · no carrier is called · one request, step by step</p>
             <div class="sim__opts">
                 <div class="sim__modes" role="group" aria-label="Carrier">
                     <button type="button" class="seg is-active" data-carrier="FedEx" aria-pressed="true">FedEx</button>
                     <button type="button" class="seg" data-carrier="DHL" aria-pressed="false">DHL</button>
                     <button type="button" class="seg" data-carrier="UPS" aria-pressed="false">UPS</button>
                 </div>
-                <div class="sim__modes" role="group" aria-label="Credentials">
-                    <button type="button" class="seg is-active" data-token="yes" aria-pressed="true">With a token</button>
-                    <button type="button" class="seg" data-token="no" aria-pressed="false">Without a token</button>
+                <div class="sim__modes sim__modes--wrap" role="group" aria-label="Scenario">
+                    <button type="button" class="seg is-active" data-scenario="ok" aria-pressed="true">Valid token</button>
+                    <button type="button" class="seg" data-scenario="none" aria-pressed="false">No token</button>
+                    <button type="button" class="seg" data-scenario="scope" aria-pressed="false">Token without permission</button>
+                    <button type="button" class="seg" data-scenario="limit" aria-pressed="false">Over the rate limit</button>
+                    <button type="button" class="seg" data-scenario="down" aria-pressed="false">Carrier unavailable</button>
                 </div>
             </div>
         </div>
@@ -147,8 +160,9 @@
             <div class="gate__core">
                 <b><svg class="i" aria-hidden="true"><use href="#i-gateway"/></svg> API Management</b>
                 <ol class="gate__checks">
-                    <li data-check="jwt"><span>Validate OAuth 2.0 token</span><small>Azure AD B2C</small></li>
-                    <li data-check="limit"><span>Throttle and log</span><small>one place for every carrier</small></li>
+                    <li data-check="jwt"><span>Validate OAuth 2.0 token</span><small>authentication &middot; Azure AD B2C</small></li>
+                    <li data-check="scope"><span>Check the token&rsquo;s permission</span><small>authorization &middot; may it create labels?</small></li>
+                    <li data-check="limit"><span>Throttle and log</span><small>rate limit &middot; one place for every carrier</small></li>
                     <li data-check="route"><span>Route to <b data-carrier-name>FedEx</b></span><small>carrier-specific integration</small></li>
                 </ol>
             </div>
@@ -204,7 +218,7 @@
         &lt;audience&gt;{api-client-id}&lt;/audience&gt;
       &lt;/audiences&gt;
     &lt;/validate-jwt&gt;
-    &lt;!-- Protect carrier quotas: one throttle for every caller --&gt;
+    &lt;!-- Protect carrier quotas: one throttle for every caller (answers 429 with Retry-After) --&gt;
     &lt;rate-limit-by-key calls="100" renewal-period="60" counter-key="@(context.Subscription.Id)" /&gt;
     &lt;!-- One front door, one backend per carrier --&gt;
     &lt;set-backend-service backend-id='@(context.Request.MatchedParameters[&quot;carrier&quot;])' /&gt;
@@ -224,6 +238,7 @@
         <li class="reveal"><span class="results__val" data-count="40" data-suffix="+ hrs">40+ hrs</span><span class="results__lbl">Dispatch overhead saved per week.</span></li>
         <li class="reveal"><span class="results__val">Improved</span><span class="results__lbl">Shipping SLA compliance, significantly.</span></li>
     </ul>
+    <p class="results__note reveal">As reported from the engagement. The client&rsquo;s systems are private, so the raw measurements aren&rsquo;t published; the simulations and code on this page are illustrative.</p>
 </section>
 
 <section class="chapter" id="skills" data-toc="Skills demonstrated" data-chapter="cs-skills" aria-labelledby="skills-h">

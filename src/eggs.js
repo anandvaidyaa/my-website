@@ -440,7 +440,7 @@
        ====================================================================== */
     var STARS = [
         { id: "apim", x: 18, y: 30, name: "API Management", fact: "One front door for every API: tokens checked at the gateway, not in every service.", key: true },
-        { id: "func", x: 50, y: 18, name: "Azure Functions", fact: "Event-driven compute that scales out for bursts and down to zero when idle.", key: true },
+        { id: "func", x: 50, y: 18, name: "Azure Functions", fact: "Event-driven compute that scales out for bursts and, on consumption plans, in to zero when idle.", key: true },
         { id: "iac", x: 82, y: 38, name: "Bicep / IaC", fact: "Every environment rebuilt from the same code. Portal clicks optional.", key: true },
         { id: "cicd", x: 66, y: 72, name: "CI/CD", fact: "One pipeline took deployments from 2 days to 15 minutes." },
         { id: "mi", x: 34, y: 66, name: "Managed Identity", fact: "Services authenticate as themselves. Secrets stored in config: zero." },

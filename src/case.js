@@ -544,19 +544,41 @@
         var cSmall = $("[data-g-client]", sim), kSmall = $("[data-g-carrier]", sim), log = $("[data-log]", sim);
         var checks = {};
         $$("[data-check]", sim).forEach(function (li) { checks[li.getAttribute("data-check")] = li; });
+        var order = ["jwt", "scope", "limit", "route"];
         var send = $('[data-act="send"]', sim), resetBtn = $('[data-act="reset"]', sim);
-        var name = "FedEx", token = "yes", timers = [];
+        var name = "FedEx", scenario = "ok", timers = [];
+
+        // Where each scenario stops, and what the caller is told. Status codes are the standard
+        // ones for each failure; the whole exhibit is a frontend simulation.
+        var STOP = {
+            none: { at: "jwt", code: "401 Unauthorized", msg: function () { return "401 Unauthorized at the gateway: the request has no token, so " + name + " is never called — and the carrier’s API keys never leave the gateway."; } },
+            scope: { at: "scope", code: "403 Forbidden", msg: function () { return "403 Forbidden: the token is genuine (authentication passed), but it doesn’t grant label creation (authorization failed). " + name + " is never called."; } },
+            limit: { at: "limit", code: "429 Too Many Requests", msg: function () { return "429 Too Many Requests: this caller has used its quota for now. The gateway answers with a Retry-After header and protects " + name + "’s limits; the carrier is never called."; } }
+        };
+        var INTRO = {
+            ok: "The request carries a valid OAuth 2.0 token with permission to create labels.",
+            none: "The request has no token at all.",
+            scope: "The request has a valid token, but without permission to create labels.",
+            limit: "This caller has already used its request quota for the minute.",
+            down: "Everything is in order on our side, but the carrier is having an outage."
+        };
 
         function say(msg, tone) { log.textContent = msg; log.className = "sim__log" + (tone ? " is-" + tone : ""); }
         function later(fn, ms) { timers.push(window.setTimeout(fn, ms)); }
         function mark(id, cls) { checks[id].className = cls ? "is-" + cls : ""; }
         function reset() {
             timers.forEach(window.clearTimeout); timers = [];
-            Object.keys(checks).forEach(function (k) { mark(k, ""); });
+            order.forEach(function (k) { mark(k, ""); });
             client.className = "gate__end"; carrier.className = "gate__end";
             cSmall.textContent = "ready"; kSmall.textContent = "idle";
             send.disabled = false;
-            say(token === "yes" ? "The request carries a valid OAuth 2.0 token. Send it to watch the gateway’s checks." : "The request has no token. Send it to see where it stops.");
+            say(INTRO[scenario] + " Send it to watch the gateway’s checks.");
+        }
+        function finish(text, tone, clientState) {
+            cSmall.textContent = clientState;
+            client.className = "gate__end" + (tone === "good" ? " is-ok" : "");
+            say(text, tone);
+            send.disabled = false;
         }
 
         function run() {
@@ -566,47 +588,59 @@
             cSmall.textContent = "POST /labels";
             say("Request sent to the gateway…");
             travel(client, core, 500);
-            later(function () { mark("jwt", "run"); }, 500);
+            var stop = STOP[scenario];
+            var t = 500;
+            // Walk the gateway's checks in order until one rejects the request
+            for (var i = 0; i < order.length; i++) {
+                (function (id, k) {
+                    later(function () { mark(id, "run"); }, t);
+                    t += 520;
+                    later(function () {
+                        if (stop && stop.at === id) {
+                            mark(id, "fail");
+                            order.slice(k + 1).forEach(function (rest) { mark(rest, "skip"); });
+                            finish(stop.msg(), "bad", stop.code);
+                            return;
+                        }
+                        mark(id, "pass");
+                    }, t);
+                })(order[i], i);
+                if (stop && stop.at === order[i]) return;
+            }
             later(function () {
-                if (token !== "yes") {
-                    mark("jwt", "fail"); mark("limit", "skip"); mark("route", "skip");
-                    cSmall.textContent = "401 Unauthorized";
-                    client.classList.remove("is-on");
-                    say("401 at the gateway: no valid token, so " + name + " is never called — and the carrier’s API keys never leave the gateway.", "bad");
-                    send.disabled = false;
-                    return;
-                }
-                mark("jwt", "pass"); mark("limit", "run");
-                say("Token is valid (issued by Azure AD B2C). Checking limits…");
-            }, 1100);
-            if (token !== "yes") return;
-            later(function () { mark("limit", "pass"); mark("route", "run"); say("Within limits, and logged. Routing to " + name + "’s integration…"); }, 1600);
-            later(function () {
-                mark("route", "pass");
                 travel(core, carrier, 500);
                 carrier.classList.add("is-on");
                 kSmall.textContent = "creating label…";
                 say(name + " is creating the label. Its API keys stay at the gateway, out of the dispatch app.");
-            }, 2100);
+            }, t);
+            if (scenario === "down") {
+                later(function () {
+                    carrier.className = "gate__end";
+                    kSmall.textContent = "503 Service Unavailable";
+                    travel(carrier, client, 600);
+                }, t + 800);
+                later(function () {
+                    finish(name + " answered 503 Service Unavailable. The gateway passes the error back to dispatch with a request ID for tracing, so the request can be retried later. Nothing is retried in this simulation.", "bad", "503 from " + name);
+                }, t + 1400);
+                return;
+            }
             later(function () {
                 carrier.className = "gate__end is-ok";
                 kSmall.textContent = "label created";
                 travel(carrier, client, 600);
-            }, 2800);
+            }, t + 700);
             later(function () {
-                client.className = "gate__end is-ok";
                 cSmall.textContent = "label received";
+                client.className = "gate__end is-ok";
                 say("Label created through " + name + " — no portal, no clicks.", "good");
-            }, 3400);
+            }, t + 1300);
             later(function () {
                 kSmall.textContent = "webhook: in transit";
                 travel(carrier, client, 600);
-            }, 4300);
+            }, t + 2200);
             later(function () {
-                cSmall.textContent = "tracking: in transit";
-                say("Label created through " + name + " — no portal, no clicks. Then " + name + " pushed a tracking update by webhook: nobody had to check.", "good");
-                send.disabled = false;
-            }, 4900);
+                finish("Label created through " + name + " — no portal, no clicks. Then " + name + " pushed a tracking update by webhook: nobody had to check.", "good", "tracking: in transit");
+            }, t + 2800);
         }
 
         segGroup($$("[data-carrier]", sim), "data-carrier", function (c) {
@@ -614,7 +648,7 @@
             $$("[data-carrier-name]", sim).forEach(function (n) { n.textContent = c; });
             reset();
         });
-        segGroup($$("[data-token]", sim), "data-token", function (t) { token = t; reset(); });
+        segGroup($$("[data-scenario]", sim), "data-scenario", function (v) { scenario = v; reset(); });
         send.addEventListener("click", run);
         resetBtn.addEventListener("click", reset);
         reset();

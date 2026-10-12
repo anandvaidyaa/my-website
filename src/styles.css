@@ -2888,3 +2888,14 @@ html:not(.js) [data-quick] { display: none !important; }
 @media (min-width: 1000px) { .contact__orbit { display: block; } .contact__head .section-intro { max-width: calc(100% - 280px); } }
 /* Six contact cards: the last one takes the full row instead of sitting alone */
 @media (min-width: 640px) { .contact__cards > .ccard:last-child { grid-column: 1 / -1; } }
+
+/* The figures on project cards are reported outcomes: say so right where they appear */
+.outcomes__cap { margin-top: 2.5rem; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.case .outcomes__cap + .outcomes { margin-top: .6rem; }
+@media (min-width: 900px) {
+    /* Stacked case: diagram on the left spanning both rows; label and figures together on the right */
+    .case--stack .case__side { grid-template-rows: auto 1fr; row-gap: .6rem; }
+    .case--stack .case__lens { grid-row: 1 / span 2; }
+    .case--stack .outcomes__cap { grid-column: 2; grid-row: 1; margin-top: 0; }
+    .case--stack .outcomes__cap + .outcomes { grid-column: 2; grid-row: 2; margin-top: 0; }
+}

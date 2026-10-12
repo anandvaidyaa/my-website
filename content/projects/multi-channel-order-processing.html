@@ -41,6 +41,16 @@
 </div>
 <!-- /hero -->
 
+<aside class="contrib reveal" aria-labelledby="contrib-h">
+    <h2 class="contrib__h" id="contrib-h"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg> My part in this project</h2>
+    <dl class="contrib__list">
+        <div><dt>Role</dt><dd>Architected the event-driven integration backend.</dd></div>
+        <div><dt>What I worked on</dt><dd>The ingest &rarr; normalise &rarr; persist &rarr; distribute flow on Azure Functions, the shared inventory model every channel maps to, and the order and inventory state in Cosmos DB.</dd></div>
+        <div><dt>Technologies I used</dt><dd>Azure Functions, Cosmos DB, ASP.NET Core &amp; C#</dd></div>
+        <div class="contrib__muted"><dt>Not published here</dt><dd>The client, team size and timeline. Outcomes are as reported from the engagement; the client&rsquo;s systems are private, so the underlying measurements can&rsquo;t be shared.</dd></div>
+    </dl>
+</aside>
+
 <section class="chapter" id="problem" data-toc="The problem" data-chapter="cs-problem" aria-labelledby="problem-h">
     <header class="chapter__head reveal">
         <span class="chapter__no" aria-hidden="true">01</span>
@@ -108,7 +118,7 @@
                     <div class="archx__detail" data-detail="shopify"><p class="archx__tag">Sales channel</p><h3>Shopify</h3><p>One of the three marketplaces. Its order and stock changes arrive through a webhook handler, and it receives updates caused by sales elsewhere.</p></div>
                     <div class="archx__detail" data-detail="amazon"><p class="archx__tag">Sales channel</p><h3>Amazon</h3><p>Same contract as every other channel: changes in, updated stock levels out, through its own adapter onto the shared model.</p></div>
                     <div class="archx__detail" data-detail="walmart"><p class="archx__tag">Sales channel</p><h3>Walmart</h3><p>The third channel. Because every channel maps to one model, adding a channel means writing one adapter, not three.</p></div>
-                    <div class="archx__detail" data-detail="fn"><p class="archx__tag">Compute</p><h3>Azure Functions</h3><p>Ingest, normalise, persist and distribute. Event-driven compute scales out with order bursts and costs nothing while idle. Handlers are idempotent, because events can arrive twice or out of order.</p></div>
+                    <div class="archx__detail" data-detail="fn"><p class="archx__tag">Compute</p><h3>Azure Functions</h3><p>Ingest, normalise, persist and distribute. Event-driven compute scales out with order bursts and, on consumption-based plans, in to zero while idle. Handlers are idempotent, because events can arrive twice or out of order.</p></div>
                     <div class="archx__detail" data-detail="model"><p class="archx__tag">Design</p><h3>Shared inventory model</h3><p>Instead of point-to-point mappings between each pair of marketplaces, every channel translates to and from a single model, designed so channel-specific fields don&rsquo;t leak into it.</p></div>
                     <div class="archx__detail" data-detail="cosmos"><p class="archx__tag">State</p><h3>Cosmos DB</h3><p>Holds the current order and inventory state: a low-latency, horizontally scalable document store for high-frequency reads and writes of small records during traffic spikes.</p></div>
                 </div>
@@ -128,7 +138,7 @@
     </div>
     <div class="sim sim--sync reveal" data-sim="sync">
         <div class="sim__head">
-            <p class="sim__tag">Illustrative · the scheduled sync runs 60× faster here</p>
+            <p class="sim__tag">Frontend simulation · no real store is touched · the scheduled sync runs 60× faster here</p>
             <div class="sim__modes" role="group" aria-label="Sync design">
                 <button type="button" class="seg is-active" data-mode="poll" aria-pressed="true">Before · scheduled sync</button>
                 <button type="button" class="seg" data-mode="event" aria-pressed="false">After · event-driven</button>
@@ -158,7 +168,7 @@
         <article class="decision reveal">
             <p class="decision__no" aria-hidden="true">D1</p>
             <h3>Event-driven, serverless compute instead of scheduled polling</h3>
-            <p>Reacting to each change as it happens is what removes the multi-minute window; Azure Functions scale out with order bursts and cost nothing while idle.</p>
+            <p>Reacting to each change as it happens is what removes the multi-minute window; Azure Functions scale out with order bursts and, on consumption-based plans, scale in to zero while idle (storage and Cosmos DB throughput are billed regardless).</p>
             <p class="tradeoff"><strong>Trade-off:</strong> event-driven systems must tolerate duplicate and out-of-order deliveries, so handlers need to be idempotent and updates ordered per item.</p>
         </article>
         <article class="decision reveal">
@@ -211,6 +221,7 @@ public async Task&lt;HttpResponseData&gt; Run(
         <li class="reveal"><span class="results__val">Eliminated</span><span class="results__lbl">Overselling across Shopify, Amazon and Walmart.</span></li>
         <li class="reveal"><span class="results__val" data-count="150" data-prefix="$" data-suffix="k+">$150k+</span><span class="results__lbl">Previously lost quarterly revenue recovered.</span></li>
     </ul>
+    <p class="results__note reveal">As reported from the engagement. The client&rsquo;s systems are private, so the raw measurements aren&rsquo;t published; the simulations and code on this page are illustrative.</p>
 </section>
 
 <section class="chapter" id="skills" data-toc="Skills demonstrated" data-chapter="cs-skills" aria-labelledby="skills-h">
