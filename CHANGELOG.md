@@ -1,5 +1,35 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (7) — Cinematic case studies
+
+The homepage's motion language now carries through the three case studies. As on the homepage, every moment is set by the scroll position, so it replays in reverse.
+
+- **Opening:** the blossom emblem folds through itself as the opening scrolls away and shows its warm inner surface. The opening tilts back into depth as the story begins.
+- **Chapter headings:** each heading opens through the glass-membrane mask used for the homepage's About heading.
+- **Exhibits wait behind frosted glass:** architecture diagrams, simulations, code and before/after comparisons. The glass opens in the project's own shape, with a luminous band along the edge:
+  - orders: a faceted wedge (channels converging);
+  - pipeline: four stages promoted in turn;
+  - API gateway: doors parting from a checkpoint slit.
+- **The frost is an overlay, not a clip on the exhibit:**
+  - Clipping the exhibit itself would hide it from the observers that wire it up lazily.
+  - It ignores the pointer, and keyboard focus inside an exhibit clears it.
+  - Each exhibit opens by mid-screen, or by the furthest point it can scroll to near the page end.
+- **The runaway shard (wide screens):** it keeps your place in the chapter list. It rests beside the chapter you are reading, then hops to the next one with a small overshoot and a spin.
+- **On phones**, the frost is tinted, not blurred, so it stays cheap.
+- **Under reduced motion**, there is no frost, mask, companion or fold.
+- **Code:** `initMembranes`, `initFrost` and `initCompanion` in `src/case.js`; styles under "Cinematic layer" in `src/case.css`.
+
+**Tested:**
+- Case studies 64/64; new case-study cinematic checks 15/15. They cover:
+  - identical states down and back up;
+  - everything open after reading;
+  - focus clears the frost;
+  - the frost ignores the pointer;
+  - reduced motion.
+- Simulations 11/11, three runs in a row. The test now scrolls instantly and waits for the position to settle; with CSS smooth scrolling it had been tapping the simulation off-screen in both the old and new builds.
+- SEO 53/53, functional 46/46 (one intermittent miss on the nav scroll timing, which passed on rerun), homepage motion 23/23 and cinematic 8/8.
+- axe: 0 violations on all case studies, both themes, 375 and 1366 px.
+
 ## 2026-10-12 (6) — Cinematic scroll pass
 
 Scroll position now drives a continuous story across the homepage, not just entrance animations. Every moment is deterministic: the same scroll position always gives the same picture, so scrolling up replays it in reverse.

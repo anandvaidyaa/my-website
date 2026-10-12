@@ -14,6 +14,9 @@
     var wideQ = mq("(min-width: 960px)");
     var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
     var range = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+    var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+    var easeInOut = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+    var easeOutBack = function (x) { return 1 + 2.70158 * Math.pow(x - 1, 3) + 1.70158 * Math.pow(x - 1, 2); };
     var SVGNS = "http://www.w3.org/2000/svg";
     var hasIO = "IntersectionObserver" in window;
 
@@ -40,6 +43,7 @@
     var near = [];
     var ticking = false;
     var vh = window.innerHeight;
+    var docMax = 0;   // furthest the page can scroll, read once per frame before any writes
     var resizers = [];
 
     function scene(el, write, opts) {
@@ -51,6 +55,7 @@
         ticking = false;
         var still = reduceMotion.matches;
         var y = window.scrollY;
+        docMax = document.documentElement.scrollHeight - vh;
         var active = scenes.filter(function (s) { return (s.essential || !still) && near.indexOf(s.el) > -1; });
         var rects = active.map(function (s) { return s.measure ? s.el.getBoundingClientRect() : null; });
         active.forEach(function (s, i) {
@@ -104,6 +109,7 @@
         if (hasIO) new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; sync(); }).observe(hero);
         var layers = $$("[data-depth]", hero);
         var title = $(".cs-hero__title", hero);
+        var inner = $(".cs-hero__inner", hero);
         var ghost = $(".cs-hero__ghost", hero);
         var heroH = 0;
         resizers.push(function () { heroH = hero.offsetHeight || 1; });
@@ -120,10 +126,14 @@
                 title.style.opacity = (1 - range(p, 0.35, 0.9) * 0.6).toFixed(3);
             }
             if (ghost) ghost.style.translate = "0 " + (y * 0.3).toFixed(1) + "px";
+            // …and the whole opening folds back into depth along the top of the screen
+            var fold = easeInOut(range(p, 0.3, 1));
+            if (inner) inner.style.transform = fold > 0.001 ? "perspective(1600px) rotateX(" + (-fold * (wideQ.matches ? 22 : 12)).toFixed(2) + "deg) scale(" + (1 - fold * 0.05).toFixed(4) + ")" : "";
         }, { measure: false });
     }
 
     /* ---------------- Chapters: numbers fill in, navigation tracks reading ---------------- */
+    var chapterRead = {};   // reading progress per chapter id (0..1), shared with the companion
     function initChapters() {
         var chapters = $$(".chapter");
         var links = {};
@@ -138,7 +148,9 @@
                     if (!reduceMotion.matches) no.style.translate = "0 " + ((p - 0.3) * -60).toFixed(1) + "px";
                 }
                 // How much of this chapter has been read (top of the viewport past its top)
-                if (link) link.style.setProperty("--cp", clamp((vh * 0.35 - r.top) / r.height, 0, 1).toFixed(3));
+                var cp = clamp((vh * 0.35 - r.top) / r.height, 0, 1);
+                chapterRead[ch.id] = cp;
+                if (link) link.style.setProperty("--cp", cp.toFixed(3));
             }, { essential: true });
         });
 
@@ -769,8 +781,122 @@
         els.forEach(function (el) { io.observe(el); });
     }
 
+    /* ---------------- Cinematic layer ----------------
+       The homepage's language carried into the story. Everything is set by scroll position
+       (so it replays in reverse) and nothing here runs when motion is reduced. */
+
+    // Chapter headings open through a membrane-shaped mask that grows from inside them
+    function initMembranes() {
+        $$(".chapter__title[data-membrane]").forEach(function (h) {
+            scene(h, function (p, r) {
+                var m = Math.pow(range((vh - r.top) / vh, 0.05, 0.62), 3);
+                if (!h.classList.contains("has-membrane")) h.classList.add("has-membrane");
+                h.style.setProperty("--m", m.toFixed(4));
+                if (h.classList.contains("is-open") !== m > 0.999) h.classList.toggle("is-open", m > 0.999);
+            });
+        });
+        reduceMotion.addEventListener && reduceMotion.addEventListener("change", function () {
+            if (reduceMotion.matches) $$(".has-membrane").forEach(function (h) { h.classList.remove("has-membrane", "is-open"); h.style.removeProperty("--m"); });
+        });
+    }
+
+    /* Each exhibit (diagram, simulation, code, comparison) waits behind frosted glass that opens
+       in this project's shape. The frost is an overlay: clipping the exhibit itself would hide it
+       from the observers that wire it up lazily. Unit coordinates describe the frost that remains. */
+    var FROST = {
+        // Three channels, one model: a faceted wedge opens from the top-left corner
+        cyan: function (o) {
+            var c = 2 * easeOut(o), b = 0.12 * Math.sin(Math.PI * o);
+            var c1 = Math.min(c, 1), c2 = Math.max(c - 1, 0), m = Math.min(c / 2 + b, 1);
+            return [[c1, 0], [1, 0], [1, 1], [0, 1], [0, c1], [c2, c1], [m, m], [c1, c2]];
+        },
+        // A deployment pipeline: four stages are promoted one after another, left to right
+        lime: function (o) {
+            var h = [0, 1, 2, 3].map(function (i) { return easeOut(range(o, i * 0.16, i * 0.16 + 0.52)); });
+            return [[0, 0], [1, 0], [1, 1 - h[3]], [0.75, 1 - h[3]], [0.75, 1 - h[2]], [0.5, 1 - h[2]],
+                [0.5, 1 - h[1]], [0.25, 1 - h[1]], [0.25, 1 - h[0]], [0, 1 - h[0]]];
+        },
+        // A gateway: two doors part from a centre slit, top first
+        magenta: function (o) {
+            var a = 0.5 * easeOut(range(o, 0, 0.75)), b = 0.5 * easeOut(range(o, 0.12, 1));
+            return [[0, 0], [0.5 - a, 0], [0.5 - b, 1], [0.5 + b, 1], [0.5 + a, 0], [1, 0], [1, 1], [0, 1]];
+        }
+    };
+    function initFrost() {
+        var cs = $(".cs");
+        var kind = cs && ["cyan", "lime", "magenta"].filter(function (k) { return cs.classList.contains("cs--" + k); })[0];
+        if (!kind || reduceMotion.matches) return;
+        var all = $$(".cs-story .archx, .cs-story .sim, .cs-story .code, .cs-story .compare");
+        all.filter(function (el) { return !all.some(function (o) { return o !== el && o.contains(el); }); }).forEach(function (ex) {
+            // The frost, and just beneath it a luminous band that runs along the opening edge
+            var edge = document.createElement("span"), frost = document.createElement("span");
+            edge.className = "cine-edge";
+            frost.className = "cine-frost";
+            edge.setAttribute("aria-hidden", "true");
+            frost.setAttribute("aria-hidden", "true");
+            ex.classList.add("cine-x");
+            ex.appendChild(frost);
+            ex.appendChild(edge);
+            var pct = function (pts) { return pts.map(function (q) { return (q[0] * 100).toFixed(2) + "% " + (q[1] * 100).toFixed(2) + "%"; }).join(","); };
+            // The band is the frost a moment earlier minus the frost now: two rings that start at a
+            // shared corner, filled even-odd, leave just the strip along the opening edge
+            var band = function (o) {
+                var a = FROST[kind](Math.max(0, o - 0.03)), b = FROST[kind](o);
+                var same = function (q, r) { return q[0] === r[0] && q[1] === r[1]; };
+                var corner = b.filter(function (q) { return (q[0] === 0 || q[0] === 1) && (q[1] === 0 || q[1] === 1) && a.some(function (r) { return same(q, r); }); })[0];
+                if (!corner) return "polygon(0 0, 0 0, 0 0)";
+                var from = function (pts) { var i = 0; while (!same(pts[i], corner)) i++; return pts.slice(i).concat(pts.slice(0, i)); };
+                return "polygon(evenodd," + pct(from(a)) + "," + pct(from(b)) + ")";
+            };
+            var last = "";
+            scene(ex, function (p, r, y) {
+                // Opens between 92% and 50% of the screen, or by the furthest point it can reach
+                // (an exhibit near the end of the page may never get to the middle)
+                var start = vh * 0.92, end = Math.min(Math.max(vh * 0.5, r.top - (docMax - y)), start - 60);
+                var o = range((start - r.top) / (start - end), 0, 1);
+                var key = o >= 1 ? "open" : o.toFixed(3);
+                if (key === last) return;
+                last = key;
+                if (ex.classList.contains("is-open") !== (o >= 1)) ex.classList.toggle("is-open", o >= 1);
+                if (o < 1) { frost.style.clipPath = "polygon(" + pct(FROST[kind](o)) + ")"; edge.style.clipPath = band(o); }
+            });
+        });
+    }
+
+    /* The sculpture's runaway shard keeps your place in the chapter list: it rests beside the
+       chapter you are reading and, as you finish it, hops to the next one (overshooting a little). */
+    function initCompanion() {
+        var list = $(".cs-nav ol");
+        var links = $$(".cs-nav a[data-nav]");
+        if (!list || links.length < 2 || reduceMotion.matches) return;
+        var wideNav = mq("(min-width: 1100px)");
+        var el = document.createElement("span");
+        el.className = "cs-frag";
+        el.setAttribute("aria-hidden", "true");
+        el.innerHTML = '<svg viewBox="-30 -30 60 60" focusable="false"><polygon points="0,-24 13,-3 0,15 -12,-3"/><polyline points="0,-24 0,15"/></svg>';
+        list.appendChild(el);
+        var ys = null, last = "";
+        resizers.push(function () { ys = null; });
+        scene(list, function () {
+            if (!wideNav.matches) return;
+            if (!ys) ys = links.map(function (a) { var li = a.parentNode; return li.offsetTop + li.offsetHeight / 2; });
+            var idx = 0;
+            var read = links.map(function (a) { return chapterRead[a.getAttribute("data-nav")] || 0; });
+            for (var i = 0; i < read.length; i++) if (read[i] > 0) idx = i;
+            var t = read[idx];
+            var nxt = Math.min(idx + 1, ys.length - 1);
+            var hop = easeOutBack(range(t, 0.86, 1));
+            var y = ys[idx] + (ys[nxt] - ys[idx]) * hop;
+            // a little lift and spin while it hops; it settles upright
+            var lift = Math.sin(Math.PI * range(t, 0.86, 1)) * -10;
+            var str = "translate3d(" + (lift * 0.6).toFixed(1) + "px," + y.toFixed(1) + "px,0) rotate(" + (hop * 360).toFixed(1) + "deg) scale(.34)";
+            if (str !== last) { last = str; el.style.transform = str; }
+            if (!el.classList.contains("is-on")) el.classList.add("is-on");
+        }, { measure: false });
+    }
+
     function boot() {
-        [initHero, initChapters, initArchitecture, initJourney, initDrift, initSync, initGate, initCode, initCount].forEach(safe);
+        [initHero, initChapters, initArchitecture, initJourney, initDrift, initSync, initGate, initCode, initCount, initMembranes, initFrost, initCompanion].forEach(safe);
         startScenes();
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

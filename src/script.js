@@ -913,8 +913,26 @@
         var host = $("#topo");
         var emblems = $$(".topo--emblem svg");
         var S = topoStates();
-        // Case studies: the blossom as a quiet emblem (continuity between pages)
-        emblems.forEach(function (svg) { topoPaint(topoBuild(svg), S.A, 30); });
+        // Case studies: the blossom as an emblem (continuity between pages). As the opening scrolls
+        // away it folds through itself and shows its inner surface, like the homepage hero.
+        emblems.forEach(function (svg) {
+            var eg = topoBuild(svg), em = svg.parentNode, hero = em.closest(".cs-hero");
+            topoPaint(eg, S.A, 30);
+            if (!hero || reduceMotion.matches) return;
+            var heroH = hero.offsetHeight || 1, lastFold = "", tick = false;
+            var paint = function () {
+                tick = false;
+                var fold = Math.sin(Math.PI * range(clamp(window.scrollY / heroH, 0, 1), 0, 0.9));
+                if (fold.toFixed(3) === lastFold) return;
+                lastFold = fold.toFixed(3);
+                topoPaint(eg, topoFold(lerpDeep(S.A, S.A, 0), fold), 30, true);
+                em.style.setProperty("--inner", lastFold);
+            };
+            window.addEventListener("scroll", function () {
+                if (!tick && window.scrollY < heroH * 1.3) { tick = true; window.requestAnimationFrame(paint); }
+            }, { passive: true });
+            window.addEventListener("resize", function () { heroH = hero.offsetHeight || 1; }, { passive: true });
+        });
         if (!host) return;
         var svg = $("svg", host);
         var g = topoBuild(svg);
