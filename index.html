@@ -226,6 +226,7 @@
                     <svg class="i i-sun"><use href="#i-sun"/></svg>
                     <svg class="i i-moon"><use href="#i-moon"/></svg>
                 </button>
+                <button type="button" class="btn btn--sm btn--glass nav__quick" data-quick aria-haspopup="dialog"><svg class="i"><use href="#i-user"/></svg> R&eacute;sum&eacute;</button>
                 <a class="btn btn--sm btn--primary nav__cta" href="#contact">Let&rsquo;s talk</a>
                 <button class="icon-btn nav__toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
                     <svg class="i i-menu"><use href="#i-menu"/></svg>
@@ -241,9 +242,11 @@
                 <li><a href="#architecture"><span>03</span>Architecture</a></li>
                 <li><a href="#experience"><span>04</span>Experience</a></li>
                 <li><a href="#projects"><span>05</span>Projects</a></li>
-                <li><a href="#credentials"><span>06</span>Credentials</a></li>
-                <li><a href="#contact"><span>07</span>Contact</a></li>
+                <li><a href="#decisions"><span>06</span>How I decide</a></li>
+                <li><a href="#credentials"><span>07</span>Credentials</a></li>
+                <li><a href="#contact"><span>08</span>Contact</a></li>
             </ul>
+            <button type="button" class="btn btn--glass mobile-menu__quick" data-quick aria-haspopup="dialog"><svg class="i"><use href="#i-user"/></svg> 30-second profile &amp; r&eacute;sum&eacute;</button>
             <div class="mobile-menu__foot">
                 <a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me"><svg class="i"><use href="#i-github"/></svg> GitHub</a>
                 <a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me"><svg class="i"><use href="#i-linkedin"/></svg> LinkedIn</a>
@@ -379,6 +382,7 @@
                         <li><a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me"><svg class="i"><use href="#i-github"/></svg><span>GitHub</span></a></li>
                         <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me"><svg class="i"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></li>
                         <li><a href="mailto:anand.svaidya24@gmail.com"><svg class="i"><use href="#i-mail"/></svg><span>Email</span></a></li>
+                        <li><button type="button" class="hero__quick" data-quick aria-haspopup="dialog"><span class="hero__quick-dot" aria-hidden="true"></span>Recruiter? 30-second profile</button></li>
                     </ul>
                 </div>
             </div>
@@ -916,11 +920,110 @@
             </div>
         </section>
 
+        <!-- ========================= HOW I DECIDE ========================= -->
+        <section class="section mind" id="decisions" data-chapter="mind" aria-labelledby="mind-title">
+            <div class="container">
+                <header class="section-head section-head--split reveal">
+                    <div>
+                        <p class="kicker"><span>06</span> Inside my engineering mind</p>
+                        <h2 class="section-title" id="mind-title">Four decisions, written down the way <em>engineers record them</em>.</h2>
+                    </div>
+                    <p class="section-intro">Architecture decision records from the projects above: the context, the constraints, the options on the table, what I chose and what it cost. Open one to read it.</p>
+                </header>
+                <div class="adrs">
+                    <details class="adr reveal">
+                        <summary>
+                            <span class="adr__id">ADR-001</span>
+                            <span class="adr__status" aria-hidden="true">accepted</span>
+                            <h3 class="adr__title">React to events instead of syncing on a schedule</h3>
+                            <span class="adr__ctx">Order processing &middot; Azure Functions, Cosmos DB</span>
+                            <span class="adr__opts" aria-hidden="true"><i>Scheduled sync</i><i>Always-on servers</i><i class="is-chosen">Event-driven functions</i></span>
+                            <svg class="i adr__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+                        </summary>
+                        <div class="adr__body">
+                            <dl class="adr__rec">
+                                <div><dt>Context</dt><dd>Inventory was synchronised between Shopify, Amazon and Walmart about every five minutes &mdash; long enough for the same item to sell on two channels at once.</dd></div>
+                                <div><dt>Constraints</dt><dd>Three marketplaces with different payload formats, order traffic that arrives in bursts, and no new manual reconciliation work.</dd></div>
+                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep the scheduled sync.</b> Whatever the interval, there is still a window in which the same item can sell twice.</li><li><span class="sr-only">Not chosen: </span><b>Fixed, always-on servers.</b> Sized for the bursts and paid for while idle.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Event-driven Azure Functions.</b> React to each change as it happens; scale out with order bursts and cost nothing while idle.</li></ul></dd></div>
+                                <div><dt>Decision</dt><dd>Event-driven Azure Functions behind every channel, one normalised inventory model shared by all of them, and order and inventory state in Cosmos DB.</dd></div>
+                                <div><dt>Trade-off accepted</dt><dd>Events can arrive twice or out of order, so every handler is idempotent and updates are ordered per item.</dd></div>
+                                <div class="adr__outcome"><dt>Outcome</dt><dd>Sync latency from about 5&nbsp;minutes to under 2&nbsp;seconds, overselling eliminated, and $150k+ of previously lost quarterly revenue recovered.</dd></div>
+                            </dl>
+                            <p class="adr__links"><a class="case__link" href="/projects/multi-channel-order-processing/">Read the case study <svg class="i"><use href="#i-arrow-right"/></svg></a></p>
+                        </div>
+                    </details>
+                    <details class="adr reveal">
+                        <summary>
+                            <span class="adr__id">ADR-002</span>
+                            <span class="adr__status" aria-hidden="true">accepted</span>
+                            <h3 class="adr__title">Give services identities, not stored secrets</h3>
+                            <span class="adr__ctx">Security &middot; Managed Identity, OAuth 2.0, RBAC</span>
+                            <span class="adr__opts" aria-hidden="true"><i>Secrets in config</i><i>Shared credentials</i><i class="is-chosen">Identities + tokens</i></span>
+                            <svg class="i adr__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+                        </summary>
+                        <div class="adr__body">
+                            <dl class="adr__rec">
+                                <div><dt>Context</dt><dd>Legacy on-premises processing at FSP Consulting relied on exposed credentials, and the carrier gateway needed callers to authenticate without holding carrier API keys.</dd></div>
+                                <div><dt>Constraints</dt><dd>Production systems; carrier API keys must stay out of client applications.</dd></div>
+                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Credentials in configuration files.</b> Secrets to store, rotate and leak.</li><li><span class="sr-only">Not chosen: </span><b>Shared credentials handed to every caller.</b> Every client holds the keys.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Managed Identities, OAuth&nbsp;2.0 and least-privilege RBAC.</b> Each service gets its own Entra ID identity and only the role it needs; callers present short-lived tokens.</li></ul></dd></div>
+                                <div><dt>Decision</dt><dd>Services authenticate with Managed Identities and least-privilege RBAC roles; callers use OAuth&nbsp;2.0 tokens validated at the gateway.</dd></div>
+                                <div><dt>Trade-off accepted</dt><dd>Token issuance and app registrations add setup, and every client has to handle expiring tokens gracefully.</dd></div>
+                                <div class="adr__outcome"><dt>Outcome</dt><dd>Exposed credentials removed and critical attack surfaces closed in production; carrier API keys stay out of client applications.</dd></div>
+                            </dl>
+                            <p class="adr__links"><a class="case__link" href="/#job-fsp">The FSP Consulting role <svg class="i"><use href="#i-arrow-right"/></svg></a> <a class="case__link" href="/projects/carrier-shipping-integration/">The carrier gateway <svg class="i"><use href="#i-arrow-right"/></svg></a></p>
+                        </div>
+                    </details>
+                    <details class="adr reveal">
+                        <summary>
+                            <span class="adr__id">ADR-003</span>
+                            <span class="adr__status" aria-hidden="true">accepted</span>
+                            <h3 class="adr__title">Make the templates the only source of truth</h3>
+                            <span class="adr__ctx">Delivery &middot; Azure Bicep, Azure DevOps</span>
+                            <span class="adr__opts" aria-hidden="true"><i>Changes by hand</i><i>Hand-written ARM JSON</i><i class="is-chosen">Bicep, versioned with the app</i></span>
+                            <svg class="i adr__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+                        </summary>
+                        <div class="adr__body">
+                            <dl class="adr__rec">
+                                <div><dt>Context</dt><dd>Releases depended on manual deployment steps. Environments drifted apart, a release could take days, and the differences surfaced in production as frequent rollbacks.</dd></div>
+                                <div><dt>Constraints</dt><dd>Every environment has to match, releases must not take the service down, and data in stateful resources has to survive a redeployment.</dd></div>
+                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep applying changes by hand.</b> This is where the drift comes from.</li><li><span class="sr-only">Not chosen: </span><b>Hand-written ARM JSON.</b> Full coverage of Azure resource types, but long and hard to review.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Azure Bicep templates in the same repository as the code.</b> Compiles to ARM, far shorter to review, and every environment can be rebuilt from a known commit.</li></ul></dd></div>
+                                <div><dt>Decision</dt><dd>Environments are declared in Bicep and deployed through multi-stage Azure DevOps pipelines. A change is a fresh deployment, never an edit to a running server.</dd></div>
+                                <div><dt>Trade-off accepted</dt><dd>Changes made in the portal are overwritten on the next deployment, databases need separate handling, and Bicep is Azure-specific.</dd></div>
+                                <div class="adr__outcome"><dt>Outcome</dt><dd>Deployment time from 2&nbsp;days to 15&nbsp;minutes, zero-downtime releases, and no manual configuration errors.</dd></div>
+                            </dl>
+                            <p class="adr__links"><a class="case__link" href="/projects/zero-downtime-deployment-pipeline/">Read the case study <svg class="i"><use href="#i-arrow-right"/></svg></a></p>
+                        </div>
+                    </details>
+                    <details class="adr reveal">
+                        <summary>
+                            <span class="adr__id">ADR-004</span>
+                            <span class="adr__status" aria-hidden="true">accepted</span>
+                            <h3 class="adr__title">Put one gateway in front of every carrier</h3>
+                            <span class="adr__ctx">Integration &middot; Azure API Management, webhooks</span>
+                            <span class="adr__opts" aria-hidden="true"><i>Carrier portals</i><i>Point-to-point integrations</i><i class="is-chosen">One API gateway</i></span>
+                            <svg class="i adr__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+                        </summary>
+                        <div class="adr__body">
+                            <dl class="adr__rec">
+                                <div><dt>Context</dt><dd>Dispatch teams created labels and tracked packages by hand across separate FedEx, DHL and UPS portals &mdash; twenty minutes at a time, holding back shipping SLA compliance.</dd></div>
+                                <div><dt>Constraints</dt><dd>Three carrier APIs, carrier keys kept out of dispatch apps, and tracking that stays current without anyone checking.</dd></div>
+                                <div class="adr__options"><dt>Options on the table</dt><dd><ul><li><span class="sr-only">Not chosen: </span><b>Keep the portals.</b> Twenty minutes of clicking per shipment.</li><li><span class="sr-only">Not chosen: </span><b>Integrate each carrier into every dispatch app.</b> Three integrations, three sets of keys, and authentication and throttling duplicated everywhere.</li><li class="is-chosen"><span class="sr-only">Chosen: </span><b>Azure API Management in front of every carrier, with tracking webhooks.</b> Dispatch integrates once; token validation, throttling, versioning and logging live in one place.</li></ul></dd></div>
+                                <div><dt>Decision</dt><dd>One gateway on Azure API Management, protected with OAuth&nbsp;2.0, automating label generation, with carriers pushing tracking updates as webhooks.</dd></div>
+                                <div><dt>Trade-off accepted</dt><dd>The gateway becomes a critical dependency, so its tier, scaling and availability are planned like any production service; webhook endpoints verify senders and handle retries and duplicates.</dd></div>
+                                <div class="adr__outcome"><dt>Outcome</dt><dd>A 20-minute manual process reduced to zero clicks, 40+ hours of dispatch work saved every week, and significantly improved SLA compliance.</dd></div>
+                            </dl>
+                            <p class="adr__links"><a class="case__link" href="/projects/carrier-shipping-integration/">Read the case study <svg class="i"><use href="#i-arrow-right"/></svg></a></p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
         <!-- ========================= CREDENTIALS ========================= -->
         <section class="section credentials" id="credentials" data-chapter="credentials" aria-labelledby="cred-title">
             <div class="container">
                 <header class="section-head reveal">
-                    <p class="kicker"><span>06</span> Education &amp; certifications</p>
+                    <p class="kicker"><span>07</span> Education &amp; certifications</p>
                     <h2 class="section-title" id="cred-title">Credentials</h2>
                 </header>
 
@@ -959,7 +1062,7 @@
         <section class="section faq" id="faq" data-chapter="faq" aria-labelledby="faq-title">
             <div class="container faq__grid">
                 <header class="section-head reveal">
-                    <p class="kicker"><span>07</span> FAQ</p>
+                    <p class="kicker"><span>08</span> FAQ</p>
                     <h2 class="section-title" id="faq-title">Quick answers</h2>
                     <p class="section-intro">The questions recruiters and engineering managers ask most often.</p>
                     <div class="constellation" id="constellation" role="group" aria-label="A small star map"></div>
@@ -989,7 +1092,7 @@
         <section class="section console" id="console" data-chapter="console" aria-labelledby="console-title">
             <div class="container console__grid">
                 <header class="section-head reveal">
-                    <p class="kicker"><span>08</span> Prefer a shell?</p>
+                    <p class="kicker"><span>09</span> Prefer a shell?</p>
                     <h2 class="section-title" id="console-title">Explore this profile from the <em>command line</em>.</h2>
                     <p class="section-intro">Type <code>help</code>, or tap a command. Everything here mirrors the page content.</p>
                 </header>
@@ -1028,7 +1131,14 @@
             <div class="contact__glow" aria-hidden="true"></div>
             <div class="container">
                 <header class="contact__head reveal">
-                    <p class="kicker"><span>09</span> Contact</p>
+                    <!-- The satellite that drifted off its orbit in the opening is back where it belongs -->
+                    <div class="contact__orbit" aria-hidden="true">
+                        <span class="contact__ring"></span>
+                        <span class="contact__core"></span>
+                        <span class="contact__sat"><i></i></span>
+                        <span class="contact__note">sat-01 &middot; back in orbit &#10003;</span>
+                    </div>
+                    <p class="kicker"><span>10</span> Contact</p>
                     <h2 class="contact__title" id="contact-title">Let&rsquo;s build cloud systems that <em>run themselves</em>.</h2>
                     <p class="section-intro">Cloud engineering, integration or DevOps roles and projects &mdash; the fastest way to reach me is email.</p>
                 </header>
@@ -1054,6 +1164,11 @@
                             <svg class="i ccard__icon"><use href="#i-github"/></svg>
                             <span class="ccard__meta"><span class="ccard__label">GitHub</span><span class="ccard__val">anandvaidyaa</span></span>
                             <svg class="i ccard__go"><use href="#i-external"/></svg>
+                        </a>
+                        <a class="ccard reveal" href="/Anand-Vaidya-Resume.pdf" download>
+                            <svg class="i ccard__icon"><use href="#i-user"/></svg>
+                            <span class="ccard__meta"><span class="ccard__label">R&eacute;sum&eacute;</span><span class="ccard__val">PDF &middot; 1 page</span></span>
+                            <svg class="i ccard__go"><use href="#i-arrow-down"/></svg>
                         </a>
                         <a class="ccard reveal" href="tel:+919913013470">
                             <svg class="i ccard__icon"><use href="#i-phone"/></svg>
@@ -1111,6 +1226,7 @@
                     <li><a href="#architecture">Architecture</a></li>
                     <li><a href="#experience">Experience</a></li>
                     <li><a href="#projects">Projects</a></li>
+                    <li><a href="#decisions">How I decide</a></li>
                     <li><a href="#credentials">Credentials</a></li>
                 </ul>
             </nav>
@@ -1126,6 +1242,7 @@
                     <li><a href="https://github.com/anandvaidyaa" target="_blank" rel="noopener me">GitHub</a></li>
                     <li><a href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener me">LinkedIn</a></li>
                     <li><a href="mailto:anand.svaidya24@gmail.com">Email</a></li>
+                    <li><a href="/Anand-Vaidya-Resume.pdf" download>R&eacute;sum&eacute; (PDF)</a></li>
                 </ul>
             </div>
         </div>
@@ -1135,6 +1252,60 @@
             <a href="#home" class="to-top">Back to top <svg class="i"><use href="#i-arrow-up"/></svg></a>
         </div>
     </footer>
+
+    <!-- Recruiter quick view: the whole profile in about 30 seconds (also on case-study pages) -->
+    <dialog class="qv" id="quick-view" aria-labelledby="qv-title">
+        <div class="qv__panel">
+            <header class="qv__head">
+                <img src="/profile-320.webp" width="72" height="72" alt="" loading="lazy" decoding="async">
+                <div>
+                    <p class="qv__kicker">30-second profile</p>
+                    <h2 class="qv__name" id="qv-title">Anand Vaidya</h2>
+                    <p class="qv__role">Azure Cloud Engineer &middot; FSP Consulting &middot; Vadodara, India</p>
+                </div>
+                <button type="button" class="icon-btn qv__close" data-qv-close aria-label="Close profile"><svg class="i"><use href="#i-close"/></svg></button>
+            </header>
+            <p class="qv__summary">3+ years building serverless integrations, secure APIs and automated infrastructure on Microsoft Azure &mdash; event-driven systems that turn hours of manual processing into seconds.</p>
+            <div class="qv__actions">
+                <a class="btn btn--primary btn--sm" href="/Anand-Vaidya-Resume.pdf" download>Download r&eacute;sum&eacute; <span class="qv__meta">PDF &middot; 1 page</span></a>
+                <a class="btn btn--glass btn--sm" href="mailto:anand.svaidya24@gmail.com"><svg class="i"><use href="#i-mail"/></svg> Email</a>
+                <a class="btn btn--glass btn--sm" href="https://www.linkedin.com/in/vaidya-anand" target="_blank" rel="noopener"><svg class="i"><use href="#i-linkedin"/></svg> LinkedIn</a>
+                <a class="btn btn--glass btn--sm" href="https://github.com/anandvaidyaa" target="_blank" rel="noopener"><svg class="i"><use href="#i-github"/></svg> GitHub</a>
+            </div>
+            <div class="qv__grid">
+                <section aria-labelledby="qv-exp">
+                    <h3 class="qv__h" id="qv-exp">Experience</h3>
+                    <ol class="qv__list">
+                        <li><span><b>Cloud Engineer</b> &middot; FSP Consulting</span><time>Apr 2025 &ndash; now</time></li>
+                        <li><span><b>Junior Developer</b> &middot; Atharva IT Services</span><time>Feb 2023 &ndash; Mar 2025</time></li>
+                        <li><span><b>LMS Administrator Intern</b> &middot; Parul University</span><time>Sep 2021 &ndash; Aug 2022</time></li>
+                    </ol>
+                </section>
+                <section aria-labelledby="qv-skills">
+                    <h3 class="qv__h" id="qv-skills">Core skills</h3>
+                    <ul class="tags">
+                        <li>Azure Functions</li><li>API Management</li><li>Logic Apps</li><li>Managed Identity &amp; OAuth 2.0</li><li>Bicep &amp; ARM</li><li>Azure DevOps CI/CD</li><li>Cosmos DB</li><li>ASP.NET Core &amp; C#</li>
+                    </ul>
+                </section>
+                <section aria-labelledby="qv-work">
+                    <h3 class="qv__h" id="qv-work">Selected work</h3>
+                    <ul class="qv__list qv__list--work">
+                        <li><a href="/projects/multi-channel-order-processing/">Multi-channel order processing</a><span>sync 5&nbsp;min &rarr; &lt;2&nbsp;s</span></li>
+                        <li><a href="/projects/zero-downtime-deployment-pipeline/">Zero-downtime deployment pipeline</a><span>2&nbsp;days &rarr; 15&nbsp;min</span></li>
+                        <li><a href="/projects/carrier-shipping-integration/">Carrier &amp; shipping gateway</a><span>40+ hrs/week saved</span></li>
+                    </ul>
+                </section>
+                <section aria-labelledby="qv-cred">
+                    <h3 class="qv__h" id="qv-cred">Credentials</h3>
+                    <ul class="qv__list">
+                        <li><span><b>Azure AI Fundamentals</b> (AI-900)</span><time>May 2025</time></li>
+                        <li><span><b>B.Tech. CSE</b> &middot; First Class with Distinction</span><time>2019 &ndash; 2023</time></li>
+                    </ul>
+                </section>
+            </div>
+            <p class="qv__foot">Prefer the long version? <a href="/#decisions" data-qv-close>How I make engineering decisions</a> &middot; <a href="/#contact" data-qv-close>Contact</a></p>
+        </div>
+    </dialog>
 
     <!-- Easter egg: opened by the footer cloud, the Konami code, typing "cloud", or the terminal -->
     <dialog class="egg glass glass--holo" id="egg" aria-labelledby="egg-title">

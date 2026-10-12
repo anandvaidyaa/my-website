@@ -19,7 +19,7 @@ const WEBSITE_ID = `${SITE}/#website`;
 const FILES = [
     "index.html", "404.html", "CNAME", "robots.txt", "site.webmanifest",
     "favicon.svg", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
-    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js"
+    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js", "Anand-Vaidya-Resume.pdf"
 ];
 const DIRS = ["fonts", "og"];
 const HASHED = ["styles.min.css", "script.min.js", "case.min.css", "case.min.js"];
@@ -63,6 +63,7 @@ const header = toRoot(grab(/<header class="site-header"[\s\S]*?<\/header>/, "sit
     .replace('<a href="/#projects">Projects</a>', '<a href="/#projects" class="is-active">Projects</a>');
 const footer = toRoot(grab(/<footer class="site-footer"[\s\S]*?<\/footer>/, "site footer"));
 const egg = grab(/<dialog class="egg[\s\S]*?<\/dialog>/, "easter-egg dialog");
+const quick = grab(/<dialog class="qv"[\s\S]*?<\/dialog>/, "quick-view dialog");
 
 // ---------- 3. Case studies ----------
 const template = await readFile("src/templates/article.html", "utf8");
@@ -94,6 +95,8 @@ for (const file of projectFiles) {
 projects.sort((a, b) => a.order - b.order);
 
 const pad = (n) => String(n).padStart(2, "0");
+// The homepage mascot peeks over the "next case study" card (continuity between pages)
+const CLOUDLET = '<svg class="cloudlet cloudlet--peek-next" viewBox="0 0 120 80" aria-hidden="true"><path class="cloudlet__body" d="M28 70h62a22 22 0 0 0 2-44 30 30 0 0 0-57-6A24 24 0 0 0 28 70z"/><g class="cloudlet__eyes"><ellipse cx="50" cy="44" rx="5" ry="6.5"/><ellipse cx="72" cy="44" rx="5" ry="6.5"/></g></svg>';
 for (const p of projects) {
     // Next case study first, then the rest in order
     const others = projects.filter((o) => o !== p).sort((a, b) => ((a.order - p.order + projects.length) % projects.length) - ((b.order - p.order + projects.length) % projects.length));
@@ -156,6 +159,7 @@ for (const p of projects) {
         HEADER: header,
         FOOTER: footer,
         EGG: egg,
+        QUICK: quick,
         KICKER: esc(p.kicker),
         LEDE: esc(p.lede),
         CONTEXT: esc(p.context),
@@ -170,7 +174,7 @@ for (const p of projects) {
         INDEX: pad(p.order),
         TOTAL: pad(projects.length),
         BODY: p.body,
-        NEXT: others.map((o, i) => `<a class="next-card next-card--${esc(o.accent)}${i === 0 ? " next-card--lead" : ""}" href="/projects/${o.slug}/"><span>${i === 0 ? "Next case study" : "Also read"} · ${pad(o.order)}</span><strong>${esc(o.title)}</strong><em>${esc(o.kicker)}</em><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>`).join("")
+        NEXT: others.map((o, i) => `<a class="next-card next-card--${esc(o.accent)}${i === 0 ? " next-card--lead" : ""}" href="/projects/${o.slug}/">${i === 0 ? CLOUDLET : ""}<span>${i === 0 ? "Next case study" : "Also read"} · ${pad(o.order)}</span><strong>${esc(o.title)}</strong><em>${esc(o.kicker)}</em><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>`).join("")
     });
 
     await mkdir(`${OUT}/projects/${p.slug}`, { recursive: true });

@@ -641,3 +641,15 @@ html:not(.js) .code-tabs [role="tabpanel"] + [role="tabpanel"] { margin-top: 1re
     .archx__node.is-hidden { opacity: 1; scale: 1; pointer-events: auto; }
     .archx__edges path.is-hidden, .archx__edges .archx__pkt.is-hidden { opacity: 1; }
 }
+
+/* ---------- Continuity with the homepage signature ---------- */
+/* The status light is a tiny planet with the satellite in orbit, like the hero's HUD */
+.cs-status__dot { position: relative; }
+.cs-status__sat { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 1px; background: var(--lime); box-shadow: 0 0 6px var(--lime); animation: cs-orbit 3.2s linear infinite; }
+@keyframes cs-orbit { from { transform: rotate(0deg) translateX(9px); } to { transform: rotate(360deg) translateX(9px); } }
+/* The mascot peeks over the next case study */
+.next-card--lead { overflow: visible; }
+.cloudlet--peek-next { position: absolute; right: 3.5rem; top: -26px; width: 52px; animation: cs-peek 6s var(--ease-in-out) infinite; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .35)); }
+@keyframes cs-peek { 0%, 70%, 100% { translate: 0 6px; } 80%, 92% { translate: 0 -4px; } }
+.next-card--lead:hover .cloudlet--peek-next { animation-play-state: paused; translate: 0 -6px; }
+@media (prefers-reduced-motion: reduce) { .cs-status__sat, .cloudlet--peek-next { animation: none; } }

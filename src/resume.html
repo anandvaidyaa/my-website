@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- Source of /Anand-Vaidya-Resume.pdf. Rendered by `npm run resume` (scripts/build-resume.mjs).
+     Every fact here mirrors index.html: change both together. -->
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<title>Anand Vaidya — Azure Cloud Engineer — Résumé</title>
+<style>
+    @font-face { font-family: "Space Grotesk"; src: url("../fonts/space-grotesk-var.woff2") format("woff2"); font-weight: 300 700; }
+    @font-face { font-family: "Outfit"; src: url("../fonts/outfit-var.woff2") format("woff2"); font-weight: 100 900; }
+    @page { size: A4; margin: 10mm 14mm 8mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Outfit", system-ui, sans-serif; font-size: 9.2pt; line-height: 1.38; color: #1b2030; }
+    h1, h2, h3 { font-family: "Space Grotesk", system-ui, sans-serif; color: #0b1020; }
+    a { color: inherit; text-decoration: none; }
+    .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12mm; padding-bottom: 4mm; border-bottom: 1.4pt solid #0b1020; }
+    h1 { font-size: 24pt; line-height: 1; letter-spacing: -.03em; }
+    .role { margin-top: 1.4mm; font-family: "Space Grotesk", sans-serif; font-size: 10.4pt; white-space: nowrap; font-weight: 600; color: #2f5bea; }
+    .contact { text-align: right; font-size: 8.4pt; line-height: 1.5; color: #3a4258; white-space: nowrap; }
+    .summary { margin-top: 3.4mm; font-size: 10pt; color: #2a3145; }
+    h2 { margin-top: 3.8mm; padding-bottom: 1.2mm; border-bottom: .6pt solid #c9d0e0; font-size: 9pt; letter-spacing: .14em; text-transform: uppercase; color: #2f5bea; }
+    .job { margin-top: 2.5mm; break-inside: avoid; }
+    .job__head { display: flex; justify-content: space-between; gap: 6mm; align-items: baseline; }
+    h3 { font-size: 10.6pt; }
+    h3 span { font-family: "Outfit", sans-serif; font-weight: 500; color: #3a4258; }
+    .when { font-size: 8.8pt; color: #5a627a; white-space: nowrap; }
+    ul { margin-top: 1.2mm; padding-left: 4.2mm; }
+    li { margin-top: .7mm; }
+    li::marker { color: #2f5bea; }
+    .tech { margin-top: 1mm; font-size: 8.6pt; color: #5a627a; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8mm; }
+    .grid--3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 6mm; }
+    .grid--4 { grid-template-columns: 1.15fr 1.15fr .9fr .8fr; gap: 0 5mm; font-size: 8.8pt; }
+    .proj { margin-top: 2.2mm; break-inside: avoid; }
+    .proj p { margin-top: .6mm; }
+    .proj .out { color: #0b6f50; font-weight: 600; }
+    .skills { margin-top: 2.2mm; display: grid; grid-template-columns: 31mm 1fr 31mm 1fr; gap: 1mm 3mm; }
+    .skills dt { font-weight: 600; color: #0b1020; }
+    .edu { margin-top: 2.2mm; }
+    .more { margin-top: 2mm; font-size: 8.6pt; color: #5a627a; }
+    .foot { margin-top: 5mm; font-size: 8pt; color: #7a8299; }
+</style>
+</head>
+<body>
+    <header class="top">
+        <div>
+            <h1>Anand Vaidya</h1>
+            <p class="role">Azure Cloud Engineer · Serverless, Integration, DevOps &amp; IaC</p>
+        </div>
+        <p class="contact">
+            Vadodara, Gujarat, India<br>
+            <a href="mailto:anand.svaidya24@gmail.com">anand.svaidya24@gmail.com</a> · <a href="tel:+919913013470">+91-9913013470</a><br>
+            <a href="https://www.linkedin.com/in/vaidya-anand">linkedin.com/in/vaidya-anand</a><br>
+            <a href="https://github.com/anandvaidyaa">github.com/anandvaidyaa</a> · <a href="https://anandvaidya.in">anandvaidya.in</a>
+        </p>
+    </header>
+
+    <p class="summary">
+        Cloud Engineer with 3+ years of engineering experience. I build serverless integrations, secure APIs and automated
+        infrastructure on Microsoft Azure &mdash; event-driven systems on Azure Functions, Logic Apps and API Management,
+        secured with OAuth&nbsp;2.0 and Managed Identities, and shipped through Bicep and Azure DevOps pipelines.
+    </p>
+
+    <h2>Experience</h2>
+    <section class="job">
+        <div class="job__head"><h3>Cloud Engineer <span>· FSP Consulting, Vadodara</span></h3><p class="when">Apr 2025 – Present</p></div>
+        <ul>
+            <li>Engineered an event-driven architecture on Azure Functions, Logic Apps and API Management, replacing manual data processing in legacy systems.</li>
+            <li>Secured service access with OAuth 2.0 and Managed Identities, removing exposed credentials and closing critical attack surfaces in production.</li>
+            <li>Reduced processing latency from hours to seconds.</li>
+        </ul>
+        <p class="tech">Azure Functions · Logic Apps · Azure API Management · Managed Identities · OAuth 2.0 · Azure Bicep</p>
+    </section>
+    <section class="job">
+        <div class="job__head"><h3>Junior Developer <span>· Atharva IT Services, Ahmedabad</span></h3><p class="when">Feb 2023 – Mar 2025</p></div>
+        <ul>
+            <li>Developed a unified .NET Core integration layer connecting Shopify, Amazon and Walmart, backed by globally distributed Cosmos DB.</li>
+            <li>Eliminated manual order reconciliation and automated shipping logistics.</li>
+            <li>Achieved zero-downtime deployments with Docker and Azure DevOps.</li>
+        </ul>
+        <p class="tech">ASP.NET Core · C# · Cosmos DB · Docker · Azure DevOps</p>
+    </section>
+    <section class="job">
+        <div class="job__head"><h3>LMS Administrator Intern <span>· Parul University, Vadodara</span></h3><p class="when">Sep 2021 – Aug 2022</p></div>
+        <ul>
+            <li>Managed and optimised the Moodle LMS infrastructure across fragmented legacy database systems.</li>
+            <li>Bridged data integrity with SQL and Active Directory authentication.</li>
+            <li>Zero downtime during peak exam periods; streamlined semester-to-semester user onboarding.</li>
+        </ul>
+    </section>
+
+    <h2>Selected projects</h2>
+    <div class="grid grid--3">
+        <section class="proj">
+            <h3>Multi-Channel Order Processing Platform</h3>
+            <p>Event-driven integration backend on Azure Functions and Cosmos DB keeping Shopify, Amazon and Walmart inventory in sync.</p>
+            <p class="out">Sync latency 5 min → &lt;2 s · overselling eliminated · $150k+ lost quarterly revenue recovered</p>
+        </section>
+        <section class="proj">
+            <h3>Zero-Downtime Cloud Deployment Pipeline</h3>
+            <p>Infrastructure-as-code pipeline: Azure Bicep templates deployed through Azure DevOps to consistent, immutable environments.</p>
+            <p class="out">Deployments 2 days → 15 min · zero-downtime releases · 0 manual configuration errors</p>
+        </section>
+        <section class="proj">
+            <h3>Carrier &amp; Shipping Integration Layer</h3>
+            <p>Secure gateway on Azure API Management with OAuth 2.0 automating FedEx, DHL and UPS labels and live tracking webhooks.</p>
+            <p class="out">20-minute manual task → zero clicks · 40+ hours/week of dispatch work saved</p>
+        </section>
+    </div>
+    <p class="more">Architecture, decisions and trade-offs for each project: <a href="https://anandvaidya.in/#projects">anandvaidya.in/#projects</a></p>
+
+    <h2>Skills</h2>
+    <dl class="skills">
+        <dt>Microsoft Azure</dt><dd>App Services, Managed Identities, Azure AD B2C</dd>
+        <dt>Serverless &amp; integration</dt><dd>Azure Functions, Logic Apps</dd>
+        <dt>APIs &amp; data</dt><dd>Azure API Management, OAuth 2.0, Cosmos DB, SQL Server</dd>
+        <dt>Infrastructure as code</dt><dd>Azure Bicep, ARM Templates</dd>
+        <dt>DevOps &amp; containers</dt><dd>Azure DevOps, CI/CD pipelines (multi-stage YAML), Docker</dd>
+        <dt>Programming</dt><dd>ASP.NET Core &amp; C#, JavaScript, Python</dd>
+    </dl>
+
+    <h2>Education &amp; certifications</h2>
+    <div class="grid grid--4">
+        <p class="edu"><strong>B.Tech. Computer Science &amp; Engineering</strong><br>Parul University, Vadodara · 2019 – 2023 · First Class with Distinction</p>
+        <p class="edu"><strong>Microsoft Certified: Azure AI Fundamentals (AI-900)</strong><br>Microsoft · May 2025</p>
+        <p class="edu"><strong>Python Data Science &amp; Masterclass</strong><br>Parul University &amp; Udemy</p>
+        <p class="edu"><strong>Deep Web — The Complete Introduction</strong><br>Udemy</p>
+    </div>
+</body>
+</html>

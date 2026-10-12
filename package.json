@@ -7,12 +7,14 @@
     "build:css": "csso src/styles.css -o styles.min.css && csso src/eggs.css -o eggs.min.css && csso src/case.css -o case.min.css",
     "build": "npm run build:js && npm run build:css",
     "assets": "node scripts/build-assets.mjs",
-    "build:site": "npm run build && node scripts/build-site.mjs"
+    "build:site": "npm run build && node scripts/build-site.mjs",
+    "resume": "node scripts/build-resume.mjs"
   },
   "devDependencies": {
     "@fontsource-variable/outfit": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "csso-cli": "^4.0.2",
+    "puppeteer-core": "^24.43.1",
     "sharp": "^0.33.5",
     "terser": "^5.48.0"
   }

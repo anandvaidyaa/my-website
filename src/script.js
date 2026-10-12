@@ -148,7 +148,7 @@
                 setOpen(toggle.getAttribute("aria-expanded") !== "true");
             });
             menu.addEventListener("click", function (e) {
-                if (e.target.closest("a")) setOpen(false);
+                if (e.target.closest("a, [data-quick]")) setOpen(false);
             });
             document.addEventListener("keydown", function (e) {
                 if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
@@ -567,7 +567,7 @@
                     window.requestAnimationFrame(function () { el.classList.add("is-visible"); });
                 }
             });
-        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        }, { threshold: 0.12, rootMargin: "100% 0px -8% 0px" }); // top: reveal what a fast scroll jumped past
 
         items.forEach(function (el) { io.observe(el); });
     }
@@ -679,7 +679,7 @@
                 }
             });
         }, { rootMargin: "100px 0px" });
-        $$(".case, .arch__stage").forEach(function (el) { io.observe(el); });
+        $$(".case, .arch__stage, .contact").forEach(function (el) { io.observe(el); });
     }
 
     /* ---------------- Skills inspector ---------------- */
@@ -1191,6 +1191,29 @@
         whenNear("#console", function () { if (!history.length) run("whoami"); });
     }
 
+    /* ---------------- Recruiter quick view ----------------
+       A native modal dialog (focus trap, Esc and focus return come from the browser).
+       The same facts are on the page, so nothing depends on opening it. */
+    function initQuickView() {
+        var dlg = $("#quick-view");
+        if (!dlg || !dlg.showModal) return;
+        var opener = null;
+        $$("[data-quick]").forEach(function (b) {
+            b.addEventListener("click", function () {
+                opener = b;
+                // let the mobile menu finish closing before the dialog takes focus
+                window.setTimeout(function () { if (!dlg.open) dlg.showModal(); }, 0);
+            });
+        });
+        dlg.addEventListener("click", function (e) {
+            // a click on the backdrop (the dialog element itself) or on a close control
+            if (e.target === dlg || e.target.closest("[data-qv-close]")) dlg.close();
+        });
+        dlg.addEventListener("close", function () {
+            if (opener && document.contains(opener) && opener.offsetParent !== null) opener.focus({ preventScroll: true });
+        });
+    }
+
     /* ---------------- Contact: copy + mailto form ---------------- */
     function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
@@ -1483,7 +1506,7 @@
         var year = $("#year");
         if (year) year.textContent = String(new Date().getFullYear());
 
-        [initTheme, initNav, initAnchors, initScroll, initReveal].forEach(safe);
+        [initTheme, initNav, initAnchors, initScroll, initReveal, initQuickView].forEach(safe);
         queue([initHero, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
         whenNear("#architecture", initArchitecture);
 

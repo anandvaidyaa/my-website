@@ -570,7 +570,8 @@
         discover("card");
     }
     function initCardTriggers() {
-        $$(".blob-portrait, .idcard").forEach(function (t) {
+        // The portrait, the ID badge, the logo and the footer name all hide the card
+        $$(".blob-portrait, .idcard, .brand__mark, .footer__name").forEach(function (t) {
             t.addEventListener("dblclick", function (e) { e.preventDefault(); openCard(); });
             var last = 0; // double-tap on touch screens
             t.addEventListener("pointerup", function (e) {

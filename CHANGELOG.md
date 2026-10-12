@@ -1,5 +1,20 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (3) — Recruiter quick view, résumé, engineering decisions
+
+An audit against the full brief showed most of it already in place (cinematic hero and scroll system, case studies, architecture explorer, terminal with `sudo hire anand`, ten easter eggs with a finale, 404 portal). This round adds what was missing.
+
+- **Recruiter quick view:** a 30-second profile in a native modal dialog — summary, roles and dates, core skills, selected work with verified outcomes, credentials, and links. Opens from "Résumé" in the header (desktop), "Recruiter? 30-second profile" in the hero, and the mobile menu, on the homepage and every case study. Focus is trapped and returned; Esc or the backdrop closes it. Without JavaScript the buttons are hidden and the same facts stay on the page.
+- **Résumé download:** `Anand-Vaidya-Resume.pdf`, one A4 page generated from `src/resume.html` with the same verified facts as the site (`npm run resume`). Linked from the quick view, the contact cards and the footer (all work without JavaScript).
+- **Inside my engineering mind:** a new section with four architecture decision records (event-driven vs scheduled sync, identities vs stored secrets, templates as the source of truth, one gateway for every carrier). Each shows the context, constraints, the options on the table (rejected ones struck through, the chosen one lit), the decision, the trade-off accepted and the outcome, with links to the evidence. Native `<details>`, so it works by keyboard and without JavaScript. Only documented options and outcomes are used.
+- **Business card** also opens by double-clicking the logo or the footer name (on every page).
+
+**Creative-director pass — the three weakest moments:** (1) the contact section ended the journey on a plain grid → the hero's runaway satellite is back in orbit around a glass core ("sat-01 · back in orbit ✓"), animated only while in view; (2) case studies didn't carry the homepage's signature → a tiny satellite now orbits each case study's status light, and the cloud mascot peeks over the next-case card; (3) adding the résumé card left "Location" orphaned → it now spans the row.
+
+**Fixes found in testing:** reveals now also trigger for content a fast scroll jumps past (the observer watches one viewport above the screen), so nothing stays invisible when scrolling back up; the outlined words in the skills band now have 3:1 contrast.
+
+**Tested:** new recruiter/decision suite 24/24 (résumé served and one page, quick view by header/hero/menu with focus handling, Esc and backdrop close, decision records by keyboard with screen-reader labels, business card from the logo, no-JavaScript fallbacks, no overflow at 1280 px on every page); 46/46 functional, 56/56 easter-egg, 53/53 SEO, 23/23 motion, 64/64 case-study checks; axe-core 0 violations on the homepage, the open quick view, open decision records and all case studies (both themes, 375 and 1366 px). Lighthouse 12 (local): homepage mobile 86–90, desktop 99; case studies mobile 99, desktop 99; CLS 0; accessibility, best practices and SEO 100.
+
 ## 2026-10-12 (2) — Case studies as interactive engineering stories
 
 All three case-study pages (`/projects/<slug>/`) rebuilt on a shared case-study design system (`src/case.css`, `src/case.js`, loaded only on those pages). Same facts as before: nothing new is claimed; anything illustrative is labelled as such.
