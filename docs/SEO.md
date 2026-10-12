@@ -63,6 +63,10 @@ To measure "conversions" without tracking scripts: count contact emails that arr
 
 ## 6. Adding content
 
-- **New case study:** copy one file in `content/projects/`, edit the `data-meta` JSON (title ≤ 60 characters in `seoTitle`, description ~150–160 characters) and the body. Add a link to it from the Projects section of `index.html` (the build fails if you forget). Run `npm run assets` for its share image, then `npm run build:site` and preview with `npx serve _site`.
+- **New case study:** copy one file in `content/projects/` and edit:
+  - the `data-meta` JSON: `seoTitle` ≤ 60 characters, `description` ~150–160 characters, `accent` (`cyan`, `lime` or `magenta`) and a short witty `status` line for the hero;
+  - the hero visual between `<!-- hero -->` and `<!-- /hero -->` (each project should have its own);
+  - the chapters, each a `<section class="chapter" id="…" data-toc="Label">` (attributes in that order; the chapter navigation is generated from them, and at least three are required). Reusable blocks: `.compare` (before/after drawn to scale), `.scrolly` + `.steps` + `[data-archx]` (a diagram that assembles step by step), `.decisions`, `figure.code` (label code as illustrative unless it is the real thing), `.results`.
+  Add a link to it from the Projects section of `index.html` (the build fails if you forget). Run `npm run assets` for its share image, then `npm run build:site` and preview with `npx serve _site`.
 - **Only publish verified facts** — problems, architecture, technologies and outcomes you can stand behind in an interview.
 - Update `dateModified` when you materially change a page.

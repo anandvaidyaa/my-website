@@ -13,89 +13,234 @@
     ["Zero", "downtime releases"],
     ["0", "manual configuration errors"]
   ],
+  "accent": "lime",
+  "status": "last release: uneventful (that’s the point)",
   "ogImage": "og/zero-downtime-deployment-pipeline.png",
   "datePublished": "2026-10-11",
-  "dateModified": "2026-10-11"
+  "dateModified": "2026-10-12"
 }
 </script>
 
-<h2 id="problem">The problem</h2>
-<p>
-    Releases depended on <strong>manual deployment steps</strong>. Environments drifted apart as people applied changes
-    by hand, a release could take <strong>days</strong>, and differences between environments surfaced in production
-    as <strong>frequent rollbacks</strong>.
-</p>
-<p>
-    The fix had to address both halves of the problem: how infrastructure is defined, and how changes reach production.
-</p>
-
-<h2 id="architecture">Architecture</h2>
-<p>
-    I engineered a <strong>fully automated infrastructure-as-code pipeline</strong>: environments are declared in
-    <strong>Azure Bicep</strong> and deployed through <strong>Azure DevOps</strong>, so every environment is
-    provisioned from the same templates and arrives in a consistent, immutable state.
-</p>
-
-<figure>
-    <div class="diagram">
-        <svg viewBox="0 0 360 220" role="img" aria-labelledby="d2-title">
-            <title id="d2-title">Pipeline: commit, build and test, Bicep provisioning, then deployment to staging and production</title>
-            <g class="d-edges">
-                <path class="flow" d="M80 60 H124"/>
-                <path class="flow" d="M224 60 H262"/>
-                <path class="flow" d="M300 78 C300 120,250 120,250 150"/>
-                <path class="flow" d="M200 166 H162"/>
-            </g>
-            <g class="d-node"><rect x="10" y="44" width="70" height="32" rx="8"/><text x="45" y="64">Commit</text></g>
-            <g class="d-node"><rect x="124" y="44" width="100" height="32" rx="8"/><text x="174" y="64">Build &amp; test</text></g>
-            <g class="d-node d-node--accent"><rect x="262" y="40" width="86" height="40" rx="10"/><text x="305" y="64">Bicep</text></g>
-            <g class="d-node"><rect x="200" y="150" width="100" height="32" rx="8"/><text x="250" y="170">Staging</text></g>
-            <g class="d-node d-node--ok"><rect x="52" y="150" width="110" height="32" rx="8"/><text x="107" y="170">Production</text></g>
-        </svg>
+<!-- hero -->
+<div class="hv hv--pipe">
+    <div class="hv__rail" data-depth="0.06">
+        <span class="hv__stage" style="--i:0">commit</span>
+        <span class="hv__stage" style="--i:1">build · test</span>
+        <span class="hv__stage hv__stage--key" style="--i:2">bicep</span>
+        <span class="hv__stage" style="--i:3">staging</span>
+        <span class="hv__stage hv__stage--ok" style="--i:4">prod</span>
+        <span class="hv__capsule"></span>
     </div>
-    <figcaption>Simplified pipeline. Stage names are illustrative of a typical multi-stage Azure DevOps flow.</figcaption>
-</figure>
-
-<h3>What the pipeline does</h3>
-<ul>
-    <li><strong>Build and test</strong> the application on every change in multi-stage YAML pipelines.</li>
-    <li><strong>Provision infrastructure from Bicep</strong> &mdash; the same templates for every environment, so there is nothing to configure by hand.</li>
-    <li><strong>Promote through environments</strong> with approval gates, and release without taking the service down.</li>
-</ul>
-<p class="note">
-    Related work from the same toolset: Bicep templates for VMs, VNets, Key Vaults and App Services across environments,
-    ARM templates where legacy pipelines needed them, and staging/production slot swaps on App Service.
-</p>
-
-<h2 id="decisions">Engineering decisions</h2>
-<div class="decisions">
-    <div class="decision">
-        <h3>Infrastructure versioned alongside the application</h3>
-        <p>When infrastructure lives in the same repository and review process as the code, every environment can be rebuilt from a known commit &mdash; which is what removes drift.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> changes made directly in the portal are overwritten on the next deployment, so the team has to treat the templates as the only source of truth.</p>
-    </div>
-    <div class="decision">
-        <h3>Immutable environments: redeploy, don&rsquo;t patch</h3>
-        <p>Rather than editing servers in place, a change produces a fresh deployment from the templates. Rollback becomes &ldquo;redeploy the previous version&rdquo;.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> stateful resources such as databases need separate handling so redeployments never replace data.</p>
-    </div>
-    <div class="decision">
-        <h3>Bicep over hand-written ARM JSON</h3>
-        <p>Bicep compiles to ARM templates but is far shorter and easier to review, while keeping full coverage of Azure resource types.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> it is Azure-specific, which suits an Azure-only estate but doesn&rsquo;t carry over to other clouds.</p>
-    </div>
+    <div class="hv__file glass glass--dark" data-depth="0.22"><small>main.bicep</small><code>param environment string</code><code>resource app 'Microsoft.Web/sites…'</code></div>
+    <div class="hv__env" data-depth="-0.08"><span>dev</span><span>staging</span><span>prod</span><small>same templates</small></div>
+    <p class="hv__coord">deploy: 2 days → 15 min</p>
+    <p class="hv__annot"><svg viewBox="0 0 90 50"><path d="M84 44C62 44 36 34 14 10m0 0 2 14M14 10l14 2"/></svg>no portal clicks were harmed</p>
 </div>
+<!-- /hero -->
 
-<h2 id="outcomes">Outcomes</h2>
-<ul>
-    <li>Deployment time reduced from <strong>2 days to 15 minutes</strong>.</li>
-    <li><strong>Zero-downtime releases</strong>.</li>
-    <li><strong>Manual configuration errors eliminated</strong> by removing manual steps altogether.</li>
-</ul>
+<section class="chapter" id="problem" data-toc="The problem" data-chapter="cs-problem" aria-labelledby="problem-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">01</span>
+        <p class="chapter__label">The problem</p>
+        <h2 class="chapter__title" id="problem-h">Two days per release, and no two environments alike.</h2>
+    </header>
+    <div class="chapter__body prose chapter__body--split">
+        <div>
+            <p class="lead-in reveal">
+                Releases depended on <strong>manual deployment steps</strong>. Environments drifted apart as people applied changes
+                by hand, a release could take <strong>days</strong>, and differences between environments surfaced in production
+                as <strong>frequent rollbacks</strong>.
+            </p>
+            <p class="reveal">
+                The fix had to address both halves of the problem: how infrastructure is defined, and how changes reach production.
+            </p>
+        </div>
+        <div class="drift reveal" data-drift aria-hidden="true">
+            <div class="drift__env" style="--r:-5deg;--x:-14px"><b>dev</b><small>patched by hand</small></div>
+            <div class="drift__env" style="--r:4deg;--x:16px"><b>staging</b><small>almost the same</small></div>
+            <div class="drift__env" style="--r:-2.5deg;--x:-8px"><b>prod</b><small>surprises</small></div>
+            <p class="drift__label"><span class="drift__a">environment drift</span><span class="drift__b">one template, three environments</span></p>
+        </div>
+    </div>
+    <div class="compare reveal" data-compare>
+        <p class="compare__h">Time to deploy <span>drawn to scale</span></p>
+        <div class="compare__row compare__row--before"><span class="compare__lbl">Before</span><span class="compare__track"><span class="compare__bar" style="--w:1"></span></span><span class="compare__val">2 days</span></div>
+        <div class="compare__row compare__row--after"><span class="compare__lbl">After</span><span class="compare__track"><span class="compare__bar" style="--w:.0052"></span></span><span class="compare__val">15 min</span></div>
+    </div>
+</section>
 
-<h2 id="skills">Skills demonstrated</h2>
-<p>
-    Infrastructure as code with <a href="/#skills">Azure Bicep and ARM templates</a>, CI/CD design in
-    <a href="/#skills">Azure DevOps</a>, and release engineering for zero-downtime delivery. See how these pieces fit
-    into a wider system in the <a href="/#architecture">architecture lab</a>.
-</p>
+<section class="chapter" id="architecture" data-toc="The deployment journey" data-chapter="cs-architecture" aria-labelledby="architecture-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">02</span>
+        <p class="chapter__label">Architecture</p>
+        <h2 class="chapter__title" id="architecture-h">Every environment, from the same templates.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="reveal">
+            I engineered a <strong>fully automated infrastructure-as-code pipeline</strong>: environments are declared in
+            <strong>Azure Bicep</strong> and deployed through <strong>Azure DevOps</strong>, so every environment is
+            provisioned from the same templates and arrives in a consistent, immutable state. Scroll to follow a change from commit to production.
+        </p>
+    </div>
+
+    <div class="scrolly scrolly--journey">
+        <ol class="steps steps--rail" data-journey="journey-pipe" aria-label="The path of a change from commit to production">
+            <li data-step="1"><p class="steps__no">Stage 1</p><h3>Commit</h3><p>Infrastructure is versioned alongside the application: the Bicep templates live in the same repository and go through the same review as the code.</p></li>
+            <li data-step="2"><p class="steps__no">Stage 2</p><h3>Build and test</h3><p>Every change builds and runs its tests in multi-stage YAML pipelines in Azure DevOps.</p></li>
+            <li data-step="3"><p class="steps__no">Stage 3</p><h3>Provision from Bicep</h3><p>The same templates provision every environment, so there is nothing to configure by hand &mdash; and nothing to drift.</p></li>
+            <li data-step="4"><p class="steps__no">Stage 4</p><h3>Deploy to staging</h3><p>A fresh deployment from the templates, rather than edits to an existing server. Rollback becomes &ldquo;redeploy the previous version&rdquo;.</p></li>
+            <li data-step="5"><p class="steps__no">Stage 5</p><h3>Approval gate</h3><p>Promotion between environments waits on an approval gate, so a person decides <em>when</em> &mdash; not <em>how</em>.</p></li>
+            <li data-step="6"><p class="steps__no">Stage 6</p><h3>Release to production</h3><p>The release goes out without taking the service down &mdash; for example with a staging/production slot swap on App Service.</p></li>
+        </ol>
+        <div class="scrolly__visual">
+            <div class="journey" id="journey-pipe">
+                <div class="archx__bar">
+                    <p class="archx__badge">Simplified · stage names illustrate a typical multi-stage flow</p>
+                    <p class="journey__readout" data-readout aria-hidden="true">stage 1 / 6 · commit</p>
+                </div>
+                <div class="journey__stage">
+                    <svg class="journey__track" viewBox="0 0 600 360" aria-hidden="true">
+                        <path class="journey__path" d="M40 70 H560 C610 70 610 180 560 180 H40 C-10 180 -10 290 40 290 H560"/>
+                        <path class="journey__done" d="M40 70 H560 C610 70 610 180 560 180 H40 C-10 180 -10 290 40 290 H560"/>
+                    </svg>
+                    <div class="journey__st" data-xy="70,70" data-step="1"><svg class="i" aria-hidden="true"><use href="#i-branch"/></svg><span>Commit</span></div>
+                    <div class="journey__st" data-xy="300,70" data-step="2"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Build &amp; test</span></div>
+                    <div class="journey__st journey__st--key" data-xy="530,70" data-step="3"><svg class="i" aria-hidden="true"><use href="#i-code"/></svg><span>Bicep</span></div>
+                    <div class="journey__st" data-xy="430,180" data-step="4"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg><span>Staging</span></div>
+                    <div class="journey__st" data-xy="160,180" data-step="5"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>Approval</span></div>
+                    <div class="journey__st journey__st--ok" data-xy="500,290" data-step="6"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg><span>Production</span></div>
+                    <span class="journey__capsule" aria-hidden="true"><span></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="callout reveal"><svg class="i" aria-hidden="true"><use href="#i-layers"/></svg><span><strong>Related work from the same toolset:</strong> Bicep templates for VMs, VNets, Key Vaults and App Services across environments, ARM templates where legacy pipelines needed them, and staging/production slot swaps on App Service.</span></p>
+</section>
+
+<section class="chapter" id="decisions" data-toc="Engineering decisions" data-chapter="cs-decisions" aria-labelledby="decisions-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">03</span>
+        <p class="chapter__label">Engineering decisions</p>
+        <h2 class="chapter__title" id="decisions-h">Treat the templates as the only truth.</h2>
+    </header>
+    <div class="decisions">
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D1</p>
+            <h3>Infrastructure versioned alongside the application</h3>
+            <p>When infrastructure lives in the same repository and review process as the code, every environment can be rebuilt from a known commit &mdash; which is what removes drift.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> changes made directly in the portal are overwritten on the next deployment, so the team has to treat the templates as the only source of truth.</p>
+        </article>
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D2</p>
+            <h3>Immutable environments: redeploy, don&rsquo;t patch</h3>
+            <p>Rather than editing servers in place, a change produces a fresh deployment from the templates. Rollback becomes &ldquo;redeploy the previous version&rdquo;.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> stateful resources such as databases need separate handling so redeployments never replace data.</p>
+        </article>
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D3</p>
+            <h3>Bicep over hand-written ARM JSON</h3>
+            <p>Bicep compiles to ARM templates but is far shorter and easier to review, while keeping full coverage of Azure resource types.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> it is Azure-specific, which suits an Azure-only estate but doesn&rsquo;t carry over to other clouds.</p>
+        </article>
+    </div>
+    <div class="chapter__body prose">
+        <h3 class="reveal">What &ldquo;same templates, every environment&rdquo; looks like</h3>
+        <p class="reveal">The shape of the approach, not the client&rsquo;s files: one parameterised template, and a pipeline that deploys it stage by stage.</p>
+    </div>
+    <div class="code-tabs reveal" data-tabs>
+        <div class="code-tabs__list" role="tablist" aria-label="Illustrative files">
+            <button type="button" role="tab" id="tab-bicep" aria-controls="panel-bicep" aria-selected="true">main.bicep</button>
+            <button type="button" role="tab" id="tab-yaml" aria-controls="panel-yaml" aria-selected="false" tabindex="-1">azure-pipelines.yml</button>
+        </div>
+        <div id="panel-bicep" role="tabpanel" aria-labelledby="tab-bicep">
+        <figure class="code" data-lang="bicep">
+            <figcaption><span class="code__file">main.bicep</span><span class="code__tag">Illustrative · the pattern, not client code</span></figcaption>
+            <pre tabindex="0"><code>// One template for every environment: only the parameters change
+param environment string   // 'dev' | 'staging' | 'prod'
+param location string = resourceGroup().location
+
+resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: 'plan-app-${environment}'
+  location: location
+  sku: { name: 'P1v3' }
+}
+
+resource app 'Microsoft.Web/sites@2023-12-01' = {
+  name: 'app-${environment}'
+  location: location
+  properties: { serverFarmId: plan.id, httpsOnly: true }
+}
+
+// Deploy to a staging slot, then swap: production keeps serving throughout
+resource staging 'Microsoft.Web/sites/slots@2023-12-01' = {
+  parent: app
+  name: 'staging'
+  location: location
+  properties: { serverFarmId: plan.id }
+}</code></pre>
+        </figure>
+        </div>
+        <div id="panel-yaml" role="tabpanel" aria-labelledby="tab-yaml">
+        <figure class="code" data-lang="yaml">
+            <figcaption><span class="code__file">azure-pipelines.yml</span><span class="code__tag">Illustrative · the pattern, not client code</span></figcaption>
+            <pre tabindex="0"><code># Build once, then promote the same artefact through environments
+stages:
+- stage: Build
+  jobs:
+  - job: build_and_test
+    steps:
+    - script: dotnet test
+
+- stage: Staging
+  dependsOn: Build
+  jobs:
+  - deployment: deploy_staging
+    environment: staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=staging
+
+- stage: Production
+  dependsOn: Staging
+  jobs:
+  - deployment: deploy_production
+    environment: production   # approval check configured on this environment
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: az deployment group create -g $(resourceGroup) -f main.bicep -p environment=prod</code></pre>
+        </figure>
+        </div>
+    </div>
+</section>
+
+<section class="chapter" id="outcomes" data-toc="Outcomes" data-chapter="cs-outcomes" aria-labelledby="outcomes-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">04</span>
+        <p class="chapter__label">Outcomes</p>
+        <h2 class="chapter__title" id="outcomes-h">Releases became routine.</h2>
+    </header>
+    <ul class="results">
+        <li class="reveal"><span class="results__val">2&nbsp;days &rarr; 15&nbsp;min</span><span class="results__lbl">Deployment time.</span></li>
+        <li class="reveal"><span class="results__val">Zero</span><span class="results__lbl">Downtime during releases.</span></li>
+        <li class="reveal"><span class="results__val">0</span><span class="results__lbl">Manual configuration errors, by removing manual steps altogether.</span></li>
+    </ul>
+</section>
+
+<section class="chapter" id="skills" data-toc="Skills demonstrated" data-chapter="cs-skills" aria-labelledby="skills-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">05</span>
+        <p class="chapter__label">Skills demonstrated</p>
+        <h2 class="chapter__title" id="skills-h">What this project shows.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="reveal">
+            Infrastructure as code with <a href="/#skills">Azure Bicep and ARM templates</a>, CI/CD design in
+            <a href="/#skills">Azure DevOps</a>, and release engineering for zero-downtime delivery. See how these pieces fit
+            into a wider system in the <a href="/#architecture">architecture lab</a>.
+        </p>
+    </div>
+</section>

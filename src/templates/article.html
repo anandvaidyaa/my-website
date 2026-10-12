@@ -46,9 +46,11 @@
     <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-var.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="/fonts/outfit-var.woff2" crossorigin>
     <link rel="stylesheet" href="/styles.min.css?v=0">
+    <link rel="stylesheet" href="/case.min.css?v=0">
     <script src="/script.min.js?v=0" defer></script>
+    <script src="/case.min.js?v=0" defer></script>
 </head>
-<body>
+<body class="cs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     {{SPRITE}}
     <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -58,55 +60,63 @@
     {{HEADER}}
 
     <main id="main">
-        <article class="article" aria-labelledby="page-title">
-            <header class="article__hero">
-                <div class="container">
-                    <nav class="crumbs" aria-label="Breadcrumb">
-                        <ol>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/#projects">Projects</a></li>
-                            <li aria-current="page">{{TITLE}}</li>
-                        </ol>
-                    </nav>
-                    <p class="kicker"><span>Case study</span> {{KICKER}}</p>
-                    <h1 class="article__title" id="page-title">{{TITLE}}</h1>
-                    <p class="article__lede">{{LEDE}}</p>
-                    <dl class="article__meta">
-                        <div><dt>Author</dt><dd><a href="/" rel="author">Anand Vaidya</a></dd></div>
-                        <div><dt>Context</dt><dd>{{CONTEXT}}</dd></div>
-                        <div><dt>Stack</dt><dd>{{STACK_TEXT}}</dd></div>
-                        <div><dt>Updated</dt><dd><time datetime="{{MODIFIED}}">{{MODIFIED_HUMAN}}</time></dd></div>
-                    </dl>
+        <article class="cs cs--{{ACCENT}}" aria-labelledby="page-title">
+            <!-- ===== Opening ===== -->
+            <header class="cs-hero" data-chapter="cs-hero">
+                <div class="cs-hero__bg" aria-hidden="true">
+                    <span class="cs-hero__glow"></span>
+                    <span class="cs-hero__grid"></span>
+                    <span class="cs-hero__ghost">{{INDEX}}</span>
                 </div>
+                <div class="container cs-hero__inner">
+                    <div class="cs-hero__copy">
+                        <nav class="crumbs" aria-label="Breadcrumb">
+                            <ol>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/#projects">Projects</a></li>
+                                <li aria-current="page">{{TITLE}}</li>
+                            </ol>
+                        </nav>
+                        <p class="cs-hero__index"><span class="cs-hero__no">Case study {{INDEX}}<i>/{{TOTAL}}</i></span><span>{{KICKER}}</span></p>
+                        <h1 class="cs-hero__title" id="page-title"><span class="cs-hero__mask">{{TITLE}}</span></h1>
+                        <p class="cs-hero__lede">{{LEDE}}</p>
+                        <dl class="cs-meta">
+                            <div><dt>Context</dt><dd>{{CONTEXT}}</dd></div>
+                            <div><dt>Stack</dt><dd>{{STACK_TEXT}}</dd></div>
+                            <div><dt>Author</dt><dd><a href="/" rel="author">Anand Vaidya</a></dd></div>
+                            <div><dt>Updated</dt><dd><time datetime="{{MODIFIED}}">{{MODIFIED_HUMAN}}</time></dd></div>
+                        </dl>
+                    </div>
+                    <div class="cs-hero__visual" aria-hidden="true">
+{{HERO}}
+                        <p class="cs-status"><span class="cs-status__dot"></span>{{STATUS}}</p>
+                    </div>
+                </div>
+                <div class="container">
+                    <ul class="cs-results" aria-label="Outcomes">{{OUTCOMES}}</ul>
+                </div>
+                <a class="cs-cue" href="#{{FIRST}}"><span class="cs-cue__line" aria-hidden="true"></span>Start reading</a>
             </header>
 
-            <div class="container article__body">
-                <aside class="article__aside" aria-label="Case study summary">
-                    <section class="aside-card" aria-labelledby="outcomes-h">
-                        <h2 id="outcomes-h">Outcomes</h2>
-                        <ul class="outcomes">{{OUTCOMES}}</ul>
-                    </section>
-                    <section class="aside-card" aria-labelledby="stack-h">
-                        <h2 id="stack-h">Technologies</h2>
-                        <ul class="tags">{{STACK_TAGS}}</ul>
-                    </section>
-                    <nav class="aside-card toc" aria-labelledby="toc-h">
-                        <h2 id="toc-h">On this page</h2>
-                        <ol>{{TOC}}</ol>
-                    </nav>
-                </aside>
-
-                <div class="prose">
+            <!-- ===== The story ===== -->
+            <div class="container cs-layout">
+                <nav class="cs-nav" aria-labelledby="cs-nav-h">
+                    <h2 class="cs-nav__h" id="cs-nav-h">On this page</h2>
+                    <ol>{{TOC}}</ol>
+                    <ul class="tags cs-nav__tags" aria-label="Technologies">{{STACK_TAGS}}</ul>
+                </nav>
+                <div class="cs-story">
 {{BODY}}
                 </div>
             </div>
 
-            <footer class="container article__foot">
+            <footer class="container cs-foot">
                 <div class="author">
                     <img src="/profile-320.webp" width="64" height="64" alt="" loading="lazy" decoding="async">
                     <p><strong>Anand Vaidya</strong>Azure Cloud Engineer at FSP Consulting, Vadodara. Building serverless integrations, secure APIs and infrastructure as code. <a href="/#contact">Get in touch</a>.</p>
                 </div>
                 <div class="next-cards">{{NEXT}}</div>
+                <a class="cs-back" href="/#projects"><svg class="i" aria-hidden="true"><use href="#i-arrow-up"/></svg> All projects</a>
             </footer>
         </article>
     </main>

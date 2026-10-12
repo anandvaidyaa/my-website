@@ -13,88 +13,217 @@
     ["$150k+", "previously lost quarterly revenue recovered"],
     ["Eliminated", "overselling across channels"]
   ],
+  "accent": "cyan",
+  "status": "channels in sync · oversold: 0",
   "ogImage": "og/multi-channel-order-processing.png",
   "datePublished": "2026-10-11",
-  "dateModified": "2026-10-11"
+  "dateModified": "2026-10-12"
 }
 </script>
 
-<h2 id="problem">The problem</h2>
-<p>
-    Sellers listed the same stock on <strong>Shopify, Amazon and Walmart</strong>. Inventory was synchronised between
-    the channels with a delay of around five minutes. That gap was long enough for the same item to sell on two
-    channels at once: orders were lost, stock was oversold, and the business absorbed the cost of cancellations.
-</p>
-<p>
-    The goal was simple to state: <strong>every channel should see the same inventory, as close to real time as
-    possible</strong>, without adding manual reconciliation work.
-</p>
-
-<h2 id="architecture">Architecture</h2>
-<p>
-    I architected an <strong>event-driven integration backend</strong> on <strong>Azure Functions</strong> and
-    <strong>Cosmos DB</strong>. Changes from each marketplace arrive as events; functions ingest them, normalise each
-    channel&rsquo;s format into a single inventory model, persist the result in Cosmos DB, and distribute the update to
-    the other channels.
-</p>
-
-<figure>
-    <div class="diagram">
-        <svg viewBox="0 0 360 220" role="img" aria-labelledby="d1-title">
-            <title id="d1-title">Shopify, Amazon and Walmart send updates to Azure Functions, which store state in Cosmos DB and sync inventory back to every channel</title>
-            <g class="d-edges">
-                <path class="flow" d="M96 46 C150 46,150 110,182 110"/>
-                <path class="flow" d="M96 110 H182"/>
-                <path class="flow" d="M96 174 C150 174,150 110,182 110"/>
-                <path class="flow flow--alt" d="M250 128 V170"/>
-            </g>
-            <g class="d-node"><rect x="14" y="30" width="82" height="32" rx="8"/><text x="55" y="50">Shopify</text></g>
-            <g class="d-node"><rect x="14" y="94" width="82" height="32" rx="8"/><text x="55" y="114">Amazon</text></g>
-            <g class="d-node"><rect x="14" y="158" width="82" height="32" rx="8"/><text x="55" y="178">Walmart</text></g>
-            <g class="d-node d-node--accent"><rect x="182" y="88" width="136" height="40" rx="10"/><text x="250" y="112">Azure Functions</text></g>
-            <g class="d-node"><rect x="196" y="170" width="108" height="32" rx="8"/><text x="250" y="190">Cosmos DB</text></g>
-        </svg>
-    </div>
-    <figcaption>Simplified architecture. Channel names are the real integrations; internal details are omitted.</figcaption>
-</figure>
-
-<h3>How a change flows through the system</h3>
-<ul>
-    <li><strong>Ingest:</strong> an order or stock change on any channel triggers an Azure Function through a webhook handler.</li>
-    <li><strong>Normalise:</strong> the function maps the channel-specific payload onto one shared inventory model.</li>
-    <li><strong>Persist:</strong> the current order and inventory state is written to Cosmos DB.</li>
-    <li><strong>Distribute:</strong> the new stock level is pushed to the other channels so all three agree.</li>
-</ul>
-
-<h2 id="decisions">Engineering decisions</h2>
-<div class="decisions">
-    <div class="decision">
-        <h3>Event-driven, serverless compute instead of scheduled polling</h3>
-        <p>Reacting to each change as it happens is what removes the multi-minute window; Azure Functions scale out with order bursts and cost nothing while idle.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> event-driven systems must tolerate duplicate and out-of-order deliveries, so handlers need to be idempotent and updates ordered per item.</p>
-    </div>
-    <div class="decision">
-        <h3>One normalised inventory model shared by every channel</h3>
-        <p>Instead of point-to-point mappings between each pair of marketplaces, every channel translates to and from a single model. Adding a channel means writing one adapter, not three.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> the shared model has to be designed carefully up front so channel-specific fields don&rsquo;t leak into it.</p>
-    </div>
-    <div class="decision">
-        <h3>Cosmos DB for order and inventory state</h3>
-        <p>A low-latency, horizontally scalable document store suits high-frequency reads and writes of small inventory records during traffic spikes.</p>
-        <p class="tradeoff"><strong>Trade-off:</strong> throughput is billed in request units, so partition-key choice and document size directly affect cost.</p>
-    </div>
+<!-- hero -->
+<div class="hv hv--sync">
+    <svg class="hv__links" viewBox="0 0 100 80">
+        <path id="hv1-a" d="M22 16 C40 16, 38 40, 50 40"/>
+        <path id="hv1-b" d="M80 14 C64 14, 64 40, 50 40"/>
+        <path id="hv1-c" d="M30 68 C42 68, 40 40, 50 40"/>
+        <circle r=".9"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#hv1-a"/></animateMotion></circle>
+        <circle r=".9"><animateMotion dur="2.6s" begin="-.9s" repeatCount="indefinite"><mpath href="#hv1-b"/></animateMotion></circle>
+        <circle r=".9"><animateMotion dur="2.6s" begin="-1.7s" repeatCount="indefinite"><mpath href="#hv1-c"/></animateMotion></circle>
+    </svg>
+    <div class="hv__core" data-depth="-0.04"><span>fn()</span><small>normalise</small></div>
+    <div class="hv__tile glass glass--dark" style="--x:4%;--y:10%" data-depth="0.16"><svg class="i"><use href="#i-store"/></svg><b>Shopify</b><small>stock · in sync</small></div>
+    <div class="hv__tile glass glass--dark" style="--x:66%;--y:4%" data-depth="0.26"><svg class="i"><use href="#i-box"/></svg><b>Amazon</b><small>stock · in sync</small></div>
+    <div class="hv__tile glass glass--dark" style="--x:14%;--y:76%" data-depth="0.1"><svg class="i"><use href="#i-store"/></svg><b>Walmart</b><small>stock · in sync</small></div>
+    <div class="hv__db" data-depth="-0.1"><svg class="i"><use href="#i-db"/></svg>Cosmos DB</div>
+    <p class="hv__coord">window: 5 min → &lt;2 s</p>
+    <p class="hv__annot"><svg viewBox="0 0 90 50"><path d="M84 44C62 44 36 34 14 10m0 0 2 14M14 10l14 2"/></svg>three shops, one shelf</p>
 </div>
+<!-- /hero -->
 
-<h2 id="outcomes">Outcomes</h2>
-<ul>
-    <li>Inventory sync latency reduced from <strong>about 5 minutes to under 2 seconds</strong>.</li>
-    <li><strong>Overselling eliminated</strong> across Shopify, Amazon and Walmart.</li>
-    <li><strong>$150k+</strong> in previously lost quarterly revenue recovered.</li>
-</ul>
+<section class="chapter" id="problem" data-toc="The problem" data-chapter="cs-problem" aria-labelledby="problem-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">01</span>
+        <p class="chapter__label">The problem</p>
+        <h2 class="chapter__title" id="problem-h">Five minutes was long enough to sell the same item twice.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="lead-in reveal">
+            Sellers listed the same stock on <strong>Shopify, Amazon and Walmart</strong>. Inventory was synchronised between
+            the channels with a delay of around five minutes. That gap was long enough for the same item to sell on two
+            channels at once: orders were lost, stock was oversold, and the business absorbed the cost of cancellations.
+        </p>
+        <div class="compare reveal" data-compare>
+            <p class="compare__h">Inventory sync window <span>drawn to scale</span></p>
+            <div class="compare__row compare__row--before"><span class="compare__lbl">Before</span><span class="compare__track"><span class="compare__bar" style="--w:1"></span></span><span class="compare__val">~5 min</span></div>
+            <div class="compare__row compare__row--after"><span class="compare__lbl">After</span><span class="compare__track"><span class="compare__bar" style="--w:.0067"></span></span><span class="compare__val">&lt;2 s</span></div>
+        </div>
+        <p class="reveal">
+            The goal was simple to state: <strong>every channel should see the same inventory, as close to real time as
+            possible</strong>, without adding manual reconciliation work.
+        </p>
+    </div>
+</section>
 
-<h2 id="skills">Skills demonstrated</h2>
-<p>
-    Serverless and event-driven design with <a href="/#skills">Azure Functions</a>, data modelling on
-    <a href="/#skills">Cosmos DB</a>, and .NET integration work with ASP.NET Core &mdash; the same stack described in my
-    <a href="/#experience">experience</a> building multi-channel e-commerce integrations.
-</p>
+<section class="chapter" id="architecture" data-toc="Architecture" data-chapter="cs-architecture" aria-labelledby="architecture-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">02</span>
+        <p class="chapter__label">Architecture</p>
+        <h2 class="chapter__title" id="architecture-h">One change in, the same inventory everywhere.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="reveal">
+            I architected an <strong>event-driven integration backend</strong> on <strong>Azure Functions</strong> and
+            <strong>Cosmos DB</strong>. Changes from each marketplace arrive as events; functions ingest them, normalise each
+            channel&rsquo;s format into a single inventory model, persist the result in Cosmos DB, and distribute the update to
+            the other channels.
+        </p>
+    </div>
+
+    <div class="scrolly">
+        <ol class="steps" data-steps-for="arch-orders" aria-label="How a change flows through the system">
+            <li data-step="1"><p class="steps__no">Step 1</p><h3>Ingest</h3><p>An order or stock change on any channel triggers an Azure Function through a webhook handler.</p></li>
+            <li data-step="2"><p class="steps__no">Step 2</p><h3>Normalise</h3><p>The function maps the channel-specific payload onto one shared inventory model.</p></li>
+            <li data-step="3"><p class="steps__no">Step 3</p><h3>Persist</h3><p>The current order and inventory state is written to Cosmos DB.</p></li>
+            <li data-step="4"><p class="steps__no">Step 4</p><h3>Distribute</h3><p>The new stock level is pushed to the other channels, so all three agree.</p></li>
+        </ol>
+        <div class="scrolly__visual">
+            <div class="archx" id="arch-orders" data-archx data-ratio="1000/640" data-mratio="1000/1150"
+                 data-edges="shopify>fn:in:1 amazon>fn:in:1 walmart>fn:in:1 fn>model:map:2 fn>cosmos:persist:3 fn>shopify:out:4 fn>amazon:out:4 fn>walmart:out:4">
+                <div class="archx__bar">
+                    <p class="archx__badge">Simplified · channel names are the real integrations</p>
+                    <button type="button" class="archx__reset">Show everything</button>
+                </div>
+                <div class="archx__stage">
+                    <svg class="archx__edges" aria-hidden="true"></svg>
+                    <button type="button" class="archx__node archx__node--ext" data-node="shopify" data-pos="12,18" data-mpos="17,9" data-step="1"><svg class="i" aria-hidden="true"><use href="#i-store"/></svg><span>Shopify</span></button>
+                    <button type="button" class="archx__node archx__node--ext" data-node="amazon" data-pos="12,50" data-mpos="50,9" data-step="1"><svg class="i" aria-hidden="true"><use href="#i-box"/></svg><span>Amazon</span></button>
+                    <button type="button" class="archx__node archx__node--ext" data-node="walmart" data-pos="12,82" data-mpos="83,9" data-step="1"><svg class="i" aria-hidden="true"><use href="#i-store"/></svg><span>Walmart</span></button>
+                    <button type="button" class="archx__node archx__node--core" data-node="fn" data-pos="47,50" data-mpos="50,45" data-step="1"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg><span>Azure Functions</span></button>
+                    <button type="button" class="archx__node archx__node--idea" data-node="model" data-pos="83,20" data-mpos="22,80" data-step="2"><svg class="i" aria-hidden="true"><use href="#i-layers"/></svg><span>Shared inventory model</span></button>
+                    <button type="button" class="archx__node" data-node="cosmos" data-pos="83,80" data-mpos="79,80" data-step="3"><svg class="i" aria-hidden="true"><use href="#i-db"/></svg><span>Cosmos DB</span></button>
+                </div>
+                <div class="archx__panel" aria-live="polite">
+                    <div class="archx__detail is-active" data-detail="overview"><p class="archx__tag">Overview</p><h3>Event-driven inventory sync</h3><p>Every change becomes an event. One set of functions turns it into the shared model, stores it and fans it out, so the three channels never wait for a schedule. Select any component for details.</p></div>
+                    <div class="archx__detail" data-detail="shopify"><p class="archx__tag">Sales channel</p><h3>Shopify</h3><p>One of the three marketplaces. Its order and stock changes arrive through a webhook handler, and it receives updates caused by sales elsewhere.</p></div>
+                    <div class="archx__detail" data-detail="amazon"><p class="archx__tag">Sales channel</p><h3>Amazon</h3><p>Same contract as every other channel: changes in, updated stock levels out, through its own adapter onto the shared model.</p></div>
+                    <div class="archx__detail" data-detail="walmart"><p class="archx__tag">Sales channel</p><h3>Walmart</h3><p>The third channel. Because every channel maps to one model, adding a channel means writing one adapter, not three.</p></div>
+                    <div class="archx__detail" data-detail="fn"><p class="archx__tag">Compute</p><h3>Azure Functions</h3><p>Ingest, normalise, persist and distribute. Event-driven compute scales out with order bursts and costs nothing while idle. Handlers are idempotent, because events can arrive twice or out of order.</p></div>
+                    <div class="archx__detail" data-detail="model"><p class="archx__tag">Design</p><h3>Shared inventory model</h3><p>Instead of point-to-point mappings between each pair of marketplaces, every channel translates to and from a single model, designed so channel-specific fields don&rsquo;t leak into it.</p></div>
+                    <div class="archx__detail" data-detail="cosmos"><p class="archx__tag">State</p><h3>Cosmos DB</h3><p>Holds the current order and inventory state: a low-latency, horizontally scalable document store for high-frequency reads and writes of small records during traffic spikes.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="chapter chapter--exhibit" id="sync-race" data-toc="See it: the sync race" data-chapter="cs-exhibit" aria-labelledby="sync-race-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">03</span>
+        <p class="chapter__label">Interactive</p>
+        <h2 class="chapter__title" id="sync-race-h">Sell the last unit. Watch who finds out.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="reveal">A one-item race between the old scheduled sync and the event-driven design. The stock level is made up and the five-minute window is sped up so you don&rsquo;t have to wait for it; the two sync windows themselves are the real ones.</p>
+    </div>
+    <div class="sim sim--sync reveal" data-sim="sync">
+        <div class="sim__head">
+            <p class="sim__tag">Illustrative · the scheduled sync runs 60× faster here</p>
+            <div class="sim__modes" role="group" aria-label="Sync design">
+                <button type="button" class="seg is-active" data-mode="poll" aria-pressed="true">Before · scheduled sync</button>
+                <button type="button" class="seg" data-mode="event" aria-pressed="false">After · event-driven</button>
+            </div>
+        </div>
+        <div class="sim__board">
+            <div class="sim__ch" data-ch="shopify"><span class="sim__name">Shopify</span><span class="sim__stock" data-stock>1</span><span class="sim__state" data-state>in stock</span></div>
+            <div class="sim__ch" data-ch="amazon"><span class="sim__name">Amazon</span><span class="sim__stock" data-stock>1</span><span class="sim__state" data-state>in stock</span></div>
+            <div class="sim__ch" data-ch="walmart"><span class="sim__name">Walmart</span><span class="sim__stock" data-stock>1</span><span class="sim__state" data-state>in stock</span></div>
+            <div class="sim__hub"><span class="sim__hub-name" data-hub>Sync job · every ~5 min</span><span class="sim__clock" data-clock>—</span></div>
+        </div>
+        <div class="sim__controls">
+            <button type="button" class="btn btn--primary" data-act="sell">Sell the last unit on Shopify</button>
+            <button type="button" class="btn btn--glass" data-act="reset">Reset</button>
+        </div>
+        <p class="sim__log" data-log aria-live="polite">Pick a design, then sell the last unit.</p>
+    </div>
+</section>
+
+<section class="chapter" id="decisions" data-toc="Engineering decisions" data-chapter="cs-decisions" aria-labelledby="decisions-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">04</span>
+        <p class="chapter__label">Engineering decisions</p>
+        <h2 class="chapter__title" id="decisions-h">Three decisions, and what each one costs.</h2>
+    </header>
+    <div class="decisions">
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D1</p>
+            <h3>Event-driven, serverless compute instead of scheduled polling</h3>
+            <p>Reacting to each change as it happens is what removes the multi-minute window; Azure Functions scale out with order bursts and cost nothing while idle.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> event-driven systems must tolerate duplicate and out-of-order deliveries, so handlers need to be idempotent and updates ordered per item.</p>
+        </article>
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D2</p>
+            <h3>One normalised inventory model shared by every channel</h3>
+            <p>Instead of point-to-point mappings between each pair of marketplaces, every channel translates to and from a single model. Adding a channel means writing one adapter, not three.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> the shared model has to be designed carefully up front so channel-specific fields don&rsquo;t leak into it.</p>
+        </article>
+        <article class="decision reveal">
+            <p class="decision__no" aria-hidden="true">D3</p>
+            <h3>Cosmos DB for order and inventory state</h3>
+            <p>A low-latency, horizontally scalable document store suits high-frequency reads and writes of small inventory records during traffic spikes.</p>
+            <p class="tradeoff"><strong>Trade-off:</strong> throughput is billed in request units, so partition-key choice and document size directly affect cost.</p>
+        </article>
+    </div>
+    <div class="chapter__body prose">
+        <h3 class="reveal">The idempotency rule, sketched</h3>
+        <p class="reveal">The trade-off in D1 is the part that makes or breaks an event-driven sync. In outline, every handler follows this shape:</p>
+    </div>
+    <figure class="code reveal" data-lang="csharp">
+        <figcaption><span class="code__file">OnInventoryChanged.cs</span><span class="code__tag">Illustrative · the pattern, not client code</span></figcaption>
+        <pre tabindex="0"><code>[Function("OnInventoryChanged")]
+public async Task&lt;HttpResponseData&gt; Run(
+    [HttpTrigger(AuthorizationLevel.Function, "post", Route = "webhooks/{channel}")] HttpRequestData req,
+    string channel)
+{
+    // 1. Ingest + normalise: each channel has one adapter onto the shared model
+    InventoryChange change = await _adapters[channel].ReadAsync(req);
+
+    // 2. Persist idempotently: duplicates and out-of-order deliveries are expected,
+    //    so a change only applies if it is newer than what is stored for that item
+    bool applied = await _inventory.UpsertIfNewerAsync(change);
+
+    // 3. Distribute: push the new level to every other channel
+    if (applied) await _fanOut.PublishAsync(change, exceptChannel: channel);
+
+    return req.CreateResponse(HttpStatusCode.Accepted);
+}</code></pre>
+    </figure>
+</section>
+
+<section class="chapter" id="outcomes" data-toc="Outcomes" data-chapter="cs-outcomes" aria-labelledby="outcomes-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">05</span>
+        <p class="chapter__label">Outcomes</p>
+        <h2 class="chapter__title" id="outcomes-h">What changed for the business.</h2>
+    </header>
+    <ul class="results">
+        <li class="reveal"><span class="results__val">5&nbsp;min &rarr; &lt;2&nbsp;s</span><span class="results__lbl">Inventory sync latency, from about five minutes to under two seconds.</span></li>
+        <li class="reveal"><span class="results__val">Eliminated</span><span class="results__lbl">Overselling across Shopify, Amazon and Walmart.</span></li>
+        <li class="reveal"><span class="results__val" data-count="150" data-prefix="$" data-suffix="k+">$150k+</span><span class="results__lbl">Previously lost quarterly revenue recovered.</span></li>
+    </ul>
+</section>
+
+<section class="chapter" id="skills" data-toc="Skills demonstrated" data-chapter="cs-skills" aria-labelledby="skills-h">
+    <header class="chapter__head reveal">
+        <span class="chapter__no" aria-hidden="true">06</span>
+        <p class="chapter__label">Skills demonstrated</p>
+        <h2 class="chapter__title" id="skills-h">What this project shows.</h2>
+    </header>
+    <div class="chapter__body prose">
+        <p class="reveal">
+            Serverless and event-driven design with <a href="/#skills">Azure Functions</a>, data modelling on
+            <a href="/#skills">Cosmos DB</a>, and .NET integration work with ASP.NET Core &mdash; the same stack described in my
+            <a href="/#experience">experience</a> building multi-channel e-commerce integrations.
+        </p>
+    </div>
+</section>

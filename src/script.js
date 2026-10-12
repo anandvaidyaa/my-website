@@ -543,7 +543,7 @@
         }
 
         // Stagger siblings inside a group
-        $$(".reveal-stagger, .principles, .cred__grid, .contact__cards, .stack__layers, .cases").forEach(function (group) {
+        $$(".reveal-stagger, .principles, .cred__grid, .contact__cards, .stack__layers, .cases, .decisions, .results, .cs-results").forEach(function (group) {
             $$(":scope > .reveal", group).forEach(function (el, i) { el.style.setProperty("--i", i % 6); });
         });
 
@@ -556,7 +556,7 @@
                 if (!entry.target.classList.contains("split") && !entry.target.closest(".is-visible")) splitWords(entry.target);
             });
         }, { rootMargin: "0px 0px 400px 0px" });
-        $$(".section-title, .contact__title, .case__title").forEach(function (h) { splitter.observe(h); });
+        $$(".section-title, .contact__title, .case__title, .chapter__title").forEach(function (h) { splitter.observe(h); });
 
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {

@@ -17,6 +17,7 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 | `docs/SEO.md` | Search Console setup, monitoring, authority building, how to add content. |
 | `src/styles.css` | **Edit this.** Design system — tokens (dark + light), layout, components, motion. Mobile-first. |
 | `src/eggs.js`, `src/eggs.css` | Optional easter-egg module (lazy-loaded, isolated). |
+| `src/case.js`, `src/case.css` | Case-study pages only: chapter navigation, interactive architecture diagrams, the scroll-linked deployment journey, the two exhibits (sync race, gateway inspector), code highlighting/copy/tabs. Loaded by `src/templates/article.html`. |
 | `src/script.js` | **Edit this.** Interactions, as small independent modules (theme, nav, reveals, skills inspector, architecture explorer, terminal, contact form). |
 | `styles.min.css`, `script.min.js` | Build output — don't edit by hand. |
 | `fonts/` | Self-hosted variable fonts (Outfit, Space Grotesk — SIL OFL 1.1, licences included). |

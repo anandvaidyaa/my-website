@@ -19,10 +19,10 @@ const WEBSITE_ID = `${SITE}/#website`;
 const FILES = [
     "index.html", "404.html", "CNAME", "robots.txt", "site.webmanifest",
     "favicon.svg", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
-    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css"
+    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js"
 ];
 const DIRS = ["fonts", "og"];
-const HASHED = ["styles.min.css", "script.min.js"];
+const HASHED = ["styles.min.css", "script.min.js", "case.min.css", "case.min.js"];
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const human = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -75,20 +75,28 @@ for (const file of projectFiles) {
     const metaMatch = raw.match(/<script type="application\/json" data-meta>([\s\S]*?)<\/script>/);
     if (!metaMatch) throw new Error(`${file}: missing data-meta block`);
     const meta = JSON.parse(metaMatch[1]);
-    for (const key of ["order", "title", "seoTitle", "description", "kicker", "lede", "context", "stack", "outcomes", "ogImage", "datePublished", "dateModified"]) {
+    for (const key of ["order", "title", "seoTitle", "description", "kicker", "lede", "context", "stack", "outcomes", "accent", "status", "ogImage", "datePublished", "dateModified"]) {
         if (meta[key] === undefined) throw new Error(`${file}: meta.${key} is required`);
     }
     if (meta.seoTitle.length > 65) console.warn(`warn: ${file} seoTitle is ${meta.seoTitle.length} chars`);
     if (meta.description.length > 170) console.warn(`warn: ${file} description is ${meta.description.length} chars`);
     const slug = file.replace(/\.html$/, "");
-    const body = raw.slice(metaMatch.index + metaMatch[0].length).trim();
-    const toc = [...body.matchAll(/<h2 id="([\w-]+)">([\s\S]*?)<\/h2>/g)].map((m) => ({ id: m[1], text: m[2].replace(/<[^>]+>/g, "") }));
-    projects.push({ ...meta, slug, body, toc, url: `${SITE}/projects/${slug}/` });
+    let body = raw.slice(metaMatch.index + metaMatch[0].length).trim();
+    // The hero visual is authored in the content file between <!-- hero --> markers
+    const heroMatch = body.match(/<!-- hero -->([\s\S]*?)<!-- \/hero -->/);
+    if (!heroMatch) throw new Error(`${file}: missing <!-- hero --> visual`);
+    body = body.replace(heroMatch[0], "").trim();
+    // Chapters: <section class="chapter" id="…" data-toc="…">
+    const toc = [...body.matchAll(/<section class="chapter[^"]*" id="([\w-]+)" data-toc="([^"]+)"/g)].map((m) => ({ id: m[1], text: m[2] }));
+    if (toc.length < 3) throw new Error(`${file}: expected at least 3 chapters`);
+    projects.push({ ...meta, slug, body, hero: heroMatch[1].trim(), toc, url: `${SITE}/projects/${slug}/` });
 }
 projects.sort((a, b) => a.order - b.order);
 
+const pad = (n) => String(n).padStart(2, "0");
 for (const p of projects) {
-    const others = projects.filter((o) => o !== p);
+    // Next case study first, then the rest in order
+    const others = projects.filter((o) => o !== p).sort((a, b) => ((a.order - p.order + projects.length) % projects.length) - ((b.order - p.order + projects.length) % projects.length));
     const breadcrumb = {
         "@type": "BreadcrumbList",
         "@id": `${p.url}#breadcrumb`,
@@ -153,10 +161,16 @@ for (const p of projects) {
         CONTEXT: esc(p.context),
         STACK_TEXT: esc(p.stack.join(" · ")),
         STACK_TAGS: p.stack.map((s) => `<li>${esc(s)}</li>`).join(""),
-        OUTCOMES: p.outcomes.map(([v, l]) => `<li><span class="outcome__val">${esc(v)}</span><span class="outcome__lbl">${esc(l)}</span></li>`).join(""),
-        TOC: p.toc.map((t) => `<li><a href="#${t.id}">${esc(t.text)}</a></li>`).join(""),
+        OUTCOMES: p.outcomes.map(([v, l]) => `<li class="reveal"><span class="cs-result__val">${esc(v)}</span><span class="cs-result__lbl">${esc(l)}</span></li>`).join(""),
+        TOC: p.toc.map((t, i) => `<li><a href="#${t.id}" data-nav="${t.id}"><span class="cs-nav__no">${pad(i + 1)}</span><span class="cs-nav__txt">${esc(t.text)}</span><i class="cs-nav__bar" aria-hidden="true"></i></a></li>`).join(""),
+        FIRST: p.toc[0].id,
+        HERO: p.hero,
+        ACCENT: esc(p.accent),
+        STATUS: esc(p.status),
+        INDEX: pad(p.order),
+        TOTAL: pad(projects.length),
         BODY: p.body,
-        NEXT: others.map((o) => `<a class="next-card" href="/projects/${o.slug}/"><span>Next case study</span><strong>${esc(o.title)}</strong></a>`).join("")
+        NEXT: others.map((o, i) => `<a class="next-card next-card--${esc(o.accent)}${i === 0 ? " next-card--lead" : ""}" href="/projects/${o.slug}/"><span>${i === 0 ? "Next case study" : "Also read"} · ${pad(o.order)}</span><strong>${esc(o.title)}</strong><em>${esc(o.kicker)}</em><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>`).join("")
     });
 
     await mkdir(`${OUT}/projects/${p.slug}`, { recursive: true });

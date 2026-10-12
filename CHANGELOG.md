@@ -1,5 +1,24 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (2) — Case studies as interactive engineering stories
+
+All three case-study pages (`/projects/<slug>/`) rebuilt on a shared case-study design system (`src/case.css`, `src/case.js`, loaded only on those pages). Same facts as before: nothing new is claimed; anything illustrative is labelled as such.
+
+**Shared system:** per-project accent; an opening with an oversized masked title, metadata strip, project-specific hero visual, outcome strip and a witty status line; chapters with outline numbers that fill as you read, lighting that changes per chapter, a sticky chapter navigation with per-chapter progress (a chip row on small screens); before/after bars drawn to scale; decision cards with trade-off panels; results with count-ups; a premium code block (highlighting, copy, keyboard-scrollable, tabs); next-case cards. Built from `content/projects/*.html` (hero slot + `<section class="chapter">` blocks) by `scripts/build-site.mjs`.
+
+**Architecture diagrams:** real buttons laid out from data, edges drawn as animated SVG with directional packets, click/keyboard details (arrows to move, Esc for the overview), "Show everything", a separate small-screen layout, and a readable list without JavaScript. On desktop the diagram is sticky and assembles in story order as each step reaches the middle of the screen (and rewinds when you scroll back); on phones it plays its steps once when it appears.
+
+**One signature interaction per page:**
+- Orders — *the sync race*: sell the last unit on Shopify and watch the old scheduled sync oversell on Amazon, then the event-driven design update every channel in under two seconds.
+- Pipeline — *the deployment journey*: a release capsule travels commit → build & test → Bicep → staging → approval → production, tied 1:1 to the scroll; environment "drift" cards straighten into one template.
+- Carrier — *the gateway inspector*: send a label request with or without an OAuth token and watch the gateway validate, throttle and route it (or reject it with a 401 before any carrier is called), then the tracking webhook arrive.
+
+**Creative-director pass — the three weakest moments:** (1) scrolly steps were tall, mostly empty boxes and faded with opacity → editorial steps with a lit rule and colour-only emphasis (also fixes contrast); (2) the inspector used the page accent for both pass and fail and went quiet mid-run → green passes with ✓, rejected failures, a running commentary; (3) on phones the opening had no visual until after a full screen of text → the visual now sits between the lede and the metadata.
+
+**Performance work:** the first version regressed mobile Lighthouse from 100 to 84–92 (same machine). Fixed by rendering off-screen chapters lazily (`content-visibility`), deferring all measurement to animation frames, wiring diagrams/journey/code only as they approach, starting hero animations after load (and pausing them off-screen), and animating only transforms (masked title, capsule). Also: Chrome's IntersectionObserver treats a fully clipped element as invisible, so reveals no longer use `clip-path` on observed elements.
+
+**Tested:** new case-study suite 64/64 (no overflow at 320–1920 px on every page, story-order assembly and rewind, keyboard on diagrams, focus styles, journey both directions, code highlight/copy/tabs including a hidden tab, full reveal after fast scrolling, reduced motion, no-JavaScript fallbacks, phone autoplay); axe-core 0 violations on all three pages in both themes at 375 and 1366 px with a node selected and an exhibit run; 53/53 SEO, 46/46 functional, 56/56 easter-egg, 23/23 homepage motion checks; no JS errors. Lighthouse 12 (local): case pages mobile 95–99, desktop 100; LCP 1.7 s mobile; CLS ≤ 0.014; accessibility, best practices and SEO 100.
+
 ## 2026-10-12 — Cinematic scroll motion
 
 One motion language: things emerge from behind a physical edge (masks and wipes), depth is shown by speed (near layers move faster than the page, far layers slower), and the lighting follows the story. No new dependencies.
