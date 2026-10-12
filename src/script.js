@@ -495,6 +495,261 @@
         facts.forEach(function (f) { io.observe(f); });
     }
 
+    /* ---------------- Living Topology ----------------
+       The portfolio's signature: five folded glass ribbons. Each ribbon is a cubic spine with a
+       width that twists through zero (that is what folds it). Scroll position picks a scene and
+       how far it has progressed; the ribbons' spines, widths and folds are interpolated between
+       scene states, so the silhouette really changes shape and every scroll position maps to
+       exactly one picture (scrolling back up plays it in reverse).
+         Emergence (hero) -> Expansion (about) -> Branching (skills, architecture)
+         -> Trajectory (experience) -> Fragmentation (projects) -> Stillness -> Convergence (contact)
+       Decorative only: aria-hidden, no pointer events, nothing depends on it. */
+    var TOPO_SCENES = [["home", "A"], ["about", "B"], ["skills", "C"], ["architecture", "C"], ["experience", "D"],
+        ["projects", "E"], ["decisions", "F"], ["credentials", "F"], ["faq", "F"], ["console", "F"], ["contact", "G"]];
+
+    function topoStates() {
+        var C = 500;
+        var polar = function (r, deg) { var a = deg * Math.PI / 180; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+        var J = [0, 9, -6, 14, -11], R = [290, 250, 320, 232, 270], W = [78, 64, 86, 58, 70];
+        var straight = function (a, b, bend) {
+            var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l * bend, ny = dx / l * bend;
+            return [a, [a[0] + dx / 3 + nx, a[1] + dy / 3 + ny], [a[0] + 2 * dx / 3 - nx, a[1] + 2 * dy / 3 - ny], b];
+        };
+        var rib = function (spine, w, fold, phase, taper) { return { s: spine, w: w, f: fold, p: phase, t: taper }; };
+        var S = {};
+        // A — Emergence: a compact folded blossom, asymmetric, with negative space at its heart
+        S.A = { r: [], n: [], g: [] };
+        // B — Expansion: the folds open, spines stretch and swing, the centre hollows out
+        S.B = { r: [], n: [], g: [] };
+        for (var i = 0; i < 5; i++) {
+            var a = -90 + i * 72 + J[i];
+            S.A.r.push(rib([polar(46, a), polar(170, a - 30), polar(R[i] * 0.8, a + 70), polar(R[i], a + 38)], W[i], 1.35, i * 0.12, 0.9));
+            S.B.r.push(rib([polar(118, a + 22), polar(270, a - 28), polar(R[i] * 1.22, a + 117), polar(R[i] * 1.46, a + 77)], W[i] * 1.32, 2.15, i * 0.12 + 0.3, 0.85));
+        }
+        // C — Branching: ribbons thin into paths from a hub to five nodes
+        var N = [[500, 500], [168, 250], [826, 186], [876, 650], [430, 884], [128, 640]];
+        S.C = { r: [], n: N.map(function (p) { return [p[0], p[1], 1]; }), g: [] };
+        for (i = 0; i < 5; i++) S.C.r.push(rib(straight(N[0], N[i + 1], i % 2 ? 26 : -26), 15, 0.6, 0.5, 0.6));
+        // D — Trajectory: one purposeful route, milestones at the joins
+        var Q = [[560, 36], [372, 228], [628, 430], [392, 640], [612, 826], [500, 984]];
+        S.D = { r: [], n: Q.slice(1).map(function (p) { return [p[0], p[1], 0.9]; }).concat([[500, 500, 0]]), g: [] };
+        for (i = 0; i < 5; i++) S.D.r.push(rib([Q[i], [Q[i][0], Q[i][1] + 95], [Q[i + 1][0], Q[i + 1][1] - 95], Q[i + 1]], 5, 0, 0, 0.5));
+        // E — Fragmentation: the structure breaks into twisted shards around the frame
+        var F = [[58, 170], [948, 140], [958, 760], [44, 830], [940, 470]], FA = [80, 110, 260, 100, 290];
+        S.E = { r: [], n: [], g: [] };
+        for (i = 0; i < 5; i++) S.E.r.push(rib([polar(0, 0).map(function (v, k) { return F[i][k] - 55 * (k ? Math.sin(FA[i] * Math.PI / 180) : Math.cos(FA[i] * Math.PI / 180)); }),
+            [F[i][0] - 18, F[i][1] + 14], [F[i][0] + 18, F[i][1] - 14],
+            [F[i][0] + 55 * Math.cos(FA[i] * Math.PI / 180), F[i][1] + 55 * Math.sin(FA[i] * Math.PI / 180)]], 34, 0.8, i * 0.2, 1));
+        // F — Stillness: the blossom again, folded small (the camera keeps it quiet)
+        S.F = { r: S.A.r.map(function (r) { return rib(r.s.map(function (p) { return [C + (p[0] - C) * 0.62, C + (p[1] - C) * 0.62]; }), r.w * 0.62, r.f, r.p, r.t); }), n: [], g: [] };
+        // G — Convergence: the ribbons draw the logo — the "A" and its ring
+        var M = function (x, y) { return [C + (x - 20) * 22, C + (y - 20) * 22]; };
+        var k = 1.3333 * 18.5;
+        S.G = { r: [
+            rib([M(11, 28), M(13.5, 22.3), M(16, 16.7), M(18.5, 11)], 13, 0, 0, 0.35),
+            rib([M(21.5, 11), M(24, 16.7), M(26.5, 22.3), M(29, 28)], 13, 0, 0, 0.35),
+            rib([M(14.5, 21), M(18.2, 21), M(21.8, 21), M(25.5, 21)], 11, 0, 0, 0.35),
+            rib([M(20, 1.5), M(20 - k, 1.5), M(20 - k, 38.5), M(20, 38.5)], 10, 0, 0, 0.3),
+            rib([M(20, 38.5), M(20 + k, 38.5), M(20 + k, 1.5), M(20, 1.5)], 10, 0, 0, 0.3)
+        ], n: [], g: [] };
+        // Nodes and crystal shards: same count in every state (hidden ones sit at the hub)
+        var hub = [C, C, 0];
+        ["A", "B", "E", "F", "G"].forEach(function (s) { while (S[s].n.length < 6) S[s].n.push(hub.slice()); });
+        while (S.D.n.length < 6) S.D.n.push(hub.slice());
+        var shard = function (r, deg, sc, o, spin) { var p = polar(r, deg); return [p[0], p[1], sc, o, spin]; };
+        S.A.g = [shard(120, -40, 1, 0.9, 10), shard(150, 60, 0.8, 0.8, 70), shard(96, 170, 0.9, 0.9, -20), shard(160, 230, 0.7, 0.8, 40), shard(70, 300, 0.6, 0.7, 0), shard(190, 120, 0.5, 0.6, 90)];
+        S.B.g = [shard(330, -50, 1.2, 0.85, 40), shard(390, 48, 1, 0.7, 110), shard(250, 170, 1.1, 0.9, 10), shard(420, 222, 0.9, 0.7, 80), shard(210, 300, 0.8, 0.6, 30), shard(360, 130, 0.7, 0.6, 140)];
+        S.E.g = [[70, 420, 1.5, 0.8, 60], [934, 300, 1.3, 0.75, 200], [56, 640, 1.2, 0.7, 120], [952, 620, 1.4, 0.75, 30], [40, 60, 1, 0.6, 260], [962, 940, 1.1, 0.6, 180]];
+        ["C", "D", "F", "G"].forEach(function (s) { S[s].g = S.A.g.map(function (g) { return [C, C, 0.2, 0, g[4]]; }); });
+        return S;
+    }
+
+    // Where the sculpture sits on screen in each state (desktop / small screens)
+    function topoCamera(state, vw, vh, small) {
+        var cam = {
+            A: small ? [0.5, 0.5, 620, -8, 0.95] : [0.73, 0.5, 1180, -8, 1],
+            B: small ? [0.86, 0.26, 380, 24, 0.38] : [0.8, 0.46, 820, 24, 0.6],
+            C: small ? [0.94, 0.58, 520, 0, 0.18] : [0.95, 0.62, 760, 0, 0.3],
+            D: small ? [0.96, 0.5, 680, 0, 0.22] : [0.9, 0.5, vh * 1.05, 0, 0.42],
+            E: small ? [0.5, 0.5, 820, 0, 0.18] : [0.5, 0.5, vw * 1.04, 0, 0.42],
+            F: small ? [0.9, 0.14, 210, 40, 0.24] : [0.9, 0.2, 360, 40, 0.3],
+            G: small ? [0.82, 0.2, 170, 0, 1] : [0.8, 0.32, 200, 0, 1]
+        }[state];
+        return { x: cam[0] * vw, y: cam[1] * vh, size: cam[2], rot: cam[3], alpha: cam[4] };
+    }
+
+    function lerpDeep(a, b, t) {
+        if (typeof a === "number") return a + (b - a) * t;
+        if (Array.isArray(a)) return a.map(function (v, i) { return lerpDeep(v, b[i], t); });
+        var o = {};
+        Object.keys(a).forEach(function (k) { o[k] = lerpDeep(a[k], b[k], t); });
+        return o;
+    }
+
+    function bez(s, t) {
+        var u = 1 - t;
+        return [u * u * u * s[0][0] + 3 * u * u * t * s[1][0] + 3 * u * t * t * s[2][0] + t * t * t * s[3][0],
+            u * u * u * s[0][1] + 3 * u * u * t * s[1][1] + 3 * u * t * t * s[2][1] + t * t * t * s[3][1]];
+    }
+    function bezD(s, t) {
+        var u = 1 - t;
+        return [3 * u * u * (s[1][0] - s[0][0]) + 6 * u * t * (s[2][0] - s[1][0]) + 3 * t * t * (s[3][0] - s[2][0]),
+            3 * u * u * (s[1][1] - s[0][1]) + 6 * u * t * (s[2][1] - s[1][1]) + 3 * t * t * (s[3][1] - s[2][1])];
+    }
+    var fx = function (v) { return Math.round(v * 10) / 10; };
+    // Closed outline of a folded ribbon: offset the spine by a width that twists through zero
+    function ribbonD(r, n) {
+        var L = [], Rr = [];
+        for (var i = 0; i <= n; i++) {
+            var t = i / n, p = bez(r.s, t), d = bezD(r.s, t), l = Math.hypot(d[0], d[1]) || 1;
+            var w = r.w * Math.pow(Math.sin(Math.PI * t), r.t) * Math.cos(Math.PI * (r.f * t + r.p));
+            var nx = -d[1] / l * w, ny = d[0] / l * w;
+            L.push([p[0] + nx, p[1] + ny]);
+            Rr.push([p[0] - nx, p[1] - ny]);
+        }
+        var pts = L.concat(Rr.reverse());
+        var d2 = "M" + fx(pts[0][0]) + " " + fx(pts[0][1]);
+        for (i = 1; i < pts.length - 1; i++) {
+            var m = [(pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2];
+            d2 += "Q" + fx(pts[i][0]) + " " + fx(pts[i][1]) + " " + fx(m[0]) + " " + fx(m[1]);
+        }
+        return d2 + "Z";
+    }
+    var spineD = function (s) { return "M" + s.map(function (p) { return fx(p[0]) + " " + fx(p[1]); }).join(" ").replace(/^(\S+ \S+) /, "$1C"); };
+
+    // Build the SVG once; the same markup serves the homepage and the case-study emblem
+    function topoBuild(svg) {
+        var NS = "http://www.w3.org/2000/svg";
+        var mk = function (tag, cls, parent) { var e = document.createElementNS(NS, tag); if (cls) e.setAttribute("class", cls); parent.appendChild(e); return e; };
+        var g = { rib: [], sheen: [], spine: [], light: [], node: [], shard: [] };
+        var gR = mk("g", "topo__ribbons", svg), gS = mk("g", "topo__sheens", svg), gP = mk("g", "topo__spines", svg), gL = mk("g", "topo__lights", svg);
+        var gN = mk("g", "topo__nodes", svg), gG = mk("g", "topo__shards", svg);
+        for (var i = 0; i < 5; i++) {
+            var r = mk("path", "topo__rib topo__rib--" + i, gR);
+            r.setAttribute("pathLength", "1");
+            g.rib.push(r);
+            g.sheen.push(mk("path", "topo__sheen", gS));
+            g.spine.push(mk("path", "topo__spine", gP));
+            var l = mk("path", "topo__light", gL);
+            l.setAttribute("pathLength", "1");
+            g.light.push(l);
+        }
+        for (i = 0; i < 6; i++) { var c = mk("circle", "topo__node", gN); c.setAttribute("r", "7"); g.node.push(c); }
+        for (i = 0; i < 6; i++) { var sh = mk("polygon", "topo__shard", gG); sh.setAttribute("points", "0,-22 15,10 -11,16"); g.shard.push(sh); }
+        return g;
+    }
+    function topoPaint(g, st, n, extra) {
+        st.r.forEach(function (r, i) {
+            var d = ribbonD(r, n);
+            g.rib[i].setAttribute("d", d);
+            g.sheen[i].setAttribute("d", d);
+            var sd = spineD(r.s);
+            g.spine[i].setAttribute("d", sd);
+            g.light[i].setAttribute("d", sd);
+        });
+        st.n.forEach(function (p, i) {
+            g.node[i].setAttribute("cx", fx(p[0]));
+            g.node[i].setAttribute("cy", fx(p[1]));
+            g.node[i].style.opacity = p[2].toFixed(3);
+        });
+        st.g.forEach(function (s, i) {
+            var dx = 0, dy = 0, spin = 0, glow = 0;
+            // The About quirk: one shard misses its slot, corrects itself, and clicks in
+            if (i === 2 && extra && extra.quirk !== undefined) {
+                var q = extra.quirk, miss = (1 - q) * (1 - q);
+                dx = 64 * miss * Math.cos(q * 9) + (q < 1 ? 10 * Math.sin(q * 26) * (1 - q) : 0);
+                dy = -48 * miss;
+                spin = 50 * miss;
+                glow = Math.max(0, 1 - Math.abs(q - 0.97) * 14);
+            }
+            g.shard[i].setAttribute("transform", "translate(" + fx(s[0] + dx) + " " + fx(s[1] + dy) + ") rotate(" + fx(s[4] + spin) + ") scale(" + s[2].toFixed(3) + ")");
+            g.shard[i].style.opacity = s[3].toFixed(3);
+            if (i === 2) g.shard[i].style.setProperty("--click", glow.toFixed(3));
+        });
+    }
+
+    function initTopology() {
+        var host = $("#topo");
+        var emblems = $$(".topo--emblem svg");
+        var S = topoStates();
+        // Case studies: the blossom as a quiet emblem (continuity between pages)
+        emblems.forEach(function (svg) { topoPaint(topoBuild(svg), S.A, 30); });
+        if (!host) return;
+        var svg = $("svg", host);
+        var g = topoBuild(svg);
+        var sheenGrad = $("#topo-sheen-grad", host);
+        var anchors = TOPO_SCENES.map(function (sc) { return document.getElementById(sc[0]); });
+        var portrait = $(".blob-portrait"), orbit = $(".contact__orbit");
+        var current = 0, ticking = false, last = "";
+        var vw = window.innerWidth, vh = window.innerHeight, small = vw < 900;
+
+        // Reduced motion: one still picture in the opening, which scrolls away with it
+        if (reduceMotion.matches) {
+            host.classList.add("topo--static");
+            topoPaint(g, S.A, 30);
+            var r0 = portrait ? portrait.getBoundingClientRect() : null;
+            var size0 = small ? 440 : 700;
+            host.style.transform = "translate3d(" + px((r0 ? r0.left + r0.width / 2 : vw * 0.73) - 500) + "," + px((r0 ? r0.top + r0.height / 2 + window.scrollY : vh * 0.5) - 500) + ",0) scale(" + (size0 / 1000).toFixed(3) + ")";
+            host.classList.add("is-born");
+            return;
+        }
+
+        if ("IntersectionObserver" in window) {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) { if (e.isIntersecting) { current = anchors.indexOf(e.target); request(); } });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+            anchors.forEach(function (a) { if (a) io.observe(a); });
+        }
+
+        function frame() {
+            ticking = false;
+            var y = window.scrollY;
+            // Read: progress through the current scene, and where the attached objects are
+            var a = anchors[current];
+            var r = a ? a.getBoundingClientRect() : { top: 0, height: 1 };
+            var f = current === 0 ? clamp(y / (r.height || 1), 0, 1) : clamp((vh / 2 - r.top) / (r.height || 1), 0, 1);
+            var pr = current <= 1 && portrait ? portrait.getBoundingClientRect() : null;
+            var or = current >= 9 && orbit ? orbit.getBoundingClientRect() : null;
+
+            // Which two states, and how far between them (scenes hold, then morph late)
+            var key = TOPO_SCENES[current][1];
+            var next = TOPO_SCENES[Math.min(current + 1, TOPO_SCENES.length - 1)][1];
+            var t = current === 0 ? range(f, 0.02, 0.92) : range(f, 0.55, 1);
+            t = t * t * (3 - 2 * t);
+            var stateKey = key + next + t.toFixed(3) + (current === 1 ? f.toFixed(3) : "");
+            var camA = topoCamera(key, vw, vh, small), camB = topoCamera(next, vw, vh, small);
+            // The opening is attached to the portrait; the ending to the contact orbit
+            if (pr && key === "A") { camA.x = pr.left + pr.width / 2; camA.y = pr.top + pr.height / 2; }
+            if (or && or.width) {
+                var gx = or.left + or.width / 2, gy = or.top + or.height / 2;
+                if (next === "G") { camB.x = gx; camB.y = gy; }
+                if (key === "G") { camA.x = gx; camA.y = gy; }
+            }
+            var cam = lerpDeep(camA, camB, t);
+
+            // Write: camera every frame (cheap, composited); geometry only when it changes
+            host.style.transform = "translate3d(" + px(cam.x - 500) + "," + px(cam.y - 500) + ",0) rotate(" + cam.rot.toFixed(2) + "deg) scale(" + (cam.size / 1000).toFixed(4) + ")";
+            host.style.opacity = cam.alpha.toFixed(3);
+            if (stateKey !== last) {
+                last = stateKey;
+                var st = key === next ? S[key] : lerpDeep(S[key], S[next], t);
+                var extra = current === 1 ? { quirk: range(f, 0.06, 0.42) } : null;
+                topoPaint(g, st, small ? 22 : 34, extra);
+                host.setAttribute("data-scene", t < 0.5 ? key : next);
+            }
+            // Light travels along the paths as the story moves on
+            var story = current + f;
+            host.style.setProperty("--light", (-story * 0.55).toFixed(4));
+            if (sheenGrad) sheenGrad.setAttribute("gradientTransform", "rotate(" + (story * 38).toFixed(1) + " .5 .5)");
+        }
+        function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
+        window.addEventListener("scroll", request, { passive: true });
+        window.addEventListener("resize", function () { vw = window.innerWidth; vh = window.innerHeight; small = vw < 900; last = ""; request(); }, { passive: true });
+        request();
+        // The opening: contours trace the form, then the membranes fill in
+        window.requestAnimationFrame(function () { host.classList.add("is-born"); });
+    }
+
     /* ---------------- Reveal on scroll + split headings ---------------- */
     function splitWords(el) {
         var index = 0;
@@ -1507,7 +1762,7 @@
         if (year) year.textContent = String(new Date().getFullYear());
 
         [initTheme, initNav, initAnchors, initScroll, initReveal, initQuickView].forEach(safe);
-        queue([initHero, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
+        queue([initHero, initTopology, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
         whenNear("#architecture", initArchitecture);
 
         // Start ambient motion once the page has finished loading

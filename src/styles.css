@@ -2886,6 +2886,8 @@ html:not(.js) [data-quick] { display: none !important; }
 :root[data-theme="light"] .contact__note { color: #4a7300; }
 .contact:not(.in-view) .contact__sat i { animation-play-state: paused; }
 @media (min-width: 1000px) { .contact__orbit { display: block; } .contact__head .section-intro { max-width: calc(100% - 280px); } }
+/* The monogram converges inside the orbit: keep it clear of the heading and the form */
+@media (min-width: 1200px) { .contact__orbit { right: -9rem; bottom: .5rem; } }
 /* Six contact cards: the last one takes the full row instead of sitting alone */
 @media (min-width: 640px) { .contact__cards > .ccard:last-child { grid-column: 1 / -1; } }
 
@@ -2899,3 +2901,51 @@ html:not(.js) [data-quick] { display: none !important; }
     .case--stack .outcomes__cap { grid-column: 2; grid-row: 1; margin-top: 0; }
     .case--stack .outcomes__cap + .outcomes { grid-column: 2; grid-row: 2; margin-top: 0; }
 }
+
+/* ==========================================================================
+   Living Topology — the signature sculpture
+   One material family: smoked glass membranes (gradient fill), spectral edge light,
+   a sheen that travels with the story, fine luminous spines inside the form.
+   ========================================================================== */
+:root {
+    --topo-1: rgba(42, 212, 240, .4); --topo-2: rgba(123, 92, 255, .14); --topo-3: rgba(255, 79, 216, .3);
+    --topo-e1: #c4f6ff; --topo-e2: #9d8bff; --topo-e3: #ff9be9; --topo-spine: rgba(205, 232, 255, .38); --topo-node: #2ad4f0;
+}
+:root[data-theme="light"] {
+    --topo-1: rgba(11, 111, 130, .2); --topo-2: rgba(109, 40, 217, .07); --topo-3: rgba(163, 18, 127, .15);
+    --topo-e1: #0b6f82; --topo-e2: #6d28d9; --topo-e3: #a3127f; --topo-spine: rgba(30, 50, 90, .3); --topo-node: #0b6f82;
+}
+.topo-s1 { stop-color: var(--topo-1); } .topo-s2 { stop-color: var(--topo-2); } .topo-s3 { stop-color: var(--topo-3); }
+.topo-e1 { stop-color: var(--topo-e1); } .topo-e2 { stop-color: var(--topo-e2); } .topo-e3 { stop-color: var(--topo-e3); }
+.topo { position: fixed; left: 0; top: 0; z-index: 0; width: 1000px; height: 1000px; pointer-events: none; transform-origin: 500px 500px; opacity: 0; }
+.topo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.topo__rib { fill: url(#topo-fill); stroke: url(#topo-edge); stroke-width: 1.3; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.topo__rib--1 { fill-opacity: .75; } .topo__rib--3 { fill-opacity: .6; } .topo__rib--4 { fill-opacity: .85; }
+.topo__sheen { fill: url(#topo-sheen-grad); opacity: .5; }
+.topo__spine { fill: none; stroke: var(--topo-spine); stroke-width: .9; vector-effect: non-scaling-stroke; }
+.topo__light { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: .05 .95; stroke-dashoffset: var(--light, 0); vector-effect: non-scaling-stroke; opacity: .75; }
+:root[data-theme="light"] .topo__light { stroke: var(--topo-e2); }
+.topo__node { fill: var(--bg); stroke: var(--topo-node); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.topo__shard { fill: url(#topo-shard); fill-opacity: calc(.55 + var(--click, 0) * .45); stroke: var(--topo-e1); stroke-width: calc(1px + var(--click, 0) * 2px); stroke-opacity: .7; vector-effect: non-scaling-stroke; }
+/* Branching and trajectory scenes: signals run along the paths (desktop, motion allowed) */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .topo[data-scene="C"] .topo__spine, .topo[data-scene="D"] .topo__spine { stroke: var(--topo-node); stroke-opacity: .7; stroke-dasharray: 3 11; animation: topo-flow 1.6s linear infinite; }
+}
+@keyframes topo-flow { to { stroke-dashoffset: -28; } }
+/* Convergence: the monogram is the payoff, so its edges and sheen come up */
+.topo[data-scene="G"] .topo__rib { stroke-width: 2; }
+.topo[data-scene="G"] .topo__sheen { opacity: .85; }
+/* The opening: contours trace the form, then the membranes fill in and the shards arrive */
+#topo .topo__rib { stroke-dasharray: 1; stroke-dashoffset: 1; fill-opacity: 0; }
+#topo .topo__sheen, #topo .topo__light, #topo .topo__shards, #topo .topo__nodes { opacity: 0; }
+#topo.is-born .topo__rib { stroke-dashoffset: 0; fill-opacity: 1; transition: stroke-dashoffset 2s cubic-bezier(.16, 1, .3, 1), fill-opacity 1.4s cubic-bezier(.22, 1, .36, 1) .8s; }
+#topo.is-born .topo__rib--1 { fill-opacity: .75; } #topo.is-born .topo__rib--3 { fill-opacity: .6; } #topo.is-born .topo__rib--4 { fill-opacity: .85; }
+#topo.is-born .topo__sheen { opacity: .5; transition: opacity 1s ease 1.6s; }
+#topo.is-born .topo__light { opacity: .75; transition: opacity 1s ease 1.9s; }
+#topo.is-born .topo__shards, #topo.is-born .topo__nodes { opacity: 1; transition: opacity .8s ease 1.4s; }
+/* Reduced motion: one still picture in the opening that scrolls away with the page */
+.topo--static { position: absolute; opacity: .85; }
+@media print { .topo { display: none; } }
+/* Case studies: the same blossom as a quiet emblem */
+.topo--emblem { position: absolute; left: -9%; bottom: -16%; top: auto; width: 560px; height: 560px; opacity: .2; transform: rotate(-14deg); z-index: auto; }
+@media (max-width: 899px) { .topo--emblem { width: 360px; height: 360px; left: -24%; bottom: -8%; } }

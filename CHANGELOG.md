@@ -1,5 +1,25 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (5) — Living Topology
+
+A signature sculpture for the whole homepage: five folded glass ribbons (`initTopology()` in `src/script.js`, styles under "Living Topology" in `src/styles.css`). Each ribbon is a cubic spine with a width that twists through zero — that is what folds it. Scroll position picks the scene and how far it has progressed, and the spines, widths and fold counts are interpolated between states, so the silhouette genuinely changes shape and every scroll position maps to exactly one picture (it reverses when scrolling up).
+
+| Scene | State |
+|---|---|
+| Hero | **Emergence** — a compact folded blossom crowning the portrait; contours trace in, then the membranes fill |
+| About | **Expansion** — the folds open around the glass ID card; one shard misses its slot and clicks in |
+| Skills, architecture | **Branching** — ribbons thin into paths between nodes, with signals (in the right margin) |
+| Experience | **Trajectory** — one route with milestones along the edge |
+| Projects | **Fragmentation** — twisted shards frame the gallery from the page edges |
+| Decisions … console | **Stillness** — small and quiet |
+| Contact | **Convergence** — the ribbons draw the logo's "A" and ring, with the runaway satellite in orbit around it |
+
+Material: smoked-glass gradient membranes, spectral edge light, a sheen and a light pulse that travel with the story, fine luminous spines. Generic decoration it replaces: the spinning torus and wireframe in the hero, the prism in About, the glass sphere at contact. Case studies carry the blossom as a quiet emblem in their openings. Reduced motion: one still picture in the opening. Decorative only (`aria-hidden`, no pointer events).
+
+**Creative-director pass — three weakest moments:** (1) the hero blossom hid behind the portrait → enlarged so the petals crown it; (2) the branching scene drew long strokes across the skills intro → moved into the right margin, thicker and quieter; (3) projects' shards floated over body text → moved to the page edges. Also: the contact monogram was faint and collided with the heading → bolder, smaller, placed clear inside the orbit.
+
+**Tested:** functional 46/46, easter eggs 56/56, SEO 53/53, motion 23/23, case studies 64/64, recruiter 24/24, simulations 11/11 (10/11 on one run: a carrier click didn't register; rerun clean); axe 0 violations (homepage and case studies, both themes, 375 and 1366 px); no horizontal overflow; no console errors. Lighthouse same-session A/B, homepage mobile: 82–85 before → 88–91 after (desktop unchanged). Scroll frame times: desktop median/p95 16.7/16.8 ms; phone at 4× CPU 16.7/33.4 ms, 2 of 252 frames over 50 ms.
+
 ## 2026-10-12 (4) — Production-readiness audit
 
 Full report with evidence, the claim-by-claim table and open questions for the owner: [`docs/AUDIT-2026-10-12.md`](docs/AUDIT-2026-10-12.md).

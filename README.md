@@ -74,6 +74,7 @@ Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/dep
   `scrollToId()` in `src/script.js`, which re-measures after lazy sections render so anchors land correctly.
 - **Glass materials:** `.glass` plus a modifier (`--dark`, `--iris`, `--crystal`, `--frost`, `--holo`) in `src/styles.css` (Phase 3 section).
 - **Hero sculpture:** pure CSS 3D + SVG (`.sculpture`), tilted by `--px/--py` set from the pointer in `initHero()`.
+- **Living Topology (signature sculpture):** `initTopology()` in `src/script.js`. Scene states and cameras are in `topoStates()` / `topoCamera()`; the scene order is `TOPO_SCENES` (section ids). Case studies show the same blossom as an emblem.
 - **Cursor:** `initCursor()` in `src/script.js`; only for a mouse with motion allowed (the native cursor stays).
 - **Easter eggs ("hidden rooms"):** `src/eggs.js` + `src/eggs.css`, loaded lazily by `loadEggs()` in `src/script.js` and safe to delete. Ten secrets plus a finale — the full list and how to trigger each one is in `CHANGELOG.md`. Spoilers live there, not on the site.
 - **Without JavaScript:** everything is visible; the architecture diagram falls back to a list with all details.
