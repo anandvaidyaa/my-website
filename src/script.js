@@ -611,7 +611,7 @@
        through itself to show its inner surface. One shard is played by #frag (see topoFragment).
        Decorative only: aria-hidden, no pointer events, nothing depends on it. */
     var TOPO_SCENES = [["home", "A"], ["about", "B"], ["skills", "C"], ["architecture", "C"], ["experience", "D"],
-        ["projects", "E"], ["decisions", "F"], ["credentials", "F"], ["faq", "F"], ["console", "F"], ["contact", "G"]];
+        ["projects", "E"], ["decisions", "F"], ["credentials", "F"], ["faq", "F"], ["console", "F"], ["contact", "G"], ["arcade", "Z"]];
 
     function topoStates() {
         var C = 500;
@@ -648,6 +648,7 @@
             [F[i][0] + 55 * Math.cos(FA[i] * Math.PI / 180), F[i][1] + 55 * Math.sin(FA[i] * Math.PI / 180)]], 34, 0.8, i * 0.2, 1));
         // F — Stillness: the blossom again, folded small (the camera keeps it quiet)
         S.F = { r: S.A.r.map(function (r) { return rib(r.s.map(function (p) { return [C + (p[0] - C) * 0.62, C + (p[1] - C) * 0.62]; }), r.w * 0.62, r.f, r.p, r.t); }), n: [], g: [] };
+        // (the arcade scene reuses this geometry while the camera fades the sculpture out)
         // G — Convergence: the ribbons draw the logo — the "A" and its ring
         var M = function (x, y) { return [C + (x - 20) * 22, C + (y - 20) * 22]; };
         var k = 1.3333 * 18.5;
@@ -679,6 +680,8 @@
             D: small ? [0.94, 0.5, 680, 0, 0.3] : [0.9, 0.5, vh * 1.05, 0, 0.42],
             E: small ? [0.5, 0.5, 820, 0, 0.18] : [0.5, 0.5, vw * 1.04, 0, 0.42],
             F: small ? [0.9, 0.14, 210, 40, 0.24] : [0.9, 0.2, 360, 40, 0.3],
+            // Z: the arcade, where the sculpture bows out (the arcade's shard mascot takes over)
+            Z: [0.9, 0.2, 300, 40, 0],
             G: small ? [0.86, 0.15, 140, 0, 0.8] : [0.8, 0.32, 200, 0, 1]
         }[state];
         return { x: cam[0] * vw, y: cam[1] * vh, size: cam[2], rot: cam[3], alpha: cam[4] };
@@ -1085,7 +1088,7 @@
                     o.shape = FRAG_KITE;
                     o.op = f > 0 && en > 0 ? 1 - ab : 0;
                     o.glow = Math.sin(Math.PI * ab);
-                } else if (cur >= 9) {
+                } else if (cur === 9 || cur === 10) {
                     // The return: it tries to go straight in, is pushed back, lines itself up, and fits
                     var q3 = cur === 9 ? range(f, 0.5, 1) * 0.55 : 0.55 + range(f, 0, 0.25) * 0.45;
                     var T = topoToScreen(cam, [500, 286]), u = sm ? 0.6 : 1, fit = sc * 1.5;
@@ -1140,6 +1143,7 @@
         var host = $("#topo");
         var emblems = $$(".topo--emblem svg");
         var S = topoStates();
+        S.Z = S.G;
         // Case studies: the blossom as an emblem (continuity between pages). As the opening scrolls
         // away it folds through itself and shows its inner surface, like the homepage hero.
         emblems.forEach(function (svg) {

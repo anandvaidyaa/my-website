@@ -3,7 +3,7 @@
   "private": true,
   "description": "Static portfolio for anandvaidya.in. Edit src/, then run `npm run build` to regenerate the minified assets in the site root.",
   "scripts": {
-    "build:js": "terser src/script.js --compress --mangle --comments false -o script.min.js && terser src/eggs.js --compress --mangle --comments false -o eggs.min.js && terser src/case.js --compress --mangle --comments false -o case.min.js && terser src/arcade.js --compress --mangle --comments false -o arcade.min.js",
+    "build:js": "terser src/script.js --compress --mangle --comments false -o script.min.js && terser src/eggs.js --compress --mangle --comments false -o eggs.min.js && terser src/case.js --compress --mangle --comments false -o case.min.js && terser src/arcade/00-core.js src/arcade/10-packet.js src/arcade/20-bugs.js src/arcade/30-deploy.js src/arcade/40-stack.js src/arcade/90-arcade.js --enclose --compress --mangle --comments false -o arcade.min.js",
     "build:css": "csso src/styles.css -o styles.min.css && csso src/eggs.css -o eggs.min.css && csso src/case.css -o case.min.css && csso src/arcade.css -o arcade.min.css",
     "build": "npm run build:js && npm run build:css",
     "assets": "node scripts/build-assets.mjs",

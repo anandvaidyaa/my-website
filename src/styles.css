@@ -3079,84 +3079,203 @@ html:not(.js) [data-quick] { display: none !important; }
 @keyframes tx-drop { 0%, 55%, 100% { transform: translateY(0); opacity: 1; } 75% { transform: translateY(4px); opacity: .5; } }
 @media (prefers-reduced-motion: reduce) { .teaser__sig i { animation: none; } }
 
-/* The arcade */
-.arcade { position: relative; overflow: hidden; }
-.arcade::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--ultra) 14%, transparent), transparent 70%), radial-gradient(40% 40% at 90% 90%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 70%); }
-.arcade__lines { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 60px; pointer-events: none; fill: none; stroke: var(--line-2); stroke-width: 1; }
-.arcade__pulse { stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 60 1400; stroke-dashoffset: 1460; opacity: 0; }
-.arcade.is-awake .arcade__pulse { opacity: .8; }
-@media (prefers-reduced-motion: no-preference) { .arcade.is-awake .arcade__pulse { animation: arc-pulse 6s linear infinite; } }
-@keyframes arc-pulse { to { stroke-dashoffset: 0; } }
+/* The arcade: a facility after hours. Tokens first (amber warnings, red critical) */
+.arcade {
+    --ah-cyan: var(--accent-2); --ah-lime: var(--lime); --ah-amber: #ffb547; --ah-red: #ff5c6c; --ah-ink: #070a12;
+    position: relative; overflow: hidden; isolation: isolate;
+}
+:root[data-theme="light"] .arcade { --ah-amber: #9a5b00; --ah-red: #b4232f; --ah-lime: #356a00; }
+.arcade__atmo { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+        radial-gradient(55% 45% at calc(50% + var(--mx, 0) * 6%) 0%, color-mix(in srgb, var(--ultra) 16%, transparent), transparent 70%),
+        radial-gradient(35% 40% at 90% 85%, color-mix(in srgb, var(--accent-2) 12%, transparent), transparent 70%),
+        linear-gradient(transparent 0 calc(100% - 1px), color-mix(in srgb, var(--accent-2) 7%, transparent) calc(100% - 1px)) 0 0 / 100% 46px,
+        linear-gradient(90deg, transparent 0 calc(100% - 1px), color-mix(in srgb, var(--accent-2) 7%, transparent) calc(100% - 1px)) 0 0 / 46px 100%;
+    transform: translate3d(calc(var(--mx, 0) * -10px), calc(var(--my, 0) * -10px), 0);
+    opacity: .35; transition: opacity 1.2s var(--ease);
+}
+.arcade.is-woken .arcade__atmo { opacity: 1; }
+.arcade__scan { position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 3px, rgba(0, 0, 0, .12) 3px 4px); opacity: .5; }
+:root[data-theme="light"] .arcade__scan { opacity: .15; }
+
+/* Title row and the mascot (the site's runaway shard, now off duty) */
 .arcade__titlerow { display: flex; align-items: flex-end; gap: 1.25rem; }
 .arcade__titlerow .section-title { flex: 1; }
-.arcade__mascot { flex: none; width: 54px; height: 54px; margin-bottom: .4rem; transition: transform .6s var(--spring, ease); }
+.arcade__mascot { flex: none; width: 56px; height: 56px; margin-bottom: .4rem; transition: transform .5s var(--spring, ease); }
 .arcade__mascot svg { width: 100%; height: 100%; overflow: visible; }
-.arcade__kite { fill: color-mix(in srgb, var(--accent-2) 45%, transparent); stroke: var(--topo-e1, var(--accent-2)); stroke-width: 1.4; stroke-linejoin: round; transition: fill .5s var(--ease); }
+.arcade__kite { fill: color-mix(in srgb, var(--accent-2) 45%, transparent); stroke: var(--topo-e1, var(--accent-2)); stroke-width: 1.4; stroke-linejoin: round; transition: fill .4s var(--ease), stroke .4s var(--ease); }
 :root[data-theme="light"] .arcade__kite { stroke: var(--accent-2); }
 .arcade__mascot polyline { fill: none; stroke: #fff; stroke-opacity: .7; stroke-width: 1; }
 @media (prefers-reduced-motion: no-preference) { .arcade.is-awake .arcade__mascot svg { animation: mascot-idle 4.6s ease-in-out infinite; } }
 .arcade__mascot.is-playing { transform: rotate(18deg) translateY(4px); }
+.arcade__mascot.is-alert { transform: rotate(-12deg) scale(1.08); }
+.arcade__mascot.is-alert .arcade__kite { fill: color-mix(in srgb, var(--ah-amber) 55%, transparent); stroke: var(--ah-amber); }
+.arcade__mascot.is-happy { transform: translateY(-8px) rotate(8deg); }
+.arcade__mascot.is-happy .arcade__kite, .arcade__mascot.is-proud .arcade__kite { fill: color-mix(in srgb, var(--ah-lime) 60%, transparent); }
 .arcade__mascot.is-sad { transform: rotate(-70deg) translateY(10px); }
-.arcade__mascot.is-proud { transform: scale(1.18); }
-.arcade__mascot.is-proud .arcade__kite { fill: color-mix(in srgb, var(--lime) 60%, transparent); }
+.arcade__mascot.is-proud { transform: scale(1.2); }
 @keyframes mascot-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-.arcade__status { display: flex; gap: .7rem; align-items: baseline; margin-top: 1rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; color: var(--muted); }
-.arcade__status span { color: var(--lime); text-transform: uppercase; }
+
+/* Boot lines: the facility waking (never blocks play) */
+.arcade__head { position: relative; }
+.boot { margin-top: .9rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; color: var(--muted); }
+.boot p::before { content: "> "; color: var(--ah-lime); }
+.js .arcade:not(.is-woken) .boot p { opacity: 0; }
+.arcade.is-waking .boot p { animation: boot-line .45s steps(12, end) both; }
+.arcade.is-waking .boot p:nth-child(2) { animation-delay: .6s; } .arcade.is-waking .boot p:nth-child(3) { animation-delay: 1.2s; }
+.arcade.is-woken .boot p { opacity: 1; animation: none; }
+@keyframes boot-line { from { clip-path: inset(0 100% 0 0); opacity: 1; } to { clip-path: inset(0); opacity: 1; } }
+/* the skip sits beside the boot lines, out of the flow, so it never leaves a gap or shifts layout */
+.boot__skip { position: absolute; right: 0; bottom: 0; min-height: 32px; padding: .2rem .6rem; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--muted); font-family: var(--font-mono); font-size: .64rem; cursor: pointer; }
+.arcade.is-woken .boot__skip { visibility: hidden; }
+.arcade__status { display: flex; gap: .7rem; align-items: baseline; margin-top: .8rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; color: var(--muted); }
+.arcade__status span { color: var(--ah-lime); text-transform: uppercase; }
 .arcade__status b { font-weight: 500; color: var(--text); }
-.arcade__shell { position: relative; margin-top: clamp(2rem, 5vw, 3rem); }
-.arcade__grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+
+/* Operator profile */
+.ops { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem 1.4rem; margin-top: 1.6rem; padding: .9rem 1.1rem;
+    border: 1px solid var(--line-2); border-radius: 4px 18px 4px 18px; background: color-mix(in srgb, var(--bg) 60%, transparent); font-family: var(--font-mono); font-size: .74rem; }
+.ops__k { display: block; color: var(--muted); font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; }
+.ops__id b { font-family: var(--font-display); font-size: 1.15rem; color: var(--text); }
+.ops__stats { display: flex; gap: 1.4rem; }
+.ops__stats dt { color: var(--muted); font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; }
+.ops__stats dd { color: var(--text); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.ops__next, .ops__session { grid-column: 1 / -1; color: var(--muted); }
+.ops__session { color: var(--text); }
+.ops__session::before { content: "◷ "; color: var(--ah-lime); }
+.ops__sound { grid-column: 3; grid-row: 1; min-height: 40px; padding: .3rem .8rem; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+.ops__sound[aria-pressed="true"] { border-color: var(--ah-lime); }
+.ops__sound::before { content: "● "; color: var(--ah-lime); }
+.ops__sound[aria-pressed="false"]::before { content: "○ "; color: var(--muted); }
+@media (max-width: 640px) { .ops { grid-template-columns: 1fr auto; } .ops__stats { grid-column: 1 / -1; } .ops__sound { grid-column: 2; } }
+
+/* Shell, traces, rooms */
+.arcade__shell { position: relative; margin-top: clamp(1.6rem, 4vw, 2.4rem); }
+.arcade__traces { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; fill: none; z-index: 0; }
+.arcade__trace { stroke: color-mix(in srgb, var(--accent-2) 30%, transparent); stroke-width: 1; stroke-dasharray: 2 5; }
+.arcade__trace--pulse { stroke: var(--ah-lime); stroke-width: 1.6; stroke-dasharray: 40 2000; stroke-dashoffset: 2040; opacity: 0; }
+.arcade.is-woken .arcade__trace--pulse { opacity: .9; }
+@media (prefers-reduced-motion: no-preference) { .arcade.is-awake.is-woken .arcade__trace--pulse { animation: trace-run 5s linear infinite; } }
+@keyframes trace-run { to { stroke-dashoffset: 0; } }
+.arcade__shell[data-view="game"] .arcade__traces { display: none; }
+.arcade__grid { position: relative; z-index: 1; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
 .toy {
     --tc: var(--accent-2);
-    position: relative; display: flex; flex-direction: column; border-radius: var(--r-l); overflow: hidden;
-    border: 1px solid var(--glass-edge); background: linear-gradient(160deg, color-mix(in srgb, var(--tc) 9%, transparent), transparent 55%), var(--glass-bg);
+    position: relative; display: flex; flex-direction: column; overflow: hidden;
+    border: 1px solid var(--glass-edge); background: linear-gradient(165deg, color-mix(in srgb, var(--tc) 10%, var(--bg)), var(--bg) 60%);
     box-shadow: inset 0 1px 0 var(--glass-hi);
-    transition: border-color .3s var(--ease), transform .4s var(--ease), box-shadow .4s var(--ease);
+    clip-path: polygon(0 14px, 14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+    transform: translate3d(calc(var(--mx, 0) * -4px), calc(var(--my, 0) * -4px), 0);
+    transition: border-color .3s var(--ease), box-shadow .4s var(--ease), filter .5s var(--ease), opacity .5s var(--ease);
 }
-.toy--bugs { --tc: var(--magenta); } .toy--deploy { --tc: var(--lime); } .toy--stack { --tc: var(--ultra); }
-.toy:hover, .toy:focus-within, .toy.is-selected { border-color: color-mix(in srgb, var(--tc) 60%, transparent); box-shadow: inset 0 1px 0 var(--glass-hi), 0 24px 50px -30px color-mix(in srgb, var(--tc) 70%, transparent); }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) { .toy:hover { transform: translateY(-4px); } }
+.toy--bugs { --tc: var(--magenta); clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)); }
+.toy--deploy { --tc: var(--ah-lime); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)); }
+.toy--stack { --tc: var(--ultra); clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%, 0 18px); }
+.toy:hover, .toy:focus-within, .toy.is-selected { border-color: color-mix(in srgb, var(--tc) 70%, transparent); box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px color-mix(in srgb, var(--tc) 40%, transparent); }
+.js .arcade:not(.is-woken) .toy { filter: saturate(.2) brightness(.7); }
+.arcade.is-waking .toy { animation: room-on .9s steps(4, end) both; }
+.arcade.is-waking .toy:nth-child(2) { animation-delay: .35s; } .arcade.is-waking .toy:nth-child(3) { animation-delay: .7s; } .arcade.is-waking .toy:nth-child(4) { animation-delay: 1.05s; }
+@keyframes room-on { 0% { filter: saturate(.2) brightness(.6); } 30% { filter: brightness(1.4); } 45% { filter: saturate(.3) brightness(.7); } 100% { filter: none; } }
+.toy.is-touched .toy__preview { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--tc) 60%, transparent); }
 .toy.is-selected::after { content: "last played"; position: absolute; right: .8rem; top: .7rem; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tc); }
-.toy__preview { aspect-ratio: 200 / 110; border-bottom: 1px solid var(--line); background: radial-gradient(var(--grid-line, var(--line)) 1px, transparent 1px) 0 0 / 14px 14px; }
-.toy__preview svg { display: block; width: 100%; height: 100%; fill: none; stroke: color-mix(in srgb, var(--tc) 75%, var(--text)); stroke-width: 1.4; stroke-linejoin: round; }
+.toy__preview { aspect-ratio: 200 / 110; border-bottom: 1px solid var(--line); background: radial-gradient(color-mix(in srgb, var(--tc) 18%, transparent) 1px, transparent 1px) 0 0 / 12px 12px, color-mix(in srgb, var(--ah-ink) 40%, transparent); }
+:root[data-theme="light"] .toy__preview { background: radial-gradient(color-mix(in srgb, var(--tc) 25%, transparent) 1px, transparent 1px) 0 0 / 12px 12px, color-mix(in srgb, var(--tc) 6%, transparent); }
+.toy__preview svg { display: block; width: 100%; height: 100%; fill: none; stroke: color-mix(in srgb, var(--tc) 80%, var(--text)); stroke-width: 1.4; stroke-linejoin: round; }
 .toy__body { display: flex; flex-direction: column; flex: 1; padding: 1rem 1.1rem 1.15rem; }
-.toy__meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--tc); }
+.toy__meta { display: flex; justify-content: space-between; gap: .5rem; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--tc); }
 :root[data-theme="light"] .toy__meta { color: var(--text); }
-.toy__meta span + span { color: var(--muted); }
+.toy__meta span + span { color: var(--muted); text-align: right; }
 .toy__title { margin-top: .5rem; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -.02em; }
-.toy__desc { margin-top: .35rem; color: var(--muted); font-size: .92rem; line-height: 1.5; flex: 1; }
-.toy__best { margin-top: .6rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; color: var(--muted); }
+.toy__room { font-family: var(--font-mono); font-size: .68rem; color: var(--muted); }
+.toy__desc { margin-top: .45rem; color: var(--muted); font-size: .92rem; line-height: 1.5; flex: 1; }
+.toy__progress { display: flex; gap: .9rem; margin-top: .6rem; font-family: var(--font-mono); font-size: .68rem; color: var(--muted); }
+.toy__progress [data-reached-for]::before { content: "◆ "; color: var(--tc); }
 .toy__best b { color: var(--text); }
 .toy__play { margin-top: .9rem; align-self: flex-start; min-height: 44px; }
-.arcade__note { margin-top: 1rem; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; color: var(--muted); }
+
+/* The previews act out each room's mechanic */
+.pv-dim { stroke: var(--line-2); }
+.pv-node { fill: var(--bg); }
+.pv-t { fill: var(--text); stroke: none; font-family: var(--font-mono); font-size: 10px; text-anchor: middle; }
+.pv-t--l { text-anchor: start; fill: var(--muted); font-size: 9px; }
+.pv-route { stroke: var(--tc); stroke-width: 2.6; stroke-dasharray: 6 5; }
+.pv-route--b { opacity: 0; }
+.pv-pk rect { fill: var(--text); stroke: none; }
+.pv-pk { offset-path: path("M26 55H84L163 86"); offset-rotate: 0deg; }
+.pv-badge { fill: var(--ah-lime); stroke: none; font-size: 11px; text-anchor: middle; opacity: 0; }
+.pv-cells rect { stroke: var(--line-2); }
+.pv-hop polygon { fill: color-mix(in srgb, var(--tc) 30%, transparent); stroke: var(--tc); }
+.pv-hop { transform: translate(35px, 27px); }
+.pv-camo { fill: var(--muted); stroke: none; font-family: var(--font-mono); font-size: 10px; text-anchor: middle; }
+.pv-leak { fill: color-mix(in srgb, var(--tc) 30%, transparent); stroke: var(--tc); opacity: 0; }
+.pv-pulse { stroke: var(--ah-lime); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.pv-corrupt-bg { fill: var(--line); stroke: none; }
+.pv-corrupt { fill: var(--tc); stroke: none; transform-box: fill-box; transform-origin: left; }
+.pv-flow { stroke: var(--tc); stroke-width: 2.6; stroke-dasharray: 160 200; }
+.pv-stages rect { fill: var(--bg); }
+.pv-canary { stroke: var(--tc); }
+.pv-warn { fill: var(--ah-amber); stroke: none; font-family: var(--font-mono); font-size: 10px; text-anchor: middle; opacity: 0; }
+.pv-back, .pv-back-head { stroke: var(--ah-amber); stroke-dasharray: 3 3; opacity: 0; }
+.pv-back-head { stroke-dasharray: none; }
+.pv-rolled { opacity: 0; }
+.pv-city rect { fill: color-mix(in srgb, var(--tc) 14%, transparent); stroke: none; }
+.pv-base { fill: color-mix(in srgb, var(--tc) 35%, transparent); }
+.pv-blk { fill: color-mix(in srgb, var(--tc) 20%, transparent); }
+.pv-ghost { fill: color-mix(in srgb, var(--ah-lime) 45%, transparent); stroke: var(--ah-lime); }
+.pv-move { fill: color-mix(in srgb, var(--tc) 22%, transparent); }
+.pv-cut { fill: color-mix(in srgb, var(--ah-red) 30%, transparent); stroke: var(--ah-red); opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+    .arcade.is-awake .pv-route--a { animation: pv-a 4s steps(1, end) infinite; }
+    .arcade.is-awake .pv-route--b { animation: pv-b 4s steps(1, end) infinite; }
+    .arcade.is-awake .pv-router { animation: pv-flip 4s steps(1, end) infinite; }
+    .arcade.is-awake .pv-pk { animation: pv-travel 4s linear infinite; }
+    .arcade.is-awake .pv-badge { animation: pv-b 4s steps(1, end) infinite; }
+    .arcade.is-awake .pv-hop { animation: pv-hop 3.2s steps(1, end) infinite; }
+    .arcade.is-awake .pv-pulse { animation: pv-pulse 3.2s ease-out infinite; }
+    .arcade.is-awake .pv-leak { animation: pv-reveal 3.2s steps(1, end) infinite; }
+    .arcade.is-awake .pv-camo { animation: pv-hide 3.2s steps(1, end) infinite; }
+    .arcade.is-awake .pv-corrupt { animation: pv-heal 6.4s ease-in-out infinite; }
+    .arcade.is-awake .pv-flow { animation: pv-flow 5s ease-in-out infinite; }
+    .arcade.is-awake .pv-warn, .arcade.is-awake .pv-back, .arcade.is-awake .pv-back-head { animation: pv-incident 5s steps(1, end) infinite; }
+    .arcade.is-awake .pv-rolled { animation: pv-roll 5s steps(1, end) infinite; }
+    .arcade.is-awake .pv-move { animation: pv-slide 2.6s ease-in-out infinite alternate; }
+    .arcade.is-awake .pv-ghost { animation: pv-ghost 2.6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: right; }
+    .arcade.is-awake .pv-cut { animation: pv-cut 2.6s ease-in infinite; }
+}
+@keyframes pv-a { 0%, 39% { opacity: 1; } 40%, 100% { opacity: 0; } }
+@keyframes pv-b { 0%, 39% { opacity: 0; } 40%, 100% { opacity: 1; } }
+@keyframes pv-flip { 0%, 39% { stroke-width: 1.4; } 40%, 46% { stroke-width: 3.5; } 47%, 100% { stroke-width: 1.4; } }
+@keyframes pv-travel { 0% { offset-distance: 0%; } 92%, 100% { offset-distance: 100%; } }
+@keyframes pv-hop { 0% { transform: translate(35px, 27px); } 25% { transform: translate(115px, 59px); } 50% { transform: translate(75px, 27px); } 75% { transform: translate(115px, 27px); } }
+@keyframes pv-pulse { 0%, 60% { opacity: 0; transform: scale(.4); } 70% { opacity: 1; } 100% { opacity: 0; transform: scale(5); } }
+@keyframes pv-reveal { 0%, 69% { opacity: 0; } 70%, 100% { opacity: 1; } }
+@keyframes pv-hide { 0%, 69% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes pv-heal { 0%, 10% { transform: scaleX(1); } 90%, 100% { transform: scaleX(.08); } }
+@keyframes pv-flow { 0% { stroke-dasharray: 0 200; } 60%, 100% { stroke-dasharray: 135 200; } }
+@keyframes pv-incident { 0%, 59% { opacity: 0; } 60%, 100% { opacity: 1; } }
+@keyframes pv-roll { 0%, 79% { opacity: 0; } 80%, 100% { opacity: 1; } }
+@keyframes pv-slide { from { transform: translateX(-30px); } to { transform: translateX(14px); } }
+@keyframes pv-ghost { from { transform: scaleX(.6); } to { transform: scaleX(1); } }
+@keyframes pv-cut { 0%, 60% { opacity: 0; transform: none; } 65% { opacity: 1; } 100% { opacity: 0; transform: translate(6px, 30px) rotate(20deg); } }
+
+/* The sealed room */
+.blackout { position: relative; z-index: 1; display: grid; gap: .2rem; width: 100%; margin-top: 1rem; padding: 1rem 1.2rem; text-align: left; cursor: pointer;
+    border: 1px dashed var(--line-2); background: repeating-linear-gradient(135deg, transparent 0 12px, color-mix(in srgb, var(--ah-amber) 5%, transparent) 12px 24px); color: var(--text);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); font: inherit; }
+.blackout:disabled { cursor: not-allowed; color: var(--muted); }
+.blackout.is-open { border-style: solid; border-color: var(--ah-amber); }
+.blackout__k { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ah-amber); }
+.blackout__t { font-family: var(--font-display); font-size: 1.25rem; }
+.blackout__state { font-family: var(--font-mono); font-size: .72rem; }
+.blackout[hidden] { display: none; }
+.arcade__note { margin-top: 1rem; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .06em; color: var(--muted); }
 .arcade__nojs { padding: 1rem; border: 1px dashed var(--line-2); border-radius: var(--r-l); color: var(--muted); }
 .arcade__stage[hidden], .arcade__grid[hidden] { display: none; }
-.arcade.is-record .arcade__lines path { stroke: color-mix(in srgb, var(--lime) 60%, transparent); }
-/* Previews: tiny loops of each game, running only while the arcade is on screen */
-.toy__preview .pv-net, .toy__preview .pv-pipe { stroke: var(--line-2); }
-.pv-route { stroke: var(--tc); stroke-width: 2.4; stroke-dasharray: 6 6; }
-.pv-packet { fill: var(--tc); stroke: none; offset-path: path("M20 55H80L130 25H180"); }
-.pv-grid text, .pv-err { fill: var(--muted); stroke: none; font-family: var(--font-mono); font-size: 11px; }
-.pv-err { fill: var(--tc); text-anchor: middle; }
-.pv-bug polygon { fill: color-mix(in srgb, var(--tc) 25%, transparent); }
-.pv-flow { stroke: var(--tc); stroke-width: 2.4; stroke-dasharray: 160 200; }
-.pv-stages rect { fill: var(--bg); }
-.pv-ok { fill: var(--tc); stroke: none; font-family: var(--font-mono); font-size: 11px; }
-.pv-base { fill: color-mix(in srgb, var(--tc) 30%, transparent); }
-.pv-blk, .pv-move { fill: color-mix(in srgb, var(--tc) 18%, transparent); }
-@media (prefers-reduced-motion: no-preference) {
-    .arcade.is-awake .pv-route { animation: pv-dash 1.2s linear infinite; }
-    .arcade.is-awake .pv-packet { animation: pv-travel 2.6s ease-in-out infinite; }
-    .arcade.is-awake .pv-bug--a { animation: pv-pop 2.4s steps(1, end) infinite; }
-    .arcade.is-awake .pv-bug--b { animation: pv-pop 2.4s steps(1, end) -1.2s infinite; }
-    .arcade.is-awake .pv-err { animation: pv-pop 1.6s steps(1, end) infinite; }
-    .arcade.is-awake .pv-flow { animation: pv-flow 3s ease-in-out infinite; }
-    .arcade.is-awake .pv-ok { animation: pv-ok 3s steps(1, end) infinite; }
-    .arcade.is-awake .pv-move { animation: pv-slide 2.4s ease-in-out infinite alternate; }
-}
-@keyframes pv-dash { to { stroke-dashoffset: -12; } }
-@keyframes pv-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
-@keyframes pv-pop { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .15; } }
-@keyframes pv-flow { from { stroke-dasharray: 0 200; } to { stroke-dasharray: 160 200; } }
-@keyframes pv-ok { 0%, 84% { opacity: 0; } 85%, 100% { opacity: 1; } }
-@keyframes pv-slide { from { transform: translateX(-40px); } to { transform: translateX(40px); } }
+.arcade.is-record .arcade__trace { stroke: color-mix(in srgb, var(--ah-lime) 60%, transparent); }
+/* Power restored after the Systems Blackout: lights out, then everything comes back */
+.arcade.is-restored .arcade__atmo { animation: restore 1.6s steps(6, end) both; }
+.arcade.is-restored .arcade__mascot { transform: scale(1.35); }
+.arcade.is-restored .arcade__kite { fill: color-mix(in srgb, var(--ah-lime) 70%, transparent); stroke: var(--ah-lime); }
+@keyframes restore { 0% { opacity: .05; } 30% { opacity: .2; } 45% { opacity: .05; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .arcade.is-restored .arcade__atmo, .arcade.is-waking .toy, .arcade.is-waking .boot p { animation: none; } .toy { transform: none; } }
 @media (max-width: 599px) { .arcade__mascot { width: 42px; height: 42px; } }

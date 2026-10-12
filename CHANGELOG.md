@@ -1,5 +1,37 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-13 (11) — After Hours becomes an engineering arcade
+
+**The world.**
+- **Arrival:** the facility wakes the first time you reach it: boot lines type in and the rooms power on. Skip intro is always available, the arrival never blocks play, and it is instant under reduced motion.
+- **The four rooms:** NOC-01, LAB-404, REL-7 and SKY-30. Signal traces connect them, they follow the pointer, and each has its own silhouette and a preview of how its game actually plays.
+- **The finale:** a fifth, sealed card that opens once every room has had a cleared mission.
+
+**Operator profile** (kept in this browser only; in memory when storage is blocked):
+- **Progress:** arcade score, personal bests, highest mission reached per room, and 10 challenges earned for things actually done in play.
+- **Ranks:** Signal Scout → Systems Operator → Incident Specialist → Night Architect, each tied to a milestone.
+- **Session line:** a short summary of the current visit.
+- **Sound:** a visible toggle, off by default.
+
+**The games.**
+
+| Room | What it is now |
+|---|---|
+| **Packet Pilot** (network survival) | Five missions: establish the connection, parallel traffic, a congestion event, rerouting around a failing node, and a network emergency with critical packets. The rules: links have capacity and queues, faults are announced before they hit, and a live route preview with ✓/✕/! badges shows where the next packet will go. Delivery chains build combos. Every lost packet names its cause, and the results card explains what went wrong. |
+| **Bug Hunter 404** (debugging investigation) | Three sectors with distinct defects: glitches that hop, memory leaks that grow, and race conditions that are critical. There are also "intended" features (false positives that raise corruption) and log fragments that reveal the root cause, which then counts double. A diagnostic pulse (2 uses) exposes camouflaged defects. Streaks follow accuracy, not speed. Between sectors you answer a fictional root-cause diagnosis; a correct one earns a pulse. The 30-second quick mode remains. |
+| **Deploy Rush** (incident simulator) | Four fictional scenarios with prerequisites and branching consequences: a skipped test that surfaces later in canary, a breaking column rename, a slow canary, and a build timeout followed by a failing verify. Options depend on the current state. Every rejection says why. Health, error rate, time and customer impact move as you act. An event log records each step, and a post-incident report reviews every decision. Nothing touches real systems. |
+| **Cloud Stack** (precision construction) | The overlap is visible before you drop. Overhangs are trimmed, the camera follows the tower, and wind picks up. Special platforms each explain their rule: narrow, reinforced, glass (cracks if you're sloppy) and keystone (restores integrity). Other effects: perfect and near-miss feedback, combos, and a collapse that explains itself. Milestones at 10/20/30 layers change and unlock skylines. Modes are Reach 15, Precision and Skyline 30. |
+| **Systems Blackout** (finale) | Unlocks after a first cleared mission in every room. It chains a reroute, a sweep, an incident and a rebuild using the same systems. The facility restores with its own animation, and the run ends with a grade (S/A/B/C) and the rank it earns. |
+
+**Under the hood.**
+- **Structure:** the arcade is now split into `src/arcade/*.js` parts bundled into one private scope.
+- **Randomness:** every run is seeded (`?arcade-seed=N` replays one).
+- **Controller:** one session controller owns the game clock, timers and listeners. Cards replace the play area instead of overlaying it, so nothing is ever clipped on a phone.
+- **Auto-pause:** the game pauses when the tab is hidden or scrolled away (with a short grace after Start) and never resumes on its own.
+- **Privacy:** no network requests, accounts, leaderboards or tracking.
+
+**Tested** with an automated suite that plays every game through its real controls (no assigned wins). It covers all five Packet Pilot missions, the Bug Hunter sectors and diagnoses, every Deploy Rush scenario (safe and unsafe paths), Cloud Stack perfect, near-miss, glass, keystone and collapse, the full finale, and the session controller. The suite also checked for foreign network requests. axe was run in both themes at 375 and 1366 px.
+
 ## 2026-10-12 (10) — After Hours: the arcade at the end of the page
 
 **The teaser.** Under the hero facts sits a tiny transmission: `tx/07 — The work is serious. The ending isn't. ↓`. It has a blinking signal and a slowly drifting arrow, which stay still under reduced motion. It links to the end of the page and doesn't mention games. It sits below your name, title and the primary buttons, never over them.

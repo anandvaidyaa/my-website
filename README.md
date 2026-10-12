@@ -17,7 +17,7 @@ fonts and icons are self-hosted / inlined. Node.js is only used at build time.
 | `docs/SEO.md` | Search Console setup, monitoring, authority building, how to add content. |
 | `src/styles.css` | **Edit this.** Design system — tokens (dark + light), layout, components, motion. Mobile-first. |
 | `src/eggs.js`, `src/eggs.css` | Optional easter-egg module (lazy-loaded, isolated). |
-| `src/arcade.js`, `src/arcade.css` | After Hours: the four games at the bottom of the homepage (lazy-loaded when the arcade comes near, or on Play). |
+| `src/arcade/*.js`, `src/arcade.css` | After Hours: the engineering arcade at the bottom of the homepage. There are four rooms and a finale, lazy-loaded when the arcade comes near or on Enter. The parts are bundled in name order into one private scope as `arcade.min.js`. |
 | `src/resume.html` | Source of `Anand-Vaidya-Resume.pdf` (one A4 page, same facts as the site). Re-render with `npm run resume` (needs a local Chrome; set `CHROME_PATH` if it isn't found) and commit the PDF — CI doesn't render it. |
 | `src/case.js`, `src/case.css` | Case-study pages only: chapter navigation, interactive architecture diagrams, the scroll-linked deployment journey, the two exhibits (sync race, gateway inspector), code highlighting/copy/tabs. Loaded by `src/templates/article.html`. |
 | `src/script.js` | **Edit this.** Interactions, as small independent modules (theme, nav, reveals, skills inspector, architecture explorer, terminal, contact form). |
@@ -77,7 +77,17 @@ Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/dep
 - **Hero sculpture:** pure CSS 3D + SVG (`.sculpture`), tilted by `--px/--py` set from the pointer in `initHero()`.
 - **Living Topology (signature sculpture):** `initTopology()` in `src/script.js`. Scene states and cameras are in `topoStates()` / `topoCamera()`; the scene order is `TOPO_SCENES` (section ids). Case studies show the same blossom as an emblem. The recurring fragment (one shard that escapes the hero and returns at contact) is `topoFragment()`; project frame shapes are `CASE_MASKS`. Case studies carry the same language in `src/case.js` (`initMembranes`, `initFrost`, `initCompanion`). The gallery frames are `topoFrameState()` / `topoProjects()`, the per-case sculptures `caseSculptureStates()` / `initCaseSculpture()`. On phones the sculpture stages its changes on the seam between sections (`seam` in `initTopology`), and case-study sculptures become chapter emblems. Rule of thumb: the sculpture may scrub with the scroll; anything that masks content must trigger, then finish (`membraneAt()`, the frost clock, the frame settle).
 - **Cursor:** `initCursor()` in `src/script.js`; only for a mouse with motion allowed (the native cursor stays).
-- **After Hours (the arcade):** the section markup and selector live in `index.html` and `src/styles.css`, so the page never shifts. `src/arcade.js` and `src/arcade.css` load on approach via `loadArcade()` in `src/script.js`. One `Session` runs at a time on its own game clock, so pause, exit and switching stop every timer, frame loop and listener. Personal bests are kept in `localStorage` (`afterhours.best.v1`) only. The hero teaser links to `#arcade`, and the terminal has a hidden `play` command.
+- **After Hours (the arcade):** the section markup lives in `index.html` and `src/styles.css`, so the page never shifts. That covers the arrival sequence, the operator panel, the four rooms and the sealed finale card.
+  - **Parts:** the games live in `src/arcade/`:
+    - `00-core.js`: helpers, seeded RNG, the operator profile, sound.
+    - `10-packet.js` Packet Pilot, `20-bugs.js` Bug Hunter 404, `30-deploy.js` Deploy Rush, `40-stack.js` Cloud Stack.
+    - `90-arcade.js`: game registry, the Systems Blackout finale, the session controller, the world UI.
+  - **Bundle:** `npm run build:js` joins the parts with `terser --enclose` into `arcade.min.js`. It loads on approach via `loadArcade()` in `src/script.js`.
+  - **Sessions:** one session runs at a time on its own game clock. Pause, exit and switching stop every timer, frame loop and listener.
+  - **Storage:** the operator profile (`afterhours.profile.v1`) holds bests, missions reached, total score, challenges, unlocked skylines and the sound setting. It lives in `localStorage` only and falls back to memory when storage is blocked.
+  - **Tests:** `?arcade-seed=N` fixes the random seed so a run can be replayed exactly; the automated gameplay tests use it.
+  - **Sound:** synthesised with WebAudio and off by default.
+  - **Privacy:** nothing is sent anywhere.
 - **Easter eggs ("hidden rooms"):** `src/eggs.js` + `src/eggs.css`, loaded lazily by `loadEggs()` in `src/script.js` and safe to delete. Ten secrets plus a finale — the full list and how to trigger each one is in `CHANGELOG.md`. Spoilers live there, not on the site.
 - **Without JavaScript:** everything is visible; the architecture diagram falls back to a list with all details.
 - **Contact form:** there is no backend. It validates, then opens the visitor's mail client with the message
