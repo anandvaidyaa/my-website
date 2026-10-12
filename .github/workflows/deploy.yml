@@ -1,11 +1,17 @@
 # Builds the site and deploys it to GitHub Pages (https://anandvaidya.in).
-# One-time setup: repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# Runs on every push to main, and can be run by hand from the Actions tab.
+# Recommended setup: repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Safety net while the Pages source is still "Deploy from a branch": GitHub's own branch
+  # deploy publishes the raw repository (no /projects/ pages) and can finish after this
+  # workflow. It fires page_build when it's done, so we redeploy the built site on top of it.
+  # Once the source is "GitHub Actions" there is no branch deploy and this never fires.
+  page_build:
 
 permissions:
   contents: read
