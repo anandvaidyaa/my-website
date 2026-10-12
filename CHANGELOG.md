@@ -1,5 +1,46 @@
 # CHANGELOG — Anand Vaidya Portfolio (anandvaidya.in)
 
+## 2026-10-12 (10) — After Hours: the arcade at the end of the page
+
+**The teaser.** Under the hero facts sits a tiny transmission: `tx/07 — The work is serious. The ending isn't. ↓`. It has a blinking signal and a slowly drifting arrow, which stay still under reduced motion. It links to the end of the page and doesn't mention games. It sits below your name, title and the primary buttons, never over them.
+
+**The arcade.** *After hours / 001 — "You've explored the systems. Now it's your turn to play."* It sits after Contact, before the footer.
+- **Selector:** four glass "toys", each with:
+  - a looping preview of the game;
+  - a skill type and playtime;
+  - a one-line description;
+  - a Play button;
+  - your best score, once you have one.
+- **Mascot:** the site's runaway shard. It idles, leans in while you play, droops on a loss, and turns lime on a personal best. A status line reports what's going on.
+- **Opening a game:** the stage grows out of the card you chose. The header becomes Back to arcade, a heads-up display, Pause, Restart, and a strip for switching straight to another game.
+- **Loading:** the games and their styles load only as the arcade comes near, or the moment Play is pressed.
+
+**The games:**
+
+| Game | How it plays |
+|---|---|
+| **Packet Pilot** (strategy) | Packets labelled A, B or C (each with its own shape, so not by colour alone) leave the source and follow whichever way each router is switched. You switch routers by click, tap or number key. Over five levels it adds routers, packets in flight at once, failed routers and blocked links; each hazard is announced 1.5 s ahead and never cuts a destination off. Scores reward correct delivery, harder levels and efficient routing (few switches). Five errors ends the run. |
+| **Bug Hunter 404** (reflexes) | A 30-second round on a grid, so targets never overlap and are at least 56 px. Hexagon bugs take one hit. Armoured bugs take two and show pips. Hotfixes are a +40 bonus. Squares marked "feature" cost points if hit. Combos multiply the score. The results show score and accuracy. The glitch entrance and sparks are off under reduced motion. |
+| **Deploy Rush** (logic) | Put the stages in order: source → build → tests → security scan → provision infra → approval → deploy → health check. There are 4 to 8 stages over four levels, and selecting a stage explains it. A wrong order is rejected at the first wrong step, with the rule. A valid run lights stage by stage, and from level 2 a stage fails with a fictional incident: a flaky build, failing tests, a vulnerable dependency, a bad rollout or a failing health check. One response is sound; the others explain why not. A good call reconnects the run; a bad one fails the release, and the level can be re-run. Three failed releases ends the game. It is labelled as fictional practice. |
+| **Cloud Stack** (precision) | Arcade rules, not physics. The moving component keeps only what overlaps the block below, and the overhang falls away. A perfect drop (within 5 px) keeps the width, and a streak of three or more wins a little back. It plays by click, tap, Space or Enter, and the keys never scroll the page. A miss brings the tower down in a controlled sequence. 30 layers wins. |
+
+**Shared behaviour:**
+- Every game has an instruction card first, then Start, Pause/Resume (also P or Esc), Restart, Back to arcade, and a results card with final score, personal best, a short message, Play again, and Choose another game.
+- One session runs at a time on its own game clock. Pausing freezes everything; exiting or switching removes every timer, frame loop and listener the game made.
+- The game pauses itself when the tab is hidden or the stage scrolls away. It never starts or resumes on its own.
+- Best scores stay in this browser (`localStorage`, one small JSON object). If storage is blocked, the session still works. There is no leaderboard, analytics or network request.
+- **Hidden extra:** type `play` in the terminal.
+
+**Creative-director pass, weakest elements fixed:**
+1. **Phones:** the Packet Pilot board was taller than the screen and its instructions were cut off. The board is now capped to the screen, the instructions get room, and the stage aligns under the header on open and on Start.
+2. **Cloud Stack's unfair start:** an early press could lose at once, because the first block entered from off-screen. Blocks now enter partly over the tower, a little slower at first. The results card no longer says "Personal best: 0".
+3. **A distracting stage:** it was translucent enough that the page's sculpture swam behind the network. It is now a near-opaque surface.
+
+Bugs found and fixed while testing:
+- The instruction, pause and results card covered the whole stage, including Back to arcade, Pause and Restart. It now covers only the play area.
+- The open-time scroll measured the stage mid-animation.
+- On touch screens, the late mouse event after tapping Start could switch a router. Input is ignored for 350 ms after Start.
+
 ## 2026-10-12 (9) — A cinematic phone experience
 
 Phones had been getting a shrunken desktop:

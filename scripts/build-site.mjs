@@ -19,7 +19,7 @@ const WEBSITE_ID = `${SITE}/#website`;
 const FILES = [
     "index.html", "404.html", "CNAME", "robots.txt", "site.webmanifest",
     "favicon.svg", "apple-touch-icon.png", "og-cover.png", "profile.webp", "profile-320.webp",
-    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js", "Anand-Vaidya-Resume.pdf"
+    "styles.min.css", "script.min.js", "eggs.min.js", "eggs.min.css", "case.min.css", "case.min.js", "arcade.min.js", "arcade.min.css", "Anand-Vaidya-Resume.pdf"
 ];
 const DIRS = ["fonts", "og"];
 const HASHED = ["styles.min.css", "script.min.js", "case.min.css", "case.min.js"];
@@ -202,8 +202,9 @@ await writeFile(`${OUT}/sitemap.xml`, sitemap);
 // ---------- 5. Cache busting + optional Search Console tag ----------
 const hashOf = (buf) => createHash("sha256").update(buf).digest("hex").slice(0, 10);
 const versions = {};
-// The easter-egg module is loaded by script.min.js, so stamp its hashes into that file first
-const eggV = { "eggs.min.js": hashOf(await readFile("eggs.min.js")), "eggs.min.css": hashOf(await readFile("eggs.min.css")) };
+// The easter-egg and arcade modules are loaded by script.min.js, so stamp their hashes into that file first
+const eggV = { "eggs.min.js": hashOf(await readFile("eggs.min.js")), "eggs.min.css": hashOf(await readFile("eggs.min.css")),
+    "arcade.min.js": hashOf(await readFile("arcade.min.js")), "arcade.min.css": hashOf(await readFile("arcade.min.css")) };
 let mainJs = await readFile(`${OUT}/script.min.js`, "utf8");
 for (const [file, v] of Object.entries(eggV)) {
     const re = new RegExp(file.replace(/\./g, "\\.") + "\\?v=[\\w.-]+", "g");

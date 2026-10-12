@@ -1935,6 +1935,11 @@
                 line(ok("→ opening " + id));
                 scrollToId(id, true);
             },
+            // Not in `help`: for the curious
+            play: function () {
+                line(ok("→ after hours. the lights are still on downstairs."));
+                scrollToId("arcade", true);
+            },
             theme: function () {
                 var t = $("#theme-toggle");
                 if (t) t.click();
@@ -2284,6 +2289,33 @@
         document.head.appendChild(js);
     }
 
+    /* ---------------- After Hours: the arcade loads only near the end of the page ---------------- */
+    var arcadeLoaded = false;
+    function loadArcade() {
+        if (arcadeLoaded || !$("#arcade")) return;
+        arcadeLoaded = true;
+        var css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "/arcade.min.css?v=dev";
+        document.head.appendChild(css);
+        var js = document.createElement("script");
+        js.src = "/arcade.min.js?v=dev";
+        js.defer = true;
+        document.head.appendChild(js);
+    }
+    function initArcade() {
+        var arcade = $("#arcade");
+        if (!arcade) return;
+        whenNear("#arcade", loadArcade);
+        // A Play pressed before the games have arrived is remembered and opened once they do
+        arcade.addEventListener("click", function (e) {
+            var b = e.target.closest && e.target.closest("[data-play]");
+            if (!b || arcade.classList.contains("is-ready")) return;
+            window.__arcadeQueue = b.getAttribute("data-play");
+            loadArcade();
+        });
+    }
+
     /* ---------------- Boot ---------------- */
     function safe(fn) {
         try { fn(); } catch (err) { if (window.console) console.error(err); }
@@ -2307,7 +2339,7 @@
         if (year) year.textContent = String(new Date().getFullYear());
 
         [initTheme, initNav, initAnchors, initScroll, initReveal, initQuickView].forEach(safe);
-        queue([initHero, initTopology, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
+        queue([initHero, initTopology, initArcade, initFeature, initChapters, initInView, initPointerFx, initSkills, initContact, initEggs, initCursor, initTerminal]);
         whenNear("#architecture", initArchitecture);
 
         // Start ambient motion once the page has finished loading

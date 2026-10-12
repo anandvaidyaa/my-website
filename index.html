@@ -407,6 +407,12 @@
                     <div><dt>Delivery</dt><dd>Bicep · Azure DevOps</dd></div>
                     <div><dt>Based in</dt><dd>Vadodara, India</dd></div>
                 </dl>
+                <a class="teaser anim" style="--d:8" href="#arcade" aria-label="Transmission: the work is serious, the ending isn't. Jump to the end of the page.">
+                    <span class="teaser__sig" aria-hidden="true"><i></i></span>
+                    <span class="teaser__code" aria-hidden="true">tx/07</span>
+                    <span class="teaser__msg">The work is serious. The ending isn&rsquo;t.</span>
+                    <span class="teaser__arrow" aria-hidden="true"><svg viewBox="0 0 12 22"><path d="M6 1v18m-4.5-4.5L6 19l4.5-4.5"/></svg></span>
+                </a>
             </div>
 
             <a class="scroll-cue" href="#about" aria-label="Scroll to About">
@@ -1215,6 +1221,68 @@
                         <button type="submit" class="btn btn--primary btn--block magnetic">Open in email app <svg class="i"><use href="#i-send"/></svg></button>
                         <p class="cform__status" id="form-status" role="status"></p>
                     </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================= AFTER HOURS (the arcade; games load on demand from arcade.js) ========================= -->
+        <section class="section arcade" id="arcade" data-chapter="arcade" aria-labelledby="arcade-title">
+            <svg class="arcade__lines" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40H260L300 12H620L660 40H1200"/><path class="arcade__pulse" d="M0 40H260L300 12H620L660 40H1200"/></svg>
+            <div class="container">
+                <header class="section-head arcade__head reveal">
+                    <p class="kicker"><span>&#8734;</span> After hours / 001</p>
+                    <div class="arcade__titlerow">
+                        <h2 class="section-title" id="arcade-title">You&rsquo;ve explored the systems. Now it&rsquo;s <em>your turn to play</em>.</h2>
+                        <div class="arcade__mascot" aria-hidden="true"><svg viewBox="-30 -30 60 60"><polygon class="arcade__kite" points="0,-24 13,-3 0,15 -12,-3"/><polyline points="0,-24 0,15"/></svg></div>
+                    </div>
+                    <p class="arcade__status"><span>sys</span><b id="arcade-status" role="status">idle &middot; pick a toy</b></p>
+                </header>
+                <div class="arcade__shell" id="arcade-shell" data-view="select">
+                    <ul class="arcade__grid" id="arcade-grid" aria-label="Games">
+                        <li class="toy toy--packet reveal" data-game="packet">
+                            <div class="toy__preview" aria-hidden="true"><svg viewBox="0 0 200 110"><g class="pv-net"><path d="M20 55H80M80 55L130 25M80 55L130 85M130 25H180M130 85H180"/></g><path class="pv-route" d="M20 55H80L130 25H180"/><rect x="10" y="45" width="20" height="20" rx="5"/><circle cx="80" cy="55" r="10"/><circle cx="130" cy="25" r="8"/><circle cx="130" cy="85" r="8"/><circle cx="182" cy="25" r="9"/><rect x="173" y="76" width="18" height="18" rx="3"/><circle class="pv-packet" r="5"/></svg></div>
+                            <div class="toy__body">
+                                <p class="toy__meta"><span>Strategy</span><span>~3 min</span></p>
+                                <h3 class="toy__title">Packet Pilot</h3>
+                                <p class="toy__desc">Flip the routers and steer every packet to the right destination before the network gets busy.</p>
+                                <p class="toy__best" data-best-for="packet" hidden>Your best <b>0</b></p>
+                                <button type="button" class="btn btn--glass toy__play" data-play="packet">Play <span class="sr-only">Packet Pilot</span><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+                            </div>
+                        </li>
+                        <li class="toy toy--bugs reveal" data-game="bugs">
+                            <div class="toy__preview" aria-hidden="true"><svg viewBox="0 0 200 110"><g class="pv-grid"><text x="18" y="30">{ }</text><text x="150" y="30">0x1F</text><text x="30" y="92">&lt;/&gt;</text><text x="140" y="95">//</text></g><g class="pv-bug pv-bug--a" transform="translate(70 50)"><polygon points="0,-16 14,-8 14,8 0,16 -14,8 -14,-8"/></g><g class="pv-bug pv-bug--b" transform="translate(130 64)"><polygon points="0,-16 14,-8 14,8 0,16 -14,8 -14,-8"/></g><text class="pv-err" x="100" y="20">ERR 404</text></svg></div>
+                            <div class="toy__body">
+                                <p class="toy__meta"><span>Reflexes</span><span>30 s</span></p>
+                                <h3 class="toy__title">Bug Hunter 404</h3>
+                                <p class="toy__desc">Squash the bugs before the countdown ends. Careful: some of them are features.</p>
+                                <p class="toy__best" data-best-for="bugs" hidden>Your best <b>0</b></p>
+                                <button type="button" class="btn btn--glass toy__play" data-play="bugs">Play <span class="sr-only">Bug Hunter 404</span><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+                            </div>
+                        </li>
+                        <li class="toy toy--deploy reveal" data-game="deploy">
+                            <div class="toy__preview" aria-hidden="true"><svg viewBox="0 0 200 110"><path class="pv-pipe" d="M22 55H178"/><path class="pv-flow" d="M22 55H178"/><g class="pv-stages"><rect x="10" y="43" width="24" height="24" rx="6"/><rect x="58" y="43" width="24" height="24" rx="6"/><rect x="106" y="43" width="24" height="24" rx="6"/><rect x="154" y="43" width="24" height="24" rx="6"/></g><text class="pv-ok" x="166" y="30">ok</text></svg></div>
+                            <div class="toy__body">
+                                <p class="toy__meta"><span>Logic</span><span>~3 min</span></p>
+                                <h3 class="toy__title">Deploy Rush</h3>
+                                <p class="toy__desc">Put the release stages in order, then make the right call when a stage fails.</p>
+                                <p class="toy__best" data-best-for="deploy" hidden>Your best <b>0</b></p>
+                                <button type="button" class="btn btn--glass toy__play" data-play="deploy">Play <span class="sr-only">Deploy Rush</span><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+                            </div>
+                        </li>
+                        <li class="toy toy--stack reveal" data-game="stack">
+                            <div class="toy__preview" aria-hidden="true"><svg viewBox="0 0 200 110"><rect class="pv-base" x="60" y="92" width="80" height="12" rx="3"/><rect class="pv-blk pv-blk--1" x="64" y="78" width="72" height="12" rx="3"/><rect class="pv-blk pv-blk--2" x="68" y="64" width="64" height="12" rx="3"/><rect class="pv-blk pv-blk--3" x="70" y="50" width="60" height="12" rx="3"/><rect class="pv-move" x="70" y="22" width="60" height="12" rx="3"/></svg></div>
+                            <div class="toy__body">
+                                <p class="toy__meta"><span>Precision</span><span>~1 min</span></p>
+                                <h3 class="toy__title">Cloud Stack</h3>
+                                <p class="toy__desc">Drop each component onto the tower. Whatever overhangs gets cut off.</p>
+                                <p class="toy__best" data-best-for="stack" hidden>Your best <b>0</b></p>
+                                <button type="button" class="btn btn--glass toy__play" data-play="stack">Play <span class="sr-only">Cloud Stack</span><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="arcade__stage" id="arcade-stage" role="region" aria-label="Game" tabindex="-1" hidden></div>
+                    <noscript><p class="arcade__nojs">The games need JavaScript. Everything else on this page works without it.</p></noscript>
+                    <p class="arcade__note">Scores stay in this browser. Nothing is sent anywhere.</p>
                 </div>
             </div>
         </section>

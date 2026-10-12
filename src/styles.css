@@ -3056,3 +3056,107 @@ html:not(.js) [data-quick] { display: none !important; }
 .topo--case { display: none; }
 @media (prefers-reduced-motion: no-preference) { .topo--case { display: block; } }
 @media (max-width: 899px) { .js .reveal.is-visible { animation-duration: .95s; } }
+
+/* ==========================================================================
+   After Hours — the teaser in the hero and the arcade's frame and selector
+   (the stage and the games are styled in arcade.css, loaded with the games)
+   ========================================================================== */
+/* A tiny transmission under the hero facts: it hints, it doesn't announce */
+.teaser {
+    display: inline-flex; align-items: center; gap: .65rem; margin-top: 1.4rem; padding: .45rem .2rem; min-height: 44px;
+    font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    text-decoration: none; border-radius: 6px;
+}
+.teaser:hover, .teaser:focus-visible { color: var(--text); }
+.teaser__sig { position: relative; width: 9px; height: 9px; flex: none; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--lime) 70%, transparent); }
+.teaser__sig i { position: absolute; inset: 2px; border-radius: 50%; background: var(--lime); animation: tx-blip 3.2s steps(1, end) infinite; }
+.teaser__code { color: color-mix(in srgb, var(--accent-2) 80%, var(--muted)); }
+.teaser__code::after { content: ""; display: inline-block; width: 1.6rem; height: 1px; margin-left: .55rem; vertical-align: middle; background: linear-gradient(90deg, var(--line-2), transparent); }
+.teaser__arrow { width: 10px; height: 18px; flex: none; color: var(--lime); }
+.teaser__arrow svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (prefers-reduced-motion: no-preference) { .teaser__arrow svg { animation: tx-drop 2.8s ease-in-out infinite; } }
+@keyframes tx-blip { 0%, 62% { opacity: 1; } 64%, 70% { opacity: .15; } 72% { opacity: 1; } 76%, 80% { opacity: .2; } }
+@keyframes tx-drop { 0%, 55%, 100% { transform: translateY(0); opacity: 1; } 75% { transform: translateY(4px); opacity: .5; } }
+@media (prefers-reduced-motion: reduce) { .teaser__sig i { animation: none; } }
+
+/* The arcade */
+.arcade { position: relative; overflow: hidden; }
+.arcade::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--ultra) 14%, transparent), transparent 70%), radial-gradient(40% 40% at 90% 90%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 70%); }
+.arcade__lines { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 60px; pointer-events: none; fill: none; stroke: var(--line-2); stroke-width: 1; }
+.arcade__pulse { stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 60 1400; stroke-dashoffset: 1460; opacity: 0; }
+.arcade.is-awake .arcade__pulse { opacity: .8; }
+@media (prefers-reduced-motion: no-preference) { .arcade.is-awake .arcade__pulse { animation: arc-pulse 6s linear infinite; } }
+@keyframes arc-pulse { to { stroke-dashoffset: 0; } }
+.arcade__titlerow { display: flex; align-items: flex-end; gap: 1.25rem; }
+.arcade__titlerow .section-title { flex: 1; }
+.arcade__mascot { flex: none; width: 54px; height: 54px; margin-bottom: .4rem; transition: transform .6s var(--spring, ease); }
+.arcade__mascot svg { width: 100%; height: 100%; overflow: visible; }
+.arcade__kite { fill: color-mix(in srgb, var(--accent-2) 45%, transparent); stroke: var(--topo-e1, var(--accent-2)); stroke-width: 1.4; stroke-linejoin: round; transition: fill .5s var(--ease); }
+:root[data-theme="light"] .arcade__kite { stroke: var(--accent-2); }
+.arcade__mascot polyline { fill: none; stroke: #fff; stroke-opacity: .7; stroke-width: 1; }
+@media (prefers-reduced-motion: no-preference) { .arcade.is-awake .arcade__mascot svg { animation: mascot-idle 4.6s ease-in-out infinite; } }
+.arcade__mascot.is-playing { transform: rotate(18deg) translateY(4px); }
+.arcade__mascot.is-sad { transform: rotate(-70deg) translateY(10px); }
+.arcade__mascot.is-proud { transform: scale(1.18); }
+.arcade__mascot.is-proud .arcade__kite { fill: color-mix(in srgb, var(--lime) 60%, transparent); }
+@keyframes mascot-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.arcade__status { display: flex; gap: .7rem; align-items: baseline; margin-top: 1rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; color: var(--muted); }
+.arcade__status span { color: var(--lime); text-transform: uppercase; }
+.arcade__status b { font-weight: 500; color: var(--text); }
+.arcade__shell { position: relative; margin-top: clamp(2rem, 5vw, 3rem); }
+.arcade__grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.toy {
+    --tc: var(--accent-2);
+    position: relative; display: flex; flex-direction: column; border-radius: var(--r-l); overflow: hidden;
+    border: 1px solid var(--glass-edge); background: linear-gradient(160deg, color-mix(in srgb, var(--tc) 9%, transparent), transparent 55%), var(--glass-bg);
+    box-shadow: inset 0 1px 0 var(--glass-hi);
+    transition: border-color .3s var(--ease), transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.toy--bugs { --tc: var(--magenta); } .toy--deploy { --tc: var(--lime); } .toy--stack { --tc: var(--ultra); }
+.toy:hover, .toy:focus-within, .toy.is-selected { border-color: color-mix(in srgb, var(--tc) 60%, transparent); box-shadow: inset 0 1px 0 var(--glass-hi), 0 24px 50px -30px color-mix(in srgb, var(--tc) 70%, transparent); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .toy:hover { transform: translateY(-4px); } }
+.toy.is-selected::after { content: "last played"; position: absolute; right: .8rem; top: .7rem; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tc); }
+.toy__preview { aspect-ratio: 200 / 110; border-bottom: 1px solid var(--line); background: radial-gradient(var(--grid-line, var(--line)) 1px, transparent 1px) 0 0 / 14px 14px; }
+.toy__preview svg { display: block; width: 100%; height: 100%; fill: none; stroke: color-mix(in srgb, var(--tc) 75%, var(--text)); stroke-width: 1.4; stroke-linejoin: round; }
+.toy__body { display: flex; flex-direction: column; flex: 1; padding: 1rem 1.1rem 1.15rem; }
+.toy__meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--tc); }
+:root[data-theme="light"] .toy__meta { color: var(--text); }
+.toy__meta span + span { color: var(--muted); }
+.toy__title { margin-top: .5rem; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -.02em; }
+.toy__desc { margin-top: .35rem; color: var(--muted); font-size: .92rem; line-height: 1.5; flex: 1; }
+.toy__best { margin-top: .6rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; color: var(--muted); }
+.toy__best b { color: var(--text); }
+.toy__play { margin-top: .9rem; align-self: flex-start; min-height: 44px; }
+.arcade__note { margin-top: 1rem; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; color: var(--muted); }
+.arcade__nojs { padding: 1rem; border: 1px dashed var(--line-2); border-radius: var(--r-l); color: var(--muted); }
+.arcade__stage[hidden], .arcade__grid[hidden] { display: none; }
+.arcade.is-record .arcade__lines path { stroke: color-mix(in srgb, var(--lime) 60%, transparent); }
+/* Previews: tiny loops of each game, running only while the arcade is on screen */
+.toy__preview .pv-net, .toy__preview .pv-pipe { stroke: var(--line-2); }
+.pv-route { stroke: var(--tc); stroke-width: 2.4; stroke-dasharray: 6 6; }
+.pv-packet { fill: var(--tc); stroke: none; offset-path: path("M20 55H80L130 25H180"); }
+.pv-grid text, .pv-err { fill: var(--muted); stroke: none; font-family: var(--font-mono); font-size: 11px; }
+.pv-err { fill: var(--tc); text-anchor: middle; }
+.pv-bug polygon { fill: color-mix(in srgb, var(--tc) 25%, transparent); }
+.pv-flow { stroke: var(--tc); stroke-width: 2.4; stroke-dasharray: 160 200; }
+.pv-stages rect { fill: var(--bg); }
+.pv-ok { fill: var(--tc); stroke: none; font-family: var(--font-mono); font-size: 11px; }
+.pv-base { fill: color-mix(in srgb, var(--tc) 30%, transparent); }
+.pv-blk, .pv-move { fill: color-mix(in srgb, var(--tc) 18%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+    .arcade.is-awake .pv-route { animation: pv-dash 1.2s linear infinite; }
+    .arcade.is-awake .pv-packet { animation: pv-travel 2.6s ease-in-out infinite; }
+    .arcade.is-awake .pv-bug--a { animation: pv-pop 2.4s steps(1, end) infinite; }
+    .arcade.is-awake .pv-bug--b { animation: pv-pop 2.4s steps(1, end) -1.2s infinite; }
+    .arcade.is-awake .pv-err { animation: pv-pop 1.6s steps(1, end) infinite; }
+    .arcade.is-awake .pv-flow { animation: pv-flow 3s ease-in-out infinite; }
+    .arcade.is-awake .pv-ok { animation: pv-ok 3s steps(1, end) infinite; }
+    .arcade.is-awake .pv-move { animation: pv-slide 2.4s ease-in-out infinite alternate; }
+}
+@keyframes pv-dash { to { stroke-dashoffset: -12; } }
+@keyframes pv-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes pv-pop { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .15; } }
+@keyframes pv-flow { from { stroke-dasharray: 0 200; } to { stroke-dasharray: 160 200; } }
+@keyframes pv-ok { 0%, 84% { opacity: 0; } 85%, 100% { opacity: 1; } }
+@keyframes pv-slide { from { transform: translateX(-40px); } to { transform: translateX(40px); } }
+@media (max-width: 599px) { .arcade__mascot { width: 42px; height: 42px; } }
